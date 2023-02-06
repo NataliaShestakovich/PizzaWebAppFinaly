@@ -47,30 +47,30 @@ namespace PizzaWebAppAuthentication.Data.Seed
                 _logger.LogInformation("Roles seem to be already in place.");
             }
 
-            // administrator
-            //var adminUserToBeCreated = new ApplicationUser
-            //{
-            //    FirstName = "Admin",
-            //    LastName = "Administrator",
-            //    UserName = "admin@pizza.com",
-            //    Email = "admin@pizza.com",
-            //    EmailConfirmed = true
-            //};
+            //administrator
+           var adminUserToBeCreated = new ApplicationUser()
+           {
+               FirstName = "Admin",
+               LastName = "Administrator",
+               UserName = "admin@pizza.com",
+               Email = "admin@pizza.com",
+               EmailConfirmed = true
+           };
 
-            //var existingAdminUser = await _userManager.FindByEmailAsync(adminUserToBeCreated.Email);
-            //if (existingAdminUser == null)
-            //{
-            //    var adminUser = await _userManager.CreateAsync(adminUserToBeCreated, "P@ssw0rd!");
-            //    if (adminUser.Succeeded)
-            //    {
-            //        await _userManager.AddToRoleAsync(adminUserToBeCreated, adminRoleName);
-            //        _logger.LogInformation("Created admin {0} and added to role {1}", adminUserToBeCreated.UserName, adminRoleName);
-            //    }
-            //}
-            //else
-            //{
-            //    _logger.LogInformation("Admin user is already there, making no changes to it!");
-            //}
+            var existingAdminUser = await _userManager.FindByEmailAsync(adminUserToBeCreated.Email);
+            if (existingAdminUser == null)
+            {
+                var adminUser = await _userManager.CreateAsync(adminUserToBeCreated, "P@ssw0rd!");
+                if (adminUser.Succeeded)
+                {
+                    await _userManager.AddToRoleAsync(adminUserToBeCreated, adminRoleName);
+                    _logger.LogInformation("Created admin {0} and added to role {1}", adminUserToBeCreated.UserName, adminRoleName);
+                }
+            }
+            else
+            {
+                _logger.LogInformation("Admin user is already there, making no changes to it!");
+            }
         }
     }
 }
