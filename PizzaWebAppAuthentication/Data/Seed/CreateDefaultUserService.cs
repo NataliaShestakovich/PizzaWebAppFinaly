@@ -29,7 +29,7 @@ namespace PizzaWebAppAuthentication.Data.Seed
             
             if (rolesExist == null)
             {
-                var roleNames = new List<string> { adminRoleName}; // перенести в опшены перечень ролей
+                var roleNames = new List<string> { adminRoleName, "User"}; // перенести в опшены перечень ролей
 
                 foreach (var roleName in roleNames)
                 {

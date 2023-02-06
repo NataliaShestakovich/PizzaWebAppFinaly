@@ -2,23 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
-using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using PizzaWebAppAuthentication.Models.AppModels;
+using System.ComponentModel.DataAnnotations;
+using System.Text;
+using System.Text.Encodings.Web;
 
 namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
 {
@@ -29,16 +22,14 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
-        private readonly IEmailSender _emailSender;
-        //private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly IEmailSender _emailSender;       
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender/*,*/
-            /*RoleManager<IdentityRole> roleManager*/)
+            IEmailSender emailSender)
 
         {
             _userManager = userManager;
@@ -46,8 +37,7 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
             _logger = logger;
-            _emailSender = emailSender;
-            //_roleManager = roleManager;
+            _emailSender = emailSender;            
         }
 
         /// <summary>
@@ -75,6 +65,16 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
         /// </summary>
         public class InputModel
         {
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Name")]
+            public string FirstName { get; set; }
+
+            [Required]
+            [DataType(DataType.Text)]
+            [Display(Name = "Surname")]
+            public string LastName { get; set; }
+
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
@@ -127,9 +127,11 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    var userId = await _userManager.GetUserIdAsync(user);
-                    var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    string userId = await _userManager.GetUserIdAsync(user);
+                    string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+                    
                     await _userManager.AddToRoleAsync(user, "user");                         // каждому юзеру добавляю роль user
+
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(
                         "/Account/ConfirmEmail",
@@ -164,7 +166,8 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
         {
             try
             {
-                return Activator.CreateInstance<ApplicationUser>();
+                //return Activator.CreateInstance <ApplicationUser>();   переписала на ручное добавление из импута, поскольку не собирала эта ф-ция объект
+                return new ApplicationUser { UserName = Input.Email, FirstName = Input.FirstName, LastName = Input.LastName, Email = Input.Email};
             }
             catch
             {
