@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 
 namespace PizzaWebAppAuthentication
@@ -38,6 +39,9 @@ namespace PizzaWebAppAuthentication
             builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             builder.Services.AddTransient<CreateDefaultUserService>();
+
+            builder.Services.AddScoped<RoleManagementService>(); //Посмотреть после если будет интерфейс
+
 
             var app = builder.Build();
 

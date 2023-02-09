@@ -2,9 +2,9 @@
 {
     public interface IRepository <T1, T2>
     {
-        void Add (T1)
+        void Add(T1 entity);
         
-        T1? Get(T2 id);
+        T1? Get(T2 fieldname);
 
         List<T1> GetList();
 
