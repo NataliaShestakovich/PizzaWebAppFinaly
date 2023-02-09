@@ -1,17 +1,16 @@
 ﻿namespace PizzaWebAppAuthentication.Repositories
 {
-    public interface IRepository <T1, T2> where T1 : class 
-                                          where T2: struct
+    public interface IRepository <T1, T2>
     {
-        void Update(T1 objectT);
-        void Update(T2 objectT);
-
-        void Delete(T1 objectT);
-        void Delete(T2 objectT);
-
-        T1? Get(Guid id);
+        void Add (T1)
+        
+        T1? Get(T2 id);
 
         List<T1> GetList();
+
+        void Update(T1 objectT);
+       
+        void Delete(T1 objectT);       
 
     }
 }

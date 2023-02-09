@@ -1,37 +1,54 @@
-﻿using PizzaWebAppAuthentication.Models.AppModels;
+﻿using PizzaWebAppAuthentication.Data;
+using PizzaWebAppAuthentication.Models.AppModels;
 
 namespace PizzaWebAppAuthentication.Repositories
 {
-    public class UserRepository : IRepository<ApplicationUser, Guid>
+    public class UserRepository<T2> : IRepository <ApplicationUser, T2>
     {
-        public void Delete(ApplicationUser objectT)
+        private readonly ApplicationDbContext _userContext;
+
+        public UserRepository(ApplicationDbContext userContext)
         {
-            throw new NotImplementedException();
+            _userContext = userContext;
         }
 
-        public void Delete(Guid objectT)
+        public ApplicationUser? Get(T2 fieldName)
         {
-            throw new NotImplementedException();
-        }
+            if (fieldName != null)
+            {
+                return _userContext.Users.Find(fieldName);
+            }
 
-        public ApplicationUser? Get(Guid id)
-        {
-            throw new NotImplementedException();
+            return null;
         }
 
         public List<ApplicationUser> GetList()
         {
-            throw new NotImplementedException();
+            return _userContext.Users.ToList();
         }
 
-        public void Update(ApplicationUser objectT)
+        public void Update(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            _userContext.Update(user);
+
+            _userContext.SaveChanges();
         }
 
-        public void Update(Guid objectT)
+        public void Delete(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            var specificUser = _userContext.Users.Find(user.Id);
+
+            if (specificUser != null)
+            {
+                _userContext.Users.Remove(specificUser);
+
+                _userContext.SaveChanges();
+            }
+        }
+
+        public void Add(ApplicationUser user) // стремный метод, но он нужен для того чтобы интерфейс был универсальным
+        {
+            throw new NotSupportedException();
         }
     }
 }
