@@ -21,7 +21,7 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
 
         public async Task<IdentityResult> CreateAsync(string name)
         {
-            if (!string.IsNullOrEmpty(name) && !await _roleManager.RoleExistsAsync(name))
+            if (!string.IsNullOrEmpty(name) && !await IsRoleExiste(name))
             {
                 IdentityResult result = await _roleManager.CreateAsync(new IdentityRole(name));
                 
@@ -31,6 +31,11 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             {
                 return IdentityResult.Failed();
             }
+        }
+
+        public Task<bool> IsRoleExiste(string name)
+        {
+            return _roleManager.RoleExistsAsync(name);
         }
     }
 }

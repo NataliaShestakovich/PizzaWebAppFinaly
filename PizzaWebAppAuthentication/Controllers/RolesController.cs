@@ -28,24 +28,35 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string name)
         {
-            try
+            if (!string.IsNullOrEmpty(name))
             {
-                IdentityResult result = await _roleService.CreateAsync(name);
+                try
+                {
+                    IdentityResult result = await _roleService.CreateAsync(name);
 
-                if (result == IdentityResult.Success)
-                {
-                    return RedirectToAction("Index");
+                    if (result == IdentityResult.Success)
+                    {
+                       return RedirectToAction("Index");
+                    }
+                    else
+                    {
+                        if (await _roleService.IsRoleExiste(name))
+                        {
+                            ViewBag.Result = "Данная роль существует в списке ролей ";
+                            return View();
+                        }
+
+                        return StatusCode(500);
+                    }
                 }
-                else
+                catch (Exception e)
                 {
-                    throw new ArgumentException(nameof(name));                    
+                    Log.Error($"Ошибка{e.Message}. {Environment.NewLine} {e.StackTrace}");
+                    return StatusCode(500);
                 }
             }
-            catch (Exception e)
-            {
-                Log.Error($"Раз ошибка{e.Message}. {Environment.NewLine} {e.StackTrace}");
-                return BadRequest();
-            }            
+            ViewBag.Result = "Необходимо указать имя роли";
+            return View();
         }
 
     }
