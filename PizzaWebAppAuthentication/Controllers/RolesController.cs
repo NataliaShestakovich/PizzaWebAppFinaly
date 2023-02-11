@@ -59,5 +59,16 @@ namespace PizzaWebAppAuthentication.Controllers
             return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Delete (string name)
+        {
+            if (!string.IsNullOrEmpty(name)&&name!="Admin")
+            {
+                IdentityResult result = await _roleService.Delete(name);
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

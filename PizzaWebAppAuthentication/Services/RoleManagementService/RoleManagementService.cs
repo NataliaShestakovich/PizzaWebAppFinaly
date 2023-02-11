@@ -37,5 +37,24 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
         {
             return _roleManager.RoleExistsAsync(name);
         }
+
+        public async Task<IdentityResult> Delete (string name)
+        {
+            if (!string.IsNullOrEmpty(name) && await IsRoleExiste(name))
+            {
+                IdentityRole? role = await _roleManager.FindByNameAsync(name);
+                if (role != null)
+                {
+                    IdentityResult result = await _roleManager.DeleteAsync(role);
+                    return result;
+                }
+                return IdentityResult.Failed();
+            }
+            else
+            {
+                return IdentityResult.Failed();
+            }
+        }
+
     }
 }
