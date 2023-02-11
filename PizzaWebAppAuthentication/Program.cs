@@ -15,20 +15,13 @@ namespace PizzaWebAppAuthentication
     {
         public static async Task Main(string[] args)
         {
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .WriteTo.File(@"D:\Users\PizzaLog folder\logs\data.log", LogEventLevel.Information)
-                .CreateLogger();
-            
-            Log.Information("Starting up!");
-
             try
             {
-                Log.Information("Starting web application");
-
                 var builder = WebApplication.CreateBuilder(args);
 
-                builder.Host.UseSerilog();
+                builder.Host.UseSerilog((ctx, lc)=> lc
+                .WriteTo.Console()
+                .WriteTo.File(@"D:\Users\PizzaLog folder\logs\data.log", LogEventLevel.Verbose));
 
                 // Add services to the container.
 

@@ -1,11 +1,25 @@
 ﻿@model string
 
-<div asp-validation-summary="All" class="text-danger"></div>
+<partial name = "_Menu" />
+<div class="col-md-9">
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="name">Новая роль</label>
-        <input name="name" class="form-control" />
+    <h3>Add new role</h3>
+
+    <div class="row">
+        <form asp-controller="Roles" asp-action="Create" method="post">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-floating mb-3">
+                    <label for="name">New role</label>
+                    <input name="name" class="form-control" />
+             </div>
+            <button type="submit" class="btn btn-primary">Добавить</button>
+        </form>
     </div>
-    <button type="submit" class="btn btn-primary">Добавить</button>
-</form>
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/site.js?v=4q1jwFhaPaZgr8WAUSrux6hAuh0XDg9kPS3xIVq36I0"></script>
+    <script src="/Identity/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="/Identity/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+</div>
