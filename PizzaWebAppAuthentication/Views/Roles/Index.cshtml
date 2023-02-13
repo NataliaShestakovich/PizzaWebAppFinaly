@@ -19,6 +19,7 @@
                     <td class="btn-group" role="group">
 
                        <form method="post" asp-controller="Roles">
+                           <button type="submit" class="btn btn-light btn-sm" asp-action="Delete" asp-route-name=@role.Name>Изменить</button>
                            <button type="submit" class="btn btn-danger btn-sm" asp-action="Delete" asp-route-name=@role.Name>Удалить</button>
                        </form>
                     </td>
