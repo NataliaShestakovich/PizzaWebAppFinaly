@@ -20,7 +20,7 @@ namespace PizzaWebAppAuthentication
                 var builder = WebApplication.CreateBuilder(args);
 
                 builder.Host.UseSerilog((ctx, lc)=> lc
-                .WriteTo.Console(LogEventLevel.Warning)
+                //.WriteTo.Console(LogEventLevel.Warning)
                 .WriteTo.File(@"D:\Users\PizzaLog folder\logs\data.log", LogEventLevel.Warning));
 
                 // Add services to the container.

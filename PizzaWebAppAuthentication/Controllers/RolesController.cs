@@ -1,7 +1,12 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions;
+using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using Serilog;
+using System.Data;
+using System.Linq;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -69,6 +74,49 @@ namespace PizzaWebAppAuthentication.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllUsersForRole()
+        {
+            var allRoles = _roleService.GetAllRoles();
+
+            var modelForChoose = new UsersForRoleViewModel();
+
+            modelForChoose.RolesSelectList = new List<SelectListItem>();
+
+            foreach (var role in allRoles)
+            {
+                modelForChoose.RolesSelectList.
+                    Add(new SelectListItem { Text = role.Name, Value = role.Name });                
+            }
+            
+            return View(modelForChoose);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetAllUsersForRole(UsersForRoleViewModel modelForChoose)
+        {
+            var selectedRole = modelForChoose.SelectedRole;
+
+            var usersForRoles = new List<string>(); // лист для хранения соответвующих юзеров
+
+            if (selectedRole == null)
+            {
+                return NotFound();
+            } 
+            
+            var selectedUsers = await _roleService.GetAllUsersForRole(selectedRole);
+               
+                foreach (var user in selectedUsers)
+                {
+                    usersForRoles.Add(user);
+                }
+                                    
+            modelForChoose.UsersForSelectedRoles = usersForRoles;
+
+            return View(modelForChoose);
+        }
+
 
     }
 }

@@ -1,0 +1,39 @@
+﻿@model PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels.UsersForRoleViewModel
+
+    <partial name = "_Menu" />
+    
+    <div class="col md-9">
+        <div class="row">
+            <h3>List of user for roles</h3>
+            <form asp-controller="Roles" asp-action="GetAllUsersForRole" metod="post">
+                <div class = "mb-9">
+                   <label class="form-label"> Select role </label>
+                   <select asp-for = "SelectedRole" asp-items = "Model.RolesSelectList" >
+                       <option value = "" >Не выбран</option>
+                   </select>
+                </div>
+                <div><th/> </div>
+                <div class="mb-3">
+                  <button type ="submit" class="btn btn-primary">Submit</button>
+                </div>                
+            </form>
+            @if (Model.UsersForSelectedRoles != null)
+            {
+                <table class="table table-hover">
+                    @foreach (var user in Model.UsersForSelectedRoles)
+                    {
+                        <tr>
+                            <td><strong>@user</strong></td>                            
+                        </tr>
+                    }
+                </table>
+            }
+        </div>
+
+        <script src="/Identity/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="/Identity/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+
+    </div>
+    
+    
+   

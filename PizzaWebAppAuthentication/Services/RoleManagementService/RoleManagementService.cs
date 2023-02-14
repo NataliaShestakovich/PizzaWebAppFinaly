@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
+using System.Collections.Generic;
 
 namespace PizzaWebAppAuthentication.Services.RoleManagementService
 {
@@ -8,10 +10,14 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
-        public RoleManagementService (RoleManager<IdentityRole> roleManager, UserManager<ApplicationUser> userManager)
+        private readonly ApplicationDbContext _context;
+        public RoleManagementService (RoleManager<IdentityRole> roleManager, 
+                                      UserManager<ApplicationUser> userManager,
+                                      ApplicationDbContext context)
         {
             _roleManager = roleManager;
             _userManager = userManager;
+            _context = context;
         }
 
         public List <IdentityRole> GetAllRoles ()
@@ -35,7 +41,9 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
 
         public Task<bool> IsRoleExiste(string name)
         {
-            return _roleManager.RoleExistsAsync(name);
+            Task<bool> result = _roleManager.RoleExistsAsync(name);
+            
+            return result;
         }
 
         public async Task<IdentityResult> Delete (string name)
@@ -54,6 +62,28 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             {
                 return IdentityResult.Failed();
             }
+        }
+
+        public async Task<List<string>> GetAllUsersForRole(string name)
+        {
+            var users = new List<string>();
+            var existedRole = await IsRoleExiste(name);
+
+            if (!string.IsNullOrEmpty(name) && existedRole)
+            {
+                var role = _roleManager.Roles.Where(r => r.Name == name).FirstOrDefault();
+                if (role != null)
+                {
+                    var usersId = _context.UserRoles.Where(r => r.RoleId == role!.Id).Select(u => u.UserId);
+                    // перепроверить не может ли попасть сюда null
+                    foreach (var id in usersId)
+                    {
+                        var emailUser = _userManager.Users.Where(i => i.Id == id).Select(n => n.Email).FirstOrDefault();
+                        users.Add(emailUser);
+                    }
+                }                
+            }
+            return users;
         }
 
     }
