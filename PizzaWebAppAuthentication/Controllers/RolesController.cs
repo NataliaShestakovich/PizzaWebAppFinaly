@@ -113,8 +113,23 @@ namespace PizzaWebAppAuthentication.Controllers
                   $"Users with the role of the {selectedRole} weren't found"
                 };
             }
-            
+            ////////////////////////////
+            var allRoles = _roleService.GetAllRoles();
+
+            modelForChoose.RolesSelectList = new List<SelectListItem>();
+
+            if (allRoles != null)
+            {
+                foreach (var role in allRoles)
+                {
+                    modelForChoose.RolesSelectList.
+                        Add(new SelectListItem { Text = role.Name, Value = role.Name });
+                }
+            }
+
             return View(modelForChoose);
         }
+
+
     }
 }
