@@ -1,12 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Metadata.Conventions;
 using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using Serilog;
-using System.Data;
-using System.Linq;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -69,7 +66,7 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             if (!string.IsNullOrEmpty(name)&&name!="Admin")
             {
-                IdentityResult result = await _roleService.Delete(name);
+                await _roleService.Delete(name);
             }
 
             return RedirectToAction("Index");
@@ -80,16 +77,19 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var allRoles = _roleService.GetAllRoles();
 
-            var modelForChoose = new UsersForRoleViewModel();
-
-            modelForChoose.RolesSelectList = new List<SelectListItem>();
-
-            foreach (var role in allRoles)
+            var modelForChoose = new UsersForRoleViewModel
             {
-                modelForChoose.RolesSelectList.
-                    Add(new SelectListItem { Text = role.Name, Value = role.Name });                
+                RolesSelectList = new List<SelectListItem>()
+            };
+
+            if (allRoles != null)
+            {
+                foreach (var role in allRoles)
+                {
+                    modelForChoose.RolesSelectList.
+                        Add(new SelectListItem { Text = role.Name, Value = role.Name });
+                }
             }
-            
             return View(modelForChoose);
         }
 
@@ -98,25 +98,23 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var selectedRole = modelForChoose.SelectedRole;
 
-            var usersForRoles = new List<string>(); // лист для хранения соответвующих юзеров
-
             if (selectedRole == null)
             {
                 return NotFound();
-            } 
-            
-            var selectedUsers = await _roleService.GetAllUsersForRole(selectedRole);
-               
-                foreach (var user in selectedUsers)
-                {
-                    usersForRoles.Add(user);
-                }
-                                    
-            modelForChoose.UsersForSelectedRoles = usersForRoles;
+            }
 
+            modelForChoose.UsersForSelectedRoles = await _roleService.GetAllUsersForRole(selectedRole);
+
+            if (modelForChoose.UsersForSelectedRoles == null 
+                || modelForChoose.UsersForSelectedRoles.Count == 0 )
+            {
+                modelForChoose.UsersForSelectedRoles = new()
+                {
+                  $"Users with the role of the {selectedRole} weren't found"
+                };
+            }
+            
             return View(modelForChoose);
         }
-
-
     }
 }
