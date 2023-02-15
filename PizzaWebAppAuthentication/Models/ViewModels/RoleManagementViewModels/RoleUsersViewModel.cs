@@ -2,12 +2,12 @@
 
 namespace PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels
 {
-    public class UsersForRoleViewModel
+    public class RoleUsersViewModel
     {
-        public List<SelectListItem> RolesSelectList { get; set; }
+        public List<SelectListItem> SelectListRole { get; set; }
 
         public string SelectedRole { get; set; }
 
-        public List<string> UsersForSelectedRoles { get; set; }
+        public List<string> Users { get; set; }
     }
 }

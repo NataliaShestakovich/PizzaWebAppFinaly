@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
-using System.Collections.Generic;
 
 namespace PizzaWebAppAuthentication.Services.RoleManagementService
 {
@@ -20,7 +18,7 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             _context = context;
         }
 
-        public List <IdentityRole> GetAllRoles ()
+        public List <IdentityRole> GetRoles ()
         {
             return _roleManager.Roles.ToList();
         }
@@ -64,21 +62,31 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             }
         }
 
-        public async Task<List<string>> GetAllUsersForRole(string name)
+        public async Task<List<string>> GetUsersByRole(string name)
         {
             var users = new List<string>();
             var existedRole = await IsRoleExiste(name);
 
             if (!string.IsNullOrEmpty(name) && existedRole)
             {
-                var role = _roleManager.Roles.Where(r => r.Name == name).FirstOrDefault();
+                var role = _roleManager.Roles
+                    .Where(r => r.Name == name)
+                    .FirstOrDefault();
+
                 if (role != null)
                 {
-                    var usersId = _context.UserRoles.Where(r => r.RoleId == role!.Id).Select(u => u.UserId);
+                    var usersId = _context.UserRoles
+                        .Where(r => r.RoleId == role!.Id)
+                        .Select(u => u.UserId);
+
                     // перепроверить не может ли попасть сюда null
                     foreach (var id in usersId)
                     {
-                        var emailUser = _userManager.Users.Where(i => i.Id == id).Select(n => n.Email).FirstOrDefault();
+                        var emailUser = _userManager.Users
+                            .Where(i => i.Id == id)
+                            .Select(n => n.Email)
+                            .FirstOrDefault();
+
                         users.Add(emailUser);
                     }
                 }                
