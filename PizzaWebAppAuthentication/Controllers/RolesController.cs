@@ -18,7 +18,7 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_roleService.GetAllRoles());
+            return View(_roleService.GetRoles());
         }
 
         [HttpGet]
@@ -73,61 +73,51 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllUsersForRole()
+        public IActionResult GetUsersByRole()
         {
-            var allRoles = _roleService.GetAllRoles();
+            var roles = _roleService.GetRoles();
 
-            var modelForChoose = new UsersForRoleViewModel
+            var roleUsersViewModel = new RoleUsersViewModel
             {
-                RolesSelectList = new List<SelectListItem>()
+                SelectListRole = new List<SelectListItem>(),
+                Users = new List<string>()
             };
 
-            if (allRoles != null)
+            if (roles != null)
             {
-                foreach (var role in allRoles)
+                foreach (var role in roles)
                 {
-                    modelForChoose.RolesSelectList.
+                    roleUsersViewModel.SelectListRole.
                         Add(new SelectListItem { Text = role.Name, Value = role.Name });
                 }
             }
-            return View(modelForChoose);
+            return View(roleUsersViewModel);
         }
 
         [HttpPost]
-        public async Task<IActionResult> GetAllUsersForRole(UsersForRoleViewModel modelForChoose)
+        public async Task<IActionResult> GetUsersByRole(RoleUsersViewModel roleUsersViewModel)
         {
-            var selectedRole = modelForChoose.SelectedRole;
+            var selectedRole = roleUsersViewModel.SelectedRole;
 
             if (selectedRole == null)
             {
                 return NotFound();
             }
 
-            modelForChoose.UsersForSelectedRoles = await _roleService.GetAllUsersForRole(selectedRole);
+            roleUsersViewModel.Users = await _roleService.GetUsersByRole(selectedRole);
 
-            if (modelForChoose.UsersForSelectedRoles == null 
-                || modelForChoose.UsersForSelectedRoles.Count == 0 )
+            var allRoles = _roleService.GetRoles();
+
+            roleUsersViewModel.SelectListRole = new List<SelectListItem>();
+
+            foreach (var role in allRoles)
             {
-                modelForChoose.UsersForSelectedRoles = new()
-                {
-                  $"Users with the role of the {selectedRole} weren't found"
-                };
-            }
-            ////////////////////////////
-            var allRoles = _roleService.GetAllRoles();
+                var selectListItem = new SelectListItem { Text = role.Name, Value = role.Name };
 
-            modelForChoose.RolesSelectList = new List<SelectListItem>();
-
-            if (allRoles != null)
-            {
-                foreach (var role in allRoles)
-                {
-                    modelForChoose.RolesSelectList.
-                        Add(new SelectListItem { Text = role.Name, Value = role.Name });
-                }
+                roleUsersViewModel.SelectListRole.Add(selectListItem);
             }
 
-            return View(modelForChoose);
+            return View(roleUsersViewModel);
         }
 
 
