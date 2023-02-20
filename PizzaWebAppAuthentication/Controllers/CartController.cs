@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
+    // контроллер, который будет отвечать за отображение содержимого корзины заказов,
+    // изменение количества товаров в корзине и оформление заказа.
+
     public class CartController : Controller
     {
         // GET: CartController

@@ -1,10 +1,24 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
     public class UserController : Controller
     {
+        //TODO Index - отображает список всех пользователей
+        //Details - отображает информацию о конкретном пользователе
+        //Create - отображает форму для создания нового пользователя
+        //Edit - отображает форму для редактирования информации о пользователе (это право должно быть у пользователя)
+        //Delete - отображает форму для удаления пользователя (это право должно быть у пользователя)
+        //Update - обновляет информацию о пользователе в базе данных
+        //DeleteConfirmed - удаляет пользователя из базы данных
+        //Manage - отображает форму для управления настройками профиля пользователя,
+        //такими как изменение пароля или адреса электронной почты.
+        //Tсли приложение позволяет пользователям отправлять друг другу сообщения,
+        //то UserController может содержать дополнительные action для управления
+        //сообщениями (например, SendMessage или ViewMessages).
+
         // GET: UserController
         public ActionResult Index()
         {

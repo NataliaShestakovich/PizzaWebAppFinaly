@@ -3,22 +3,30 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
-    public class PizzaController : Controller
+    //контроллер, который будет отвечать за отображение списка доступных пицц и деталей
+    //каждой пиццы, а также за добавление пиццы в корзину.
+
+    public class PizzasController : Controller
     {
         // GET: PizzaController
-        public ActionResult Index()
+        public IActionResult Index() // отображает список доступных пицц ЮЗЕР И АДМИН Т.Е ЗАРЕГИСТРИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ
         {
             return View();
         }
 
         // GET: PizzaController/Details/5
-        public ActionResult Details(int id)
+        public IActionResult Details(int id) //отображает детали конкретной пиццы, включая ее ингредиенты и цену. ЗАРЕГИСТРИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ
+        {
+            return View();
+        }
+
+        public IActionResult AddToCart(int id) //добавляет пиццу в корзину заказов. ЗАРЕГИСТРИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ ИЛИ ТОЛЬКО ЮЗЕР ???
         {
             return View();
         }
 
         // GET: PizzaController/Create
-        public ActionResult Create()
+        public IActionResult Create() // отображает форму для создания новой пиццы. АДМИН
         {
             return View();
         }
@@ -26,7 +34,7 @@ namespace PizzaWebAppAuthentication.Controllers
         // POST: PizzaController/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
+        public IActionResult Create(IFormCollection collection)
         {
             try
             {
@@ -38,8 +46,22 @@ namespace PizzaWebAppAuthentication.Controllers
             }
         }
 
+        [HttpGet]
+        public IActionResult CreateCustomPizza() //отображать форму, на которой пользователь может
+                                                 //выбирать свои предпочтения по ингредиентам для
+                                                 //пиццы, включая тип теста, соуса, сыра и топпингов.
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public IActionResult CreateCustomPizza(IFormCollection collection)
+        {
+            return View();
+        }
+
         // GET: PizzaController/Edit/5
-        public ActionResult Edit(int id)
+        public IActionResult Edit(int id) //отображает форму для редактирования существующей пиццы АДМИН
         {
             return View();
         }
@@ -47,7 +69,7 @@ namespace PizzaWebAppAuthentication.Controllers
         // POST: PizzaController/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public IActionResult Edit(int id, IFormCollection collection)
         {
             try
             {
@@ -60,7 +82,7 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         // GET: PizzaController/Delete/5
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id) // удаляет выбранную пиццу в объект меню пиццерии АДМИН
         {
             return View();
         }
@@ -68,7 +90,7 @@ namespace PizzaWebAppAuthentication.Controllers
         // POST: PizzaController/Delete/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
+        public IActionResult Delete(int id, IFormCollection collection)
         {
             try
             {
