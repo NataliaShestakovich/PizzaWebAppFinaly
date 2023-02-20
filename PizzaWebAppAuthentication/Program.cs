@@ -51,6 +51,11 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddScoped<RoleManagementService>(); //Посмотреть после если будет интерфейс
 
+                builder.Services.AddAuthorization(option => 
+                        {option.AddPolicy("OnlyAdmin", policyBuilder =>
+                        policyBuilder.RequireRole("Admin"));
+                });
+
 
                 var app = builder.Build();
 

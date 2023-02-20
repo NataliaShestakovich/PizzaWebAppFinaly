@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
@@ -7,6 +8,7 @@ using Serilog;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
+    [Authorize(Policy = "OnlyAdmin")]
     public class RolesController : Controller
     {
         private readonly RoleManagementService _roleService;

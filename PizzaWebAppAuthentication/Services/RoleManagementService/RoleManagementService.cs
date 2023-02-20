@@ -52,6 +52,7 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
                 if (role != null)
                 {
                     IdentityResult result = await _roleManager.DeleteAsync(role);
+                    
                     return result;
                 }
                 return IdentityResult.Failed();
