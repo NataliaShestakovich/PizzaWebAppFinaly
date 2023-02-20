@@ -57,6 +57,12 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpPost]
         public IActionResult CreateCustomPizza(IFormCollection collection)
         {
+            //Метод CreateCustomPizza может создавать объект Pizza, но он не обязан его
+            //инициализировать пустым конструктором. В этом методе можно создавать объект
+            //Pizza с некоторыми начальными значениями, например, задавать имя пиццы, ее размер
+            //и т.д. Также метод CreateCustomPizza может возвращать не только RedirectToAction
+            //к методу AddIngredientToPizza, но и сам объект Pizza, который затем будет
+            //использоваться в методе AddIngredientToPizza.
             return View();
         }
 
