@@ -49,7 +49,7 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddTransient<CreateDefaultUserService>();
 
-                builder.Services.AddScoped<RoleManagementService>(); //Посмотреть после если будет интерфейс
+                builder.Services.AddScoped<UserManagementService>(); //Посмотреть после если будет интерфейс
 
                 builder.Services.AddAuthorization(option => 
                         {option.AddPolicy("OnlyAdmin", policyBuilder =>

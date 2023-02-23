@@ -4,12 +4,12 @@ using PizzaWebAppAuthentication.Models.AppModels;
 
 namespace PizzaWebAppAuthentication.Services.RoleManagementService
 {
-    public class RoleManagementService
+    public class UserManagementService
     {
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ApplicationDbContext _context;
-        public RoleManagementService (RoleManager<IdentityRole> roleManager, 
+        public UserManagementService (RoleManager<IdentityRole> roleManager, 
                                       UserManager<ApplicationUser> userManager,
                                       ApplicationDbContext context)
         {
@@ -18,9 +18,14 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             _context = context;
         }
 
-        public List <IdentityRole> GetRoles ()
+        public List <IdentityRole> GetRoles () // все роли
         {
             return _roleManager.Roles.ToList();
+        }
+
+        public List<ApplicationUser> GetUsers() // всех юзеров
+        {
+            return _userManager.Users.ToList();
         }
 
         public async Task<IdentityResult> CreateAsync(string name)

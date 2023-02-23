@@ -130,7 +130,7 @@ namespace PizzaWebAppAuthentication.Areas.Identity.Pages.Account
                     string userId = await _userManager.GetUserIdAsync(user);
                     string code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
                     
-                    await _userManager.AddToRoleAsync(user, "user");                         // каждому юзеру добавляю роль user
+                    await _userManager.AddToRoleAsync(user, "User");  // каждому юзеру добавляю роль user
 
                     code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
                     var callbackUrl = Url.Page(

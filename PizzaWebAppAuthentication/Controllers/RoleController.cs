@@ -9,10 +9,10 @@ using Serilog;
 namespace PizzaWebAppAuthentication.Controllers
 {
     [Authorize(Policy = "OnlyAdmin")]
-    public class RolesController : Controller
+    public class RoleController : Controller
     {
-        private readonly RoleManagementService _roleService;
-        public RolesController(RoleManagementService roleService)
+        private readonly UserManagementService _roleService;
+        public RoleController(UserManagementService roleService)
         {
             _roleService= roleService;
         }
