@@ -1,5 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
+using PizzaWebAppAuthentication.Models.ViewModels.UserManagementViewModels;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
+using System.Data;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -24,9 +29,43 @@ namespace PizzaWebAppAuthentication.Controllers
         //сообщениями (например, SendMessage или ViewMessages).
 
         // GET: UserController
-        public ActionResult Index() //отображает список всех пользователей для АДМИНа
+        public async Task<IActionResult> Index(UsersListViewModel? usersListViewModel) //отображает список всех пользователей для АДМИНа
         {
-            return View(_userService.GetUsers());
+            List<ApplicationUser> userList = new();
+
+            if (usersListViewModel != null)
+            {
+                if (!string.IsNullOrEmpty(usersListViewModel.SelectedRole))
+                {
+                    userList = await _userService.GetUsersByRoleAsync(usersListViewModel.SelectedRole);
+                }
+                else
+                {
+                    userList = _userService.GetUsers();
+                }
+                if (!string.IsNullOrEmpty(usersListViewModel.SelectedEmail))
+                {
+                    userList = userList.Where(e => e.Email == usersListViewModel.SelectedEmail).ToList();
+                }
+                if (!string.IsNullOrEmpty(usersListViewModel.SelectedFirstName))
+                {
+                    userList = userList.Where(e => e.FirstName == usersListViewModel.SelectedFirstName).ToList();
+                }
+            }
+            else
+            {
+                userList = _userService.GetUsers();
+            }
+            
+            var _usersListViewModel = new UsersListViewModel
+            {
+                 Users = userList.ToList(),
+                 Role = _userService.GetSelectListRoles(),
+                 FirstName = _userService.GetSelectListFirstName(),
+                 Email = _userService.GetSelectListEmail(),
+            };
+              
+            return View(_usersListViewModel);
         }
 
         // GET: UserController/Details/5

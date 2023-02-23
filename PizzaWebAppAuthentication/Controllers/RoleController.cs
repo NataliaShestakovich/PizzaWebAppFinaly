@@ -36,7 +36,7 @@ namespace PizzaWebAppAuthentication.Controllers
             {
                 try
                 {
-                    IdentityResult result = await _roleService.CreateAsync(name);
+                    IdentityResult result = await _roleService.CreateRoleAsync(name);
 
                     if (result == IdentityResult.Success)
                     {
@@ -106,7 +106,7 @@ namespace PizzaWebAppAuthentication.Controllers
                 return NotFound();
             }
 
-            roleUsersViewModel.Users = await _roleService.GetUsersByRole(selectedRole);
+            roleUsersViewModel.Users = await _roleService.GetUserNamesByRole(selectedRole);
 
             var allRoles = _roleService.GetRoles();
 

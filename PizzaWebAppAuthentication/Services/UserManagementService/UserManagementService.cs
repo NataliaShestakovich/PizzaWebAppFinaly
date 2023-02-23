@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
+using System.Data;
 
 namespace PizzaWebAppAuthentication.Services.RoleManagementService
 {
@@ -25,10 +29,65 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
 
         public List<ApplicationUser> GetUsers() // всех юзеров
         {
-            return _userManager.Users.ToList();
+            return _userManager.Users?.ToList()??new List<ApplicationUser>();
         }
 
-        public async Task<IdentityResult> CreateAsync(string name)
+        public async Task<List<ApplicationUser>> GetUsersByRoleAsync(string roleName) 
+        {
+            var role = await _roleManager?.FindByNameAsync(roleName);
+
+            var users = await _userManager?.GetUsersInRoleAsync(role.Name);
+
+            return users?.ToList()??new List<ApplicationUser>();
+        }
+
+        public List<SelectListItem> GetSelectListRoles() // создание списка для выпадающего списка ролей
+        {
+            var selectListRole = new List<SelectListItem>();
+            var roles = _roleManager.Roles.ToList();
+            
+            if (roles != null)
+            {
+                foreach (var role in roles)
+                {
+                    selectListRole.Add(new SelectListItem { Text = role.Name, Value = role.Name });
+                }
+            }
+            return selectListRole;
+        }
+
+        public List<SelectListItem> GetSelectListEmail() // создание списка для выпадающего списка emails
+        {
+            var selectListEmail = new List<SelectListItem>();
+            var emails = _userManager.Users.Select(p => p.Email).ToList();
+
+            if (emails != null)
+            {
+                foreach (var email in emails)
+                {
+                    selectListEmail.Add(new SelectListItem { Text = email, Value = email});
+                }
+            }
+            return selectListEmail;
+        }
+
+        public List<SelectListItem> GetSelectListFirstName() // создание списка для выпадающего списка firstNames
+        {
+            var selectListFirstName = new List<SelectListItem>();
+            var firstNames = _userManager.Users.Select(p => p.FirstName).ToList();
+
+            if (firstNames != null)
+            {
+                foreach (var name in firstNames)
+                {
+                    selectListFirstName.Add(new SelectListItem { Text = name, Value = name});
+                }
+            }
+            return selectListFirstName;
+        }
+
+
+        public async Task<IdentityResult> CreateRoleAsync(string name)
         {
             if (!string.IsNullOrEmpty(name) && !await IsRoleExiste(name))
             {
@@ -68,7 +127,7 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             }
         }
 
-        public async Task<List<string>> GetUsersByRole(string name)
+        public async Task<List<string>> GetUserNamesByRole(string name)
         {
             var users = new List<string>();
             var existedRole = await IsRoleExiste(name);
