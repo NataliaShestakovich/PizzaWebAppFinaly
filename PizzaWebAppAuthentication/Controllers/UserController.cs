@@ -69,15 +69,23 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         // GET: UserController/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Details(Guid id)
         {
-            return View();
+            var user = _userService.GetUserByIDAsync(id);
+            
+            return View(user);
         }
 
         // GET: UserController/Create
         public IActionResult Create()
         {
-            return View();
+            HttpContext httpContext = HttpContext;
+
+            string host = httpContext.Request.Host.Host;
+            
+            int port = httpContext.Request.Host.Port.GetValueOrDefault();
+
+            return Redirect($"https://{host}:{port}/Identity/Account/Register");
         }
 
         // POST: UserController/Create
