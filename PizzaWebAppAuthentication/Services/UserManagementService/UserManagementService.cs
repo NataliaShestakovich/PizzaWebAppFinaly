@@ -48,6 +48,8 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             return users;
         }
 
+
+
         public List<SelectListItem> GetSelectListRoles() // создание списка для выпадающего списка ролей
         {
             var selectListRole = new List<SelectListItem>();

@@ -66,9 +66,13 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete (string name)
         {
-            if (!string.IsNullOrEmpty(name)&&name!="Admin")
+            if (!string.IsNullOrEmpty(name)&&name!="Admin"/*&& name != "User"*/)
             {
-                await _roleService.Delete(name);
+                var isExistUser = await _roleService.GetUsersByRoleAsync(name);
+                if (isExistUser.Count() <= 0)
+                {
+                    await _roleService.Delete(name);
+                }                
             }
 
             return RedirectToAction("Index");
