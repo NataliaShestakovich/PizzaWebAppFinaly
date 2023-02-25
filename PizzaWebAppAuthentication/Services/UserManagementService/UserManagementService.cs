@@ -27,6 +27,13 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             return _roleManager.Roles.ToList();
         }
 
+        public async Task<string> GetRoleByUserAsync(ApplicationUser user) // роль для пользователя
+        {
+            var role = await _userManager.GetRolesAsync(user);
+
+            return role?.FirstOrDefault()??string.Empty;
+        }
+
         public List<ApplicationUser> GetUsers() // всех юзеров
         {
             return _userManager.Users?.ToList()??new List<ApplicationUser>();
@@ -47,8 +54,6 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
 
             return users;
         }
-
-
 
         public List<SelectListItem> GetSelectListRoles() // создание списка для выпадающего списка ролей
         {

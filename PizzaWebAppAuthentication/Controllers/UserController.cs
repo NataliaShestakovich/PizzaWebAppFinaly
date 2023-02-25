@@ -69,11 +69,21 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         // GET: UserController/Details/5
-        public IActionResult Details(Guid id)
+        public async Task<IActionResult> Details(Guid id)
         {
-            var user = _userService.GetUserByIDAsync(id);
-            
-            return View(user);
+            var user = await _userService.GetUserByIDAsync(id);
+
+            var userData = new UserDataViewModel
+            {
+                Id = id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                Phone = user?.PhoneNumber??string.Empty,
+                Role = await _userService.GetRoleByUserAsync(user),
+                DateLastOrder = DateTime.Today.AddDays(new Random().Next(-5,-1))
+            };
+            return View(userData);
         }
 
         // GET: UserController/Create
