@@ -10,6 +10,9 @@ namespace PizzaWebAppAuthentication
             {
                 var identitySeeder = scope.ServiceProvider.GetService<CreateDefaultUserService>();
                 await identitySeeder.CreateRoles();
+
+                var initializerDb = scope.ServiceProvider.GetService<InitializeDataBase>();
+                initializerDb.InitializeDb();
             }            
         }
     }

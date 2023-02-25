@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Repositories;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
@@ -49,12 +50,16 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddTransient<CreateDefaultUserService>();
 
+                builder.Services.AddTransient<InitializeDataBase>();
+
                 builder.Services.AddScoped<UserManagementService>(); //Посмотреть после если будет интерфейс
 
                 builder.Services.AddAuthorization(option => 
                         {option.AddPolicy("OnlyAdmin", policyBuilder =>
                         policyBuilder.RequireRole("Admin"));
                 });
+
+                builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
 
 
                 var app = builder.Build();
