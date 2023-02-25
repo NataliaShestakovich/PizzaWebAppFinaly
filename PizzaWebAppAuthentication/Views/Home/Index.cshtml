@@ -1,8 +1,72 @@
-﻿@{
+﻿@using PizzaWebAppAuthentication.Models.AppModels;
+@model IEnumerable<Pizza>
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="delivery-info">
+  <h2>Pizza Smile :)</h2>
+  <p>Мы доставляем пиццу в любую точку города, чтобы вы могли наслаждаться нашей вкусной пиццей в удобное для вас время.</p>
+  <p>Вы можете сделать заказ через наш сайт или по телефону, а наш курьер доставит пиццу прямо к вашей двери в самые короткие сроки.</p>
 </div>
+<p></p>
+<div class="grid">
+    @foreach (var item in Model)
+    {
+        <div class="grid-item">
+            <img src="@item.ImageUrl" alt="Product Image"/>
+            <div class="grid-item-details">
+                <h3>@item.Name</h3>
+                <p>@item.Description</p>
+                <span>@item.Price</span>
+            </div>
+        </div>
+    }
+</div>
+
+<style>
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        margin: -15px;
+    }
+
+    .grid-item {
+        box-sizing: border-box;
+        padding: 15px;
+        width: calc(33% - 30px);
+    }
+
+        .grid-item img {
+            max-width: 100%;
+        }
+
+    .grid-item-details h3 {
+        margin-top: 0;
+    }
+
+    .grid-item-details p {
+        margin-bottom: 0;
+    }
+
+    .delivery-info {
+        color: #ff5201;
+        font-size: 24px;
+        background-color: #f8f8f8;
+        padding: 20px;
+        margin-top: 20px;
+    }
+
+        .delivery-info h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .delivery-info p {
+            font-size: 18px;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+
+</style>
