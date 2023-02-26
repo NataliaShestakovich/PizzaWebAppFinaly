@@ -100,7 +100,6 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             return selectListFirstName;
         }
 
-
         public async Task<IdentityResult> CreateRoleAsync(string name)
         {
             if (!string.IsNullOrEmpty(name) && !await IsRoleExiste(name))
@@ -172,6 +171,5 @@ namespace PizzaWebAppAuthentication.Services.RoleManagementService
             }
             return users;
         }
-
     }
 }
