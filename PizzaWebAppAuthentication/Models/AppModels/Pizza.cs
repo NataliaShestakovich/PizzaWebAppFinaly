@@ -15,7 +15,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public string Description { get; set; }
 
-        [DataType(DataType.ImageUrl)]
         public string ImageUrl { get; set; }
 
         public virtual ICollection<Ingredient> Ingredients { get; set; }

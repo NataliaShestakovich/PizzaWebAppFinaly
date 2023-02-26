@@ -5,14 +5,14 @@
 }
 
 <div class="delivery-info">
-   <img src="@Url.Content("~/images/Constructor.png")" alt="Logo"/>
+   <img src="@Url.Content("~/images/Constructor2.png")" alt="Logo"/>
  </div>
 <p></p>
 <div class="grid">
     @foreach (var item in Model)
     {
         <div class="grid-item">
-            <img src="@item.ImageUrl" alt="Product Image"/>
+            <img src="@Url.Content(item.ImageUrl)" alt="Product Image"/>
             <div class="grid-item-details">
                 <h3>@item.Name</h3>
                 <p>@item.Description</p>
@@ -32,8 +32,8 @@
 
     .grid-item {
         box-sizing: border-box;
-        padding: 15px;
-        width: calc(25% - 30px);
+        padding: 25px;
+        width: calc(25% - 40px);
     }
 
         .grid-item img {
