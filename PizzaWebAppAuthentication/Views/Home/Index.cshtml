@@ -5,10 +5,8 @@
 }
 
 <div class="delivery-info">
-  <h2>Pizza Smile :)</h2>
-  <p>Мы доставляем пиццу в любую точку города, чтобы вы могли наслаждаться нашей вкусной пиццей в удобное для вас время.</p>
-  <p>Вы можете сделать заказ через наш сайт или по телефону, а наш курьер доставит пиццу прямо к вашей двери в самые короткие сроки.</p>
-</div>
+   <img src="@Url.Content("~/images/Constructor.png")" alt="Logo"/>
+ </div>
 <p></p>
 <div class="grid">
     @foreach (var item in Model)
@@ -35,7 +33,7 @@
     .grid-item {
         box-sizing: border-box;
         padding: 15px;
-        width: calc(33% - 30px);
+        width: calc(25% - 30px);
     }
 
         .grid-item img {
@@ -56,7 +54,13 @@
         background-color: #f8f8f8;
         padding: 20px;
         margin-top: 20px;
+        text-align: center;
     }
+
+    .delivery-info img {
+  max-width: 100%;
+  height: auto;
+}
 
         .delivery-info h2 {
             font-size: 24px;
