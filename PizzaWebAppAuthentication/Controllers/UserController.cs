@@ -16,19 +16,6 @@ namespace PizzaWebAppAuthentication.Controllers
             _userService = userService;
         }
 
-        //Details - отображает информацию о конкретном пользователе
-        //Create - отображает форму для создания нового пользователя
-        //Edit - отображает форму для редактирования информации о пользователе (это право должно быть у пользователя)
-        //Delete - отображает форму для удаления пользователя (это право должно быть у пользователя)
-        //Update - обновляет информацию о пользователе в базе данных
-        //DeleteConfirmed - удаляет пользователя из базы данных
-        //Manage - отображает форму для управления настройками профиля пользователя,
-        //такими как изменение пароля или адреса электронной почты.
-        //Tсли приложение позволяет пользователям отправлять друг другу сообщения,
-        //то UserController может содержать дополнительные action для управления
-        //сообщениями (например, SendMessage или ViewMessages).
-
-        // GET: UserController
         public async Task<IActionResult> Index(UsersListViewModel? usersListViewModel) //отображает список всех пользователей для АДМИНа
         {
             List<ApplicationUser> userList = new();
@@ -68,7 +55,6 @@ namespace PizzaWebAppAuthentication.Controllers
             return View(_usersListViewModel);
         }
 
-        // GET: UserController/Details/5
         public async Task<IActionResult> Details(Guid id)
         {
             var user = await _userService.GetUserByIDAsync(id);
@@ -96,63 +82,6 @@ namespace PizzaWebAppAuthentication.Controllers
             int port = httpContext.Request.Host.Port.GetValueOrDefault();
 
             return Redirect($"https://{host}:{port}/Identity/Account/Register");
-        }
-
-        // POST: UserController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: UserController/Edit/5
-        public IActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: UserController/Delete/5
-        public IActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: UserController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        }        
     }
 }
