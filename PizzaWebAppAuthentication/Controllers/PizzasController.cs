@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Models.ViewModels;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -55,7 +56,7 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         [HttpPost]
-        public IActionResult CreateCustomPizza(IFormCollection collection)
+        public IActionResult CreateCustomPizza(PizzaViewModel pizza)
         {
             //Метод CreateCustomPizza может создавать объект Pizza, но он не обязан его
             //инициализировать пустым конструктором. В этом методе можно создавать объект

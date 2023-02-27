@@ -5,7 +5,9 @@
 }
 
 <div class="delivery-info">
+    <a href="@Url.Action("CreateCustomPizza", "Pizzas")">
    <img src="@Url.Content("~/images/Constructor2.png")" alt="Logo"/>
+   </a>
  </div>
 <p></p>
 <div class="grid">
@@ -17,6 +19,9 @@
                 <h3>@item.Name</h3>
                 <p>@item.Description</p>
                 <span>@item.Price</span>
+                <p></p>
+                <button class ="in-cart" type="button"/>
+                <span class = "txt">В корзину<span/>
             </div>
         </div>
     }
@@ -43,6 +48,20 @@
     .grid-item-details h3 {
         margin-top: 0;
     }
+
+    .in-cart {
+  background-color: #005f6b;
+  color: #fff;
+  border: none;
+  padding: 5px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.in-cart:hover {
+  background-color: #F4B752;
+}
 
     .grid-item-details p {
         margin-bottom: 0;

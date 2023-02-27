@@ -1,0 +1,48 @@
+﻿@using PizzaWebAppAuthentication.Models.ViewModels;
+@model PizzaViewModel
+@{
+    ViewData["Title"] = "Create Custom Pizza";
+}
+
+@using (Html.BeginForm("CreateCustomPizza", "Pizzas", FormMethod.Post))
+{
+    <div>
+        <h2>Выберите тип теста:</h2>
+        <div>
+            <label>
+                @Html.RadioButtonFor(model => model.DoughType, "thin")
+                Тонкое тесто
+            </label>
+        </div>
+        <div>
+            <label>
+                @Html.RadioButtonFor(model => model.DoughType, "thick")
+                Толстое тесто
+            </label>
+        </div>
+    </div>
+
+    <div>
+        <h2>Выберите ингредиенты:</h2>
+        <div>
+            <label>
+                @Html.CheckBoxFor(model => model.HasTomatoes)
+                Помидоры
+            </label>
+        </div>
+        <div>
+            <label>
+                @Html.CheckBoxFor(model => model.HasMushrooms)
+                Грибы
+            </label>
+        </div>
+        <div>
+            <label>
+                @Html.CheckBoxFor(model => model.HasCheese)
+                Сыр
+            </label>
+        </div>
+    </div>
+
+    <button type="submit">Заказать</button>
+}
