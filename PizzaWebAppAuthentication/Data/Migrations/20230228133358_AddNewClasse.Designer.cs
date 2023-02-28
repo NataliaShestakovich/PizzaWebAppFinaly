@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzaWebAppAuthentication.Data;
 
@@ -11,9 +12,11 @@ using PizzaWebAppAuthentication.Data;
 namespace PizzaWebAppAuthentication.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230228133358_AddNewClasse")]
+    partial class AddNewClasse
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -314,7 +317,11 @@ namespace PizzaWebAppAuthentication.Data.Migrations
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OrderStatusId")
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("OrderStatusId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
@@ -474,19 +481,15 @@ namespace PizzaWebAppAuthentication.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.OrderStatus", "OrderStatus")
+                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.OrderStatus", null)
                         .WithMany("Orders")
-                        .HasForeignKey("OrderStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OrderStatusId");
 
                     b.HasOne("PizzaWebAppAuthentication.Models.AppModels.ApplicationUser", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
 
                     b.Navigation("DeliveryAddress");
-
-                    b.Navigation("OrderStatus");
 
                     b.Navigation("User");
                 });

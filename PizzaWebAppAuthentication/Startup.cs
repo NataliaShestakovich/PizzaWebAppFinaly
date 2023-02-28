@@ -12,7 +12,9 @@ namespace PizzaWebAppAuthentication
                 await identitySeeder.CreateRoles();
 
                 var initializerDb = scope.ServiceProvider.GetService<InitializeDataBase>();
-                initializerDb.InitializeDb();
+                initializerDb.InitializePizzasTableDb();
+                initializerDb.InitializeOrdersTableDb();
+                initializerDb.InitializeUsersTableDb;
             }            
         }
     }
