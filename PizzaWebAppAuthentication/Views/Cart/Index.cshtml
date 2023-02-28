@@ -1,0 +1,57 @@
+﻿@model PizzaWebAppAuthentication.Models.ViewModels.CartViewModel
+
+<h2>Cart</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Pizza</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+       @* @foreach (var item in Model.Items)
+        {
+                <tr>
+                    <td>@item.Key.Name</td>
+                    <td>@item.Key.Price</td>
+                    <td>
+                        <form asp-action="UpdateCart" method="post">
+                            <div class="form-group">
+                                <input type="hidden" name="pizzaId" value="@item.Pizza.Id" />
+                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="10" />
+                                <button type="submit" class="btn btn-sm btn-primary">Обновить</button>
+                            </div>
+                        </form>
+                    </td>
+                    <td>@(item.Pizza.Price * item.Quantity)</td>
+                    <td>
+                        <form asp-action="RemoveFromCart" method="post">
+                            <input type="hidden" name="pizzaId" value="@item.Pizza.Id" />
+                            <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
+                        </form>
+                    </td>
+                </tr>
+        }
+    </tbody>
+    <tfoot>
+        <tr>
+            <th colspan="3">Итого:</th>
+            <th>@Model.TotalPrice</th>
+            <th></th>
+        </tr>
+    </tfoot>
+</table>
+
+@if (Model.CartItems.Count == 0)
+{
+        <p>Корзина пуста</p>
+}*@
+
+<div>
+    <a asp-action="Index" class="btn btn-secondary">Продолжить покупки</a>
+    <a asp-action="Checkout" class="btn btn-primary">Оформить заказ</a>
+</div>
