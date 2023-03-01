@@ -14,7 +14,7 @@ namespace PizzaWebAppAuthentication
                 var initializerDb = scope.ServiceProvider.GetService<InitializeDataBase>();
                 initializerDb.InitializePizzasTableDb();
                 initializerDb.InitializeOrdersTableDb();
-                initializerDb.InitializeUsersTableDb();
+                await initializerDb.InitializeUsersTableDb();
             }            
         }
     }

@@ -42,10 +42,10 @@ namespace PizzaWebAppAuthentication.Data.Seed
         {
             if (_context.OrderStatuses.Count() == 0)
             {
-                var status1 = new OrderStatus { Id = 1, Name = "Accepted" };
-                var status2 = new OrderStatus { Id = 2, Name = "Cooking" };
-                var status3 = new OrderStatus { Id = 3, Name = "Completed" };
-                var status4 = new OrderStatus { Id = 4, Name = "Interrupted" };
+                var status1 = new OrderStatus { Name = "Accepted" };
+                var status2 = new OrderStatus { Name = "Cooking" };
+                var status3 = new OrderStatus { Name = "Completed" };
+                var status4 = new OrderStatus { Name = "Interrupted" };
 
                 var statuses = new List<OrderStatus> { status1, status2, status3, status4 };
 

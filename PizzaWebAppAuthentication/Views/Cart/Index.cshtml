@@ -13,7 +13,7 @@
         </tr>
     </thead>
     <tbody>
-       @* @foreach (var item in Model.Items)
+        @foreach (var item in Model.Items)
         {
                 <tr>
                     <td>@item.Key.Name</td>
@@ -21,16 +21,16 @@
                     <td>
                         <form asp-action="UpdateCart" method="post">
                             <div class="form-group">
-                                <input type="hidden" name="pizzaId" value="@item.Pizza.Id" />
-                                <input type="number" name="quantity" value="@item.Quantity" min="1" max="10" />
+                                <input type="hidden" name="pizzaId" value="@item.Key.Id" />
+                                <input type="number" name="quantity" value="@item.Value" min="1" max="10" />
                                 <button type="submit" class="btn btn-sm btn-primary">Обновить</button>
                             </div>
                         </form>
                     </td>
-                    <td>@(item.Pizza.Price * item.Quantity)</td>
+                    <td>@(item.Key.Price * item.Value)</td>
                     <td>
                         <form asp-action="RemoveFromCart" method="post">
-                            <input type="hidden" name="pizzaId" value="@item.Pizza.Id" />
+                            <input type="hidden" name="pizzaId" value="@item.Key.Id" />
                             <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
                         </form>
                     </td>
@@ -46,10 +46,10 @@
     </tfoot>
 </table>
 
-@if (Model.CartItems.Count == 0)
+@if (Model.Items.Count == 0)
 {
         <p>Корзина пуста</p>
-}*@
+}
 
 <div>
     <a asp-action="Index" class="btn btn-secondary">Продолжить покупки</a>
