@@ -66,7 +66,7 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete (string name)
         {
-            if (!string.IsNullOrEmpty(name)&&name!="Admin"/*&& name != "User"*/)
+            if (!string.IsNullOrEmpty(name) && name!="Admin" && name != "User")
             {
                 var isExistUser = await _roleService.GetUsersByRoleAsync(name);
                 if (isExistUser.Count() <= 0)
@@ -76,56 +76,6 @@ namespace PizzaWebAppAuthentication.Controllers
             }
 
             return RedirectToAction("Index");
-        }
-
-        [HttpGet]
-        public IActionResult GetUsersByRole()
-        {
-            var roles = _roleService.GetRoles();
-
-            var roleUsersViewModel = new RoleUsersViewModel
-            {
-                SelectListRole = new List<SelectListItem>(),
-                Users = new List<string>()
-            };
-
-            if (roles != null)
-            {
-                foreach (var role in roles)
-                {
-                    roleUsersViewModel.SelectListRole.
-                        Add(new SelectListItem { Text = role.Name, Value = role.Name });
-                }
-            }
-            return View(roleUsersViewModel);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> GetUsersByRole(RoleUsersViewModel roleUsersViewModel)
-        {
-            var selectedRole = roleUsersViewModel.SelectedRole;
-
-            if (selectedRole == null)
-            {
-                return NotFound();
-            }
-
-            roleUsersViewModel.Users = await _roleService.GetUserNamesByRole(selectedRole);
-
-            var allRoles = _roleService.GetRoles();
-
-            roleUsersViewModel.SelectListRole = new List<SelectListItem>();
-
-            foreach (var role in allRoles)
-            {
-                var selectListItem = new SelectListItem { Text = role.Name, Value = role.Name };
-
-                roleUsersViewModel.SelectListRole.Add(selectListItem);
-            }
-
-            return View(roleUsersViewModel);
-        }
-
-
+        }        
     }
 }

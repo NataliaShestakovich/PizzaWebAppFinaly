@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Models.ViewModels;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -11,7 +11,9 @@ namespace PizzaWebAppAuthentication.Controllers
         // GET: CartController
         public ActionResult Index()
         {
-            return View();
+
+            CartViewModel cartViewModel = new();
+            return View(cartViewModel);
         }
 
         // GET: CartController/Details/5
