@@ -1,6 +1,9 @@
-﻿@model PizzaWebAppAuthentication.Models.ViewModels.CartViewModel
+﻿@using PizzaWebAppAuthentication.Areas.Identity.Pages.Account.Manage
+@model PizzaWebAppAuthentication.Models.ViewModels.CartViewModel
+
 
 <h2>Cart</h2>
+
 
 
 @if (Model.Items == null || Model.Items.Count == 0)
@@ -53,8 +56,6 @@
           </tfoot>
       </table>
    }
-
-
 
 <div>
     <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Продолжить покупки</a>
