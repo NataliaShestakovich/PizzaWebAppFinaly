@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models.AppModels;
-using PizzaWebAppAuthentication.Models.ViewModels;
+using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
