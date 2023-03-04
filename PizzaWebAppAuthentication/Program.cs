@@ -33,6 +33,13 @@ namespace PizzaWebAppAuthentication
                 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString));
 
+                builder.Services.AddDistributedMemoryCache();
+                builder.Services.AddSession(options =>
+                {
+                    options.IdleTimeout = TimeSpan.FromMinutes(40);
+                    options.Cookie.IsEssential = true;
+                });
+
                 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
                 builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
@@ -63,6 +70,8 @@ namespace PizzaWebAppAuthentication
 
 
                 var app = builder.Build();
+
+                app.UseSession();
 
                 await Startup.InitializeIdentities(app.Services);
 
