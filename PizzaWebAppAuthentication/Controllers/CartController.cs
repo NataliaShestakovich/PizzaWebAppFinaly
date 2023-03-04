@@ -1,13 +1,33 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
-    // контроллер, который будет отвечать за отображение содержимого корзины заказов,
-    // изменение количества товаров в корзине и оформление заказа.
-
     public class CartController : Controller
     {
+        private readonly IHttpContextAccessor _session;
+        public CartController(IHttpContextAccessor session)
+        {
+            _session= session;
+        }
+        public ActionResult CartPartial()
+        {
+            //var model = new CartViewModel
+            //{
+            //    Items = new Dictionary<Pizza, int>()                 
+            //};
+
+            //model.User = new ApplicationUser();
+
+            //if (HttpContext. != 0)
+            //{
+            //    var list = (List<CartViewModel>)Session["cart"];
+            //}
+            return PartialView();
+        }
+
+        
         // GET: CartController
         public ActionResult Index()
         {
