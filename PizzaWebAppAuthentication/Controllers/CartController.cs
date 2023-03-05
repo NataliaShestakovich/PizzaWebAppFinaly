@@ -54,74 +54,64 @@ namespace PizzaWebAppAuthentication.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-
-        // GET: CartController/Details/5
-        public ActionResult Details(int id)
+        public async Task<ActionResult> Decrease(int id)
         {
-            return View();
-        }
+            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
 
-        // GET: CartController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
 
-        // POST: CartController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
+            if (cartItem.Quantity > 1)
             {
-                return RedirectToAction(nameof(Index));
+                --cartItem.Quantity;
             }
-            catch
+            else
             {
-                return View();
+                cart.RemoveAll(p=>p.PizzaId==id);
             }
+
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+            
+            TempData["Success"] = "The product has been removed.";
+
+            return RedirectToAction("Index");
         }
 
-        // GET: CartController/Edit/5
-        public ActionResult Edit(int id)
+        public async Task<ActionResult> Remove(int id)
         {
-            return View();
+            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+
+            cart.RemoveAll(p => p.PizzaId == id);
+
+            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
+
+            if (cart.Count == 0)
+            {
+                HttpContext.Session.Remove("Cart");
+            }
+            else
+            {
+                HttpContext.Session.SetJson("Cart", cart);
+            }
+
+            TempData["Success"] = "The product has been removed.";
+
+            return RedirectToAction("Index");
         }
 
-        // POST: CartController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
+        public ActionResult Clear()
         {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            HttpContext.Session.Remove("Cart");
+
+            return RedirectToAction("Index");
         }
 
-        // GET: CartController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
 
-        // POST: CartController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
     }
 }
