@@ -27,6 +27,34 @@ namespace PizzaWebAppAuthentication.Controllers
             return View(cartViewModel);
         }
 
+        public async Task<ActionResult> Add(int id) 
+        { 
+            var pizza = await _contextDb.Pizzas.FindAsync(id); // Вынести в сервис и репозиторий этот метод и заменить на обращение через него
+            if (pizza == null)
+            {
+                //TODO сделать проверку выбросить нотификейшен
+            }
+            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
+            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
+
+            if (cartItem == null)
+            {
+                cart.Add(new CartItem(pizza));
+            }
+            else
+            {
+                cartItem.Quantity += 1;
+            }
+
+            HttpContext.Session.SetJson("Cart", cart);
+
+            TempData["Success"] = "The product has been added.";
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+
         // GET: CartController/Details/5
         public ActionResult Details(int id)
         {

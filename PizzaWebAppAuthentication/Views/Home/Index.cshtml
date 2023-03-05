@@ -20,8 +20,9 @@
                 <p>@item.Description</p>
                 <span>@item.Price</span>
                 <p></p>
-                <button class ="in-cart" type="button"/>
-                <span class = "txt">В корзину<span/>
+                <a class="btn btn-primary" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">Add to cart</a>
+                   @*<button class ="in-cart" type="button"/>*@
+                @*<span class = "txt">В корзину<span/>*@
             </div>
         </div>
     }
