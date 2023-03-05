@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Data;
+using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 
@@ -6,33 +8,22 @@ namespace PizzaWebAppAuthentication.Controllers
 {
     public class CartController : Controller
     {
-        private readonly IHttpContextAccessor _session;
-        public CartController(IHttpContextAccessor session)
+        private readonly ApplicationDbContext _contextDb;
+        public CartController(ApplicationDbContext contextDb)
         {
-            _session= session;
+            _contextDb = contextDb;
         }
-        public ActionResult CartPartial()
-        {
-            //var model = new CartViewModel
-            //{
-            //    Items = new Dictionary<Pizza, int>()                 
-            //};
-
-            //model.User = new ApplicationUser();
-
-            //if (HttpContext. != 0)
-            //{
-            //    var list = (List<CartViewModel>)Session["cart"];
-            //}
-            return PartialView();
-        }
-
-        
-        // GET: CartController
+       
         public ActionResult Index()
         {
+            var cart = HttpContext.Session.GetJson <List<CartItem>>("Cart") ?? new List<CartItem>();
 
-            CartViewModel cartViewModel = new();
+            CartViewModel cartViewModel = new()
+            {
+                CartItems = cart,
+                GrandTotal = cart.Sum(x => x.Quantity* x.Price)
+            };
+
             return View(cartViewModel);
         }
 

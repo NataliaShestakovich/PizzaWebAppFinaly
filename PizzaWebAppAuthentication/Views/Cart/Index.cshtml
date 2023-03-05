@@ -1,63 +1,49 @@
-﻿@*@    using PizzaWebAppAuthentication.Areas.Identity.Pages.Account.Manage
-@model CartViewModel
+﻿@model PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles.CartViewModel
 
+@{
+    ViewData["Title"] = "Cart Overview";
+}
 
-<h2>Cart</h2>
+<h1>Cart overview</h1>
 
+@if (Model.CartItems.Count > 0)
+{
+    <table class="table">
+        <tr>
+            <th>Product</th>
+            <th>Quantity</th>
+            <th></th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+           @foreach (var item in Model.CartItems)
+            {
+               <tr>
+                   <td>@item.PizzaName</td>
+                   <td>@item.Quantity</td>
+                   <td> 
+                       <a class="btn btn-primary btn-sm" asp-action="Add" asp-route-id="@item.PizzaId">+</a>
+                       <a class="btn btn-info btn-sm" asp-action="Decrease" asp-route-id="@item.PizzaId">-</a>
+                       <a class="btn btn-danger btn-sm" asp-action="Remove" asp-route-id="@item.PizzaId">Remove</a>
+                   </td>
+                   <td>@item.Price.ToString("C2")</td>
+                   <td>@Model.CartItems.Where(x=>x.PizzaId == item.PizzaId).Sum(x=>x.Quantity*x.Price).ToString("C2")</td>
+               </tr>
+            }
+        <tr>
+            <td class="text-right" colspan="4">Grand Total: @Model.GrandTotal.ToString("C2")</td>
+        </tr>
+        <tr>
+            <td class="text-right" colspan="4">
+                <a class="btn btn-danger" asp-action="Clear">Claer Cart</a>
+                <a class="btn btn-primary" href="#">Checkout</a>
+            </td>
+        </tr>
+    </table>
 
+}
+else
+{
+    <h3 class="display-4 text-cente">Your cart is empty</h3>
+}
 
-@if (Model.Items == null || Model.Items.Count == 0)
-    {
-            <p>Корзина пуста</p>
-    }
-   else
-   {  
-      <table class="table">
-         <thead>
-              <tr>
-                  <th>Pizza</th>
-                  <th>Price</th>
-                  <th>Quantity</th>
-                  <th>Total</th>
-                  <th></th>
-              </tr>
-          </thead>
-          <tbody>
-              @foreach (var item in Model.Items)
-              {
-                      <tr>
-                          <td>@item.Key.Name</td>
-                          <td>@item.Key.Price</td>
-                          <td>
-                              <form asp-action="UpdateCart" method="post">
-                                  <div class="form-group">
-                                      <input type="hidden" name="pizzaId" value="@item.Key.Id" />
-                                      <input type="number" name="quantity" value="@item.Value" min="1" max="10" />
-                                      <button type="submit" class="btn btn-sm btn-primary">Обновить</button>
-                                  </div>
-                              </form>
-                          </td>
-                          <td>@(item.Key.Price * item.Value)</td>
-                          <td>
-                              <form asp-action="RemoveFromCart" method="post">
-                                  <input type="hidden" name="pizzaId" value="@item.Key.Id" />
-                                  <button type="submit" class="btn btn-sm btn-danger">Удалить</button>
-                              </form>
-                          </td>
-                      </tr>
-              }
-          </tbody>
-          <tfoot>
-              <tr>
-                  <th colspan="3">Итого:</th>
-                  <th>@Model.TotalPrice</th>
-                  <th></th>
-              </tr>
-          </tfoot>
-      </table>
-   }
-
-<div>
-    <a asp-controller="Home" asp-action="Index" class="btn btn-secondary">Продолжить покупки</a>
-    <a asp-action="Checkout" class="btn btn-primary">Оформить заказ</a>
-</div>*@

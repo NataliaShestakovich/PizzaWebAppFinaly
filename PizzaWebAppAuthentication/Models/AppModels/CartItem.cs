@@ -1,8 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
-using System.Drawing;
-
-namespace PizzaWebAppAuthentication.Models.AppModels
+﻿namespace PizzaWebAppAuthentication.Models.AppModels
 {
     public class CartItem
     {

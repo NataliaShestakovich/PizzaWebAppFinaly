@@ -4,10 +4,8 @@ namespace PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles
 {
     public class CartViewModel
     {
-        public Dictionary<Pizza, int> Items { get; set; }
+        public List<CartItem> CartItems { get; set; }
 
-        public ApplicationUser User { get; set; }
-
-        public decimal TotalPrice => Items.Sum(x => x.Key.Price * x.Value);
+        public decimal GrandTotal { get; set;}
     }
 }
