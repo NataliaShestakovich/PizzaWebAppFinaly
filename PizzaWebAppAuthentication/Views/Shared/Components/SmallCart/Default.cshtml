@@ -1,26 +1,28 @@
 ﻿@using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 @model SmallCartViewModel
 
-<style>
-    .custom-badge {
-        background-color: #FFA07A; /* терракотовый цвет */
-    }
-</style>
-
 @if (Model != null)
 {
-   
-        <i class="fas fa-cart-shopping d-inline"></i>
-        <p class = "d-inline">Items in cart: <span class="badge badge-primary custom-badge">@Model.NumberOfItems</span></p>
-        <p class = "d-inline">Total: <b>@Model.TotalAmount.ToString("C2")</b></p>
-            @*<a class="btn btn-primary" asp-controller="Cart" asp-action="Index">View Cart</a>
-            <a class="btn btn-danger" asp-controller="Cart" asp-action="Clear">Clear Cart</a>*@
-    
+
+
+    <a class="fas fa-cart-shopping cart-link" asp-controller="Cart" asp-action="Index"></a>
+    <p class="d-inline">Items: <span class="badge badge-primary text-dark">@Model.NumberOfItems</span></p>
+    <a class="fas fa-trash-alt d-inline cart-link d-inline" asp-controller="Cart" asp-action="Clear"></a>
+    <p class="d-inline">Total: <b>@Model.TotalAmount.ToString("C2")</b></p>
+
 }
 else
 {
-    <p class="lead m-0">Your cart is empty</p>
+    <a class="fas fa-cart-shopping cart-link" asp-controller="Cart" asp-action="Index"></a>
+    <p class="d-inline">Items: <span class="badge badge-primary text-dark">0</span></p>
+    <p class="d-inline">Total: <b>@uint.MinValue.ToString("C2")</b></p>
 }
+
+<style>
+    a.cart-link {
+        color: #333;
+    }
+</style>
 
 
 

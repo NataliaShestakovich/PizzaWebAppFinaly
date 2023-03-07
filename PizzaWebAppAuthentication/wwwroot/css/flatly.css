@@ -4636,22 +4636,22 @@ textarea.form-control-lg {
 }
 
 .badge {
-  --bs-badge-padding-x: 0.65em;
-  --bs-badge-padding-y: 0.35em;
-  --bs-badge-font-size: 0.75em;
-  --bs-badge-font-weight: 700;
-  --bs-badge-color: #fff;
-  --bs-badge-border-radius: 0.375rem;
-  display: inline-block;
-  padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
-  font-size: var(--bs-badge-font-size);
-  font-weight: var(--bs-badge-font-weight);
-  line-height: 1;
-  color: var(--bs-badge-color);
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  border-radius: var(--bs-badge-border-radius);
+    --bs-badge-padding-x: 0.45em;
+    --bs-badge-padding-y: 0.25em;
+    --bs-badge-font-size: 0.95em;
+    --bs-badge-font-weight: 600;
+    --bs-badge-color: #fff;
+    --bs-badge-border-radius: 0.375rem;
+    display: inline-block;
+    padding: var(--bs-badge-padding-y) var(--bs-badge-padding-x);
+    font-size: var(--bs-badge-font-size);
+    font-weight: var(--bs-badge-font-weight);
+    line-height: 1;
+    color: var(--bs-badge-color);
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: var(--bs-badge-border-radius);
 }
 .badge:empty {
   display: none;
@@ -8233,7 +8233,7 @@ textarea.form-control-lg {
 }
 
 .bg-body {
-  --bs-bg-opacity: 1;
+  --bs-bg-opacity: 0.0;
   background-color: rgba(var(--bs-body-bg-rgb), var(--bs-bg-opacity)) !important;
 }
 
