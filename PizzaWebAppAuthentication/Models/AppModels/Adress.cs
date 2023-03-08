@@ -12,7 +12,7 @@
 
         public int Apartment { get; set; }
 
-        public virtual ApplicationUser User { get; set; }
+        public virtual ICollection<ApplicationUser> User { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

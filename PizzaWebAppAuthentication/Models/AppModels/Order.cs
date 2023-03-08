@@ -10,12 +10,10 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public DateTime OrderDate { get; set; }
       
-        public virtual ICollection<Pizza> OrderItems {get; set; }
-
-        public decimal TotalPrice { get; set; }
-
-        public OrderStatus OrderStatus { get; set; }
+        public ICollection<CartItem> OrderItems {get; set; }
 
         public virtual Address DeliveryAddress { get; set; }
+
+        public decimal TotalPrice { get; set; }
     }
 }

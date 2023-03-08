@@ -8,7 +8,7 @@
 {
     <table class="table">
         <tr>
-            <th>Product</th>
+            <th>Pizza Name</th>
             <th>Quantity</th>
             <th></th>
             <th>Price</th>
@@ -34,11 +34,10 @@
         <tr>
             <td class="text-right" colspan="4">
                 <a class="btn btn-danger" asp-action="Clear">Claer Cart</a>
-                <a class="btn btn-primary" href="#">Checkout</a>
+                <a class="btn btn-primary" asp-controller="Orders" asp-action="Checkout" asp-route-cart="@Model"> Checkout </a>
             </td>
         </tr>
     </table>
-
 }
 else
 {

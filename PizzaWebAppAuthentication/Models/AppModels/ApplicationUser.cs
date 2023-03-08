@@ -12,7 +12,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Required]
         [Display(Name = "Surname")]
         public string LastName { get; set; }
-
         
         [Display(Name = "Login")]
         public override string? UserName { get => base.UserName; set => base.UserName = value; }

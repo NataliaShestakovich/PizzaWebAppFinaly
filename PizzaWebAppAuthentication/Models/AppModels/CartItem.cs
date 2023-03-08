@@ -2,6 +2,8 @@
 {
     public class CartItem
     {
+        public long Id { get; set; }
+
         public long PizzaId { get; set; }
 
         public string PizzaName { get; set; }

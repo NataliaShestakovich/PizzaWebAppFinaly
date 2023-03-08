@@ -1,0 +1,77 @@
+﻿@model PizzaWebAppAuthentication.Models.AppModels.Order
+
+@{
+    ViewData["Title"] = "Checkout";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Your Order</h2>
+<p>Your order number: @Model.Id</p>
+
+<div>
+    <hr />
+    <table class="table">
+        <tr>
+            <th>Pizza Name</th>
+            <th>Quantity</th>
+            <th>Price</th>
+            <th>Total</th>
+        </tr>
+        @foreach (var item in Model.OrderItems)
+        {
+            <tr>
+                <td>@item.PizzaName</td>
+                <td>@item.Quantity</td>
+                <td>@item.Price.ToString("C2")</td>
+                <td>@Model.OrderItems.Where(x => x.PizzaId == item.PizzaId).Sum(x => x.Quantity * x.Price).ToString("C2")</td>
+            </tr>
+        }
+        <tr>
+            <td class="text-right" colspan="4">Grand Total: @Model.TotalPrice.ToString("C2")</td>
+        </tr>
+    </table>
+</div>
+
+<form asp-action="Checkout" method="post" class="form-horizontal" role="form">
+    @Html.AntiForgeryToken()
+
+    <h4>You're just one step away from your yummy pizzas.</h4>
+    <hr />
+
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <div class="form-group">
+        <label asp-for=@Model.DeliveryAddress.City class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for=@Model.DeliveryAddress.City class="form-control" />
+            <span asp-validation-for=@Model.DeliveryAddress.City class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for=@Model.DeliveryAddress.Street class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for=@Model.DeliveryAddress.Street class="form-control" />
+            <span asp-validation-for=@Model.DeliveryAddress.Street class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for=@Model.DeliveryAddress.Building class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for=@Model.DeliveryAddress.Building class="form-control" />
+            <span asp-validation-for=@Model.DeliveryAddress.Building class="text-danger"></span>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label asp-for=@Model.DeliveryAddress.Apartment class="col-md-2 control-label"></label>
+        <div class="col-md-5">
+            <input asp-for=@Model.DeliveryAddress.Apartment class="form-control" />
+            <span asp-validation-for=@Model.DeliveryAddress.Apartment class="text-danger"></span>
+        </div>
+    </div>
+    <div>
+        <button class="btn btn-primary" type="submit">Confirm and pay</button>
+    </div>
+</form>

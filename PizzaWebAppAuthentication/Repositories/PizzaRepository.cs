@@ -14,9 +14,8 @@ namespace PizzaWebAppAuthentication.Repositories
         }
         
         public async Task<IEnumerable<Pizza>> GetPizzas()
-        {
-             
-                var pizzas = await _context.Pizzas.ToListAsync();
+        {    
+            var pizzas = await _context.Pizzas.ToListAsync();
             return pizzas;
         }
     }

@@ -3,8 +3,6 @@
 
 @if (Model != null)
 {
-
-
     <a class="fas fa-cart-shopping cart-link" asp-controller="Cart" asp-action="Index"></a>
     <p class="d-inline">Items: <span class="badge badge-primary text-dark">@Model.NumberOfItems</span></p>
     <a class="fas fa-trash-alt d-inline cart-link d-inline" asp-controller="Cart" asp-action="Clear"></a>
