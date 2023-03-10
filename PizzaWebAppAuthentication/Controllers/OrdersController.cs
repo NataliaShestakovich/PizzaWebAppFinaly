@@ -6,6 +6,7 @@ using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 using PizzaWebAppAuthentication.Repositories;
+using System.Security.Claims;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -30,8 +31,25 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
 
+            if (cart.Count <= 0 || cart == null)
+            {
+                TempData["Error"] = "Your cart is empty, add some pizzas first";
+
+                return RedirectToAction("Index", "Home");
+            }
+
+             return View();
+        }
+
+        [Authorize]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout(Order dataOrder)
+        {
             var id = Guid.NewGuid();
-           
+
+            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+
             Order order = new Order
             {
                 Id = id,
@@ -40,36 +58,31 @@ namespace PizzaWebAppAuthentication.Controllers
                 TotalPrice = cart.Sum(x => x.Quantity * x.Price)
             };
 
-            var userId = _userManager.GetUserId(HttpContext.User);
-            
-            order.User = new ApplicationUser
+            string userName = HttpContext.User.Identity.Name;
+            var user = await _userManager.FindByNameAsync(userName);
+
+            order.User = new ApplicationUser();
+            order.User = user;            
+
+            var IsExistAddress = _context.Addresses.Where(c => c.City == dataOrder.DeliveryAddress.City).
+                                                    Where(s => s.Street == dataOrder.DeliveryAddress.Street).
+                                                    Where(b => b.Building == dataOrder.DeliveryAddress.Building).
+                                                    Where(a => a.Apartment == dataOrder.DeliveryAddress.Apartment).
+                                                    FirstOrDefault();
+            order.DeliveryAddress = new();
+
+            if (IsExistAddress != null)
             {
-                Id = userId
-            };
-            
-            if (order.OrderItems.Count <= 0)
-            {
-                TempData["Error"] = "Your cart is empty, add some pizzas first";
-                
-                return RedirectToAction("Index", "Home");
+                order.DeliveryAddress = IsExistAddress;                
             }
-            return View(order);
-        }
-
-        [Authorize]
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Checkout(Order order)
-        {
-            Address address = new() 
-            { 
-                Id = Guid.NewGuid()
-            };
-
-            address.Orders.Add(order);
-            address.User.Add(order.User);
-
-            order.DeliveryAddress = address;
+            else
+            {                
+                order.DeliveryAddress.Id = Guid.NewGuid();
+                order.DeliveryAddress.City = dataOrder.DeliveryAddress.City;
+                order.DeliveryAddress.Street = dataOrder.DeliveryAddress.Street;
+                order.DeliveryAddress.Building = dataOrder.DeliveryAddress.Building;
+                order.DeliveryAddress.Apartment = dataOrder.DeliveryAddress.Apartment;               
+            }
 
             if (ModelState.IsValid)
             {
@@ -84,7 +97,7 @@ namespace PizzaWebAppAuthentication.Controllers
             }
             
             TempData["Error"] = "Incomplete ordering data";
-            return View(order);
+            return RedirectToAction("Index","Cart");
         }
     }
 }
