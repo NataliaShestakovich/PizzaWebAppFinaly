@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 
 namespace PizzaWebAppAuthentication.Models.AppModels
 {
@@ -10,7 +11,7 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public DateTime OrderDate { get; set; }
       
-        public ICollection<CartItem> OrderItems {get; set; }
+        public ICollection<CartItemViewModel> OrderItems {get; set; }
 
         public virtual Address DeliveryAddress { get; set; }
 

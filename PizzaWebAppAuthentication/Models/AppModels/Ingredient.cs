@@ -12,6 +12,5 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         public decimal Price { get; set; }
 
         public int PortionGrams { get; set; }
-
     }
 }
