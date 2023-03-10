@@ -1,48 +1,80 @@
 ﻿@using PizzaWebAppAuthentication.Models.ViewModels;
+@using PizzaWebAppAuthentication.Models.AppModels
 @model PizzaViewModel
 @{
     ViewData["Title"] = "Create Custom Pizza";
 }
 
-@using (Html.BeginForm("CreateCustomPizza", "Pizzas", FormMethod.Post))
-{
-    <div>
-        <h2>Выберите тип теста:</h2>
-        <div>
-            <label>
-                @Html.RadioButtonFor(model => model.DoughType, "thin")
-                Тонкое тесто
-            </label>
-        </div>
-        <div>
-            <label>
-                @Html.RadioButtonFor(model => model.DoughType, "thick")
-                Толстое тесто
-            </label>
-        </div>
-    </div>
+<div class="container">
+    <div class="info">
+        @using (Html.BeginForm("CreateCustomPizza", "Pizzas", FormMethod.Post))
+        {
+            <div style="margin-bottom: 20px;">
+                <h3>Тип теста:</h3>
+                @foreach (var pizzaBase in (List<PizzaBase>)ViewData["Bases"])
+                {
+                    <div style="display: inline-block; margin-right: 20px;">
+                        <label>
+                            @Html.RadioButtonFor(model => model.Base, pizzaBase.Name)
+                            @pizzaBase.Name
+                        </label>
+                    </div>
+                }
+            </div>
 
-    <div>
-        <h2>Выберите ингредиенты:</h2>
-        <div>
-            <label>
-                @Html.CheckBoxFor(model => model.HasTomatoes)
-                Помидоры
-            </label>
-        </div>
-        <div>
-            <label>
-                @Html.CheckBoxFor(model => model.HasMushrooms)
-                Грибы
-            </label>
-        </div>
-        <div>
-            <label>
-                @Html.CheckBoxFor(model => model.HasCheese)
-                Сыр
-            </label>
-        </div>
-    </div>
+            <div style="margin-bottom: 20px;">
+                <h3>Размер пиццы:</h3>
+                @foreach (var size in (List<Size>)ViewData["Sizes"])
+                {
+                    <div style="display: inline-block; margin-right: 20px;">
+                        <label>
+                            @Html.RadioButtonFor(model => model.Size, size.Diameter)
+                            @(size.Name + ' ' + size.Diameter + "см")
+                        </label>
+                    </div>
+                }
+            </div>
 
-    <button type="submit">Заказать</button>
-}
+            <div style="margin-bottom: 20px;">
+                <h3>Ингредиенты:</h3>
+
+                @foreach (var ingredient in (List<string>)ViewData["Ingredients"])
+                {
+                    <p />
+                    <input type="checkbox" name="Ingredients" value=@ingredient> @ingredient
+                }
+            </div>
+
+            <button type="submit">Заказать</button>
+        }
+    </div>
+    <div class="image">
+        <img src="@Url.Content("~/images/construct.png")" alt="Product Image" />
+    </div>
+</div>
+
+<style>
+    .container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .info, .image {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .info {
+        /* стили для блока с информацией */
+    }
+
+    .image {
+        background-image: url('~/images/1.png');
+        background-size: cover;
+        background-position: center;
+        /* стили для блока с картинкой */
+    }
+</style>
+
+
+
