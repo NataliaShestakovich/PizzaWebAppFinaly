@@ -14,7 +14,7 @@
     @foreach (var item in Model)
     {
         <div class="grid-item">
-            <img src="@Url.Content(item.ImageUrl)" alt="Product Image"/>
+            <img src="@Url.Content(item.ImagePath)" alt="Product Image"/>
             <div class="grid-item-details">
                 <h3>@item.Name</h3>
                 <p>@item.Description</p>
@@ -50,7 +50,7 @@
         margin-top: 0;
     }
 
-    .in-cart {
+    .btn-primary {
   background-color: #005f6b;
   color: #fff;
   border: none;
@@ -60,7 +60,7 @@
   transition: background-color 0.3s ease;
 }
 
-.in-cart:hover {
+        .btn-primary:hover {
   background-color: #F4B752;
 }
 
