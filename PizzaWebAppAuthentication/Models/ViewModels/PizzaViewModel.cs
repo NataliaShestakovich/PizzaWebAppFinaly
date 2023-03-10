@@ -1,10 +1,11 @@
-﻿namespace PizzaWebAppAuthentication.Models.ViewModels
+﻿using PizzaWebAppAuthentication.Models.AppModels;
+
+namespace PizzaWebAppAuthentication.Models.ViewModels
 {
     public class PizzaViewModel
     {
-        public string DoughType { get; set; }
-        public bool HasTomatoes { get; set; }
-        public bool HasMushrooms { get; set; }
-        public bool HasCheese { get; set; }
+        public string Base { get; set; }
+        public double Size { get; set; }
+        public List<string> Ingredients { get; set; }
     }
 }

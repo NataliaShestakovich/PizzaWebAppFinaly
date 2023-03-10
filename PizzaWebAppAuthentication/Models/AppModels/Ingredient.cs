@@ -9,7 +9,9 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        public int PricePerKg { get; set; }
+        public decimal Price { get; set; }
+
+        public int PortionGrams { get; set; }
+
     }
 }

@@ -5,7 +5,11 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 {
     public class Pizza
     {
-        public int Id { get; set; }
+        public Pizza()
+        {
+            Ingredients = new List<Ingredient>();
+        }
+        public Guid Id { get; set; }
 
         [Required]
         public string Name { get; set; }
@@ -13,9 +17,15 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Precision(25, 5)]
         public decimal Price { get; set; }
 
-        public string ImageUrl { get; set; }
+        public bool IsCustom { get; set; }
 
-        public virtual ICollection<Ingredient> Ingredients { get; set; }
+        public PizzaBase PizzaBase { get; set; }
+
+        public Size Size { get; set; }
+
+        public string ImagePath { get; set; }
+
+        public List<Ingredient> Ingredients { get; set; }
 
         public string Description { get; set; }
 
