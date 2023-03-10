@@ -29,7 +29,7 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpGet]
         public IActionResult Checkout()
         {
-            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
             if (cart.Count <= 0 || cart == null)
             {
@@ -48,7 +48,7 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var id = Guid.NewGuid();
 
-            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
             Order order = new Order
             {

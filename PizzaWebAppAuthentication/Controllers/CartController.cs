@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
-using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 
 namespace PizzaWebAppAuthentication.Controllers
@@ -16,7 +15,7 @@ namespace PizzaWebAppAuthentication.Controllers
        
         public ActionResult Index()
         {
-            var cart = HttpContext.Session.GetJson <List<CartItem>>("Cart") ?? new List<CartItem>();
+            var cart = HttpContext.Session.GetJson <List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
             CartViewModel cartViewModel = new()
             {
@@ -34,13 +33,13 @@ namespace PizzaWebAppAuthentication.Controllers
             {
                 //TODO сделать проверку выбросить нотификейшен
             }
-            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart") ?? new List<CartItem>();
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
-            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
+            CartItemViewModel cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
 
             if (cartItem == null)
             {
-                cart.Add(new CartItem(pizza));
+                cart.Add(new CartItemViewModel(pizza));
             }
             else
             {
@@ -56,9 +55,9 @@ namespace PizzaWebAppAuthentication.Controllers
 
         public async Task<ActionResult> Decrease(Guid id)
         {
-            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart");
 
-            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
+            CartItemViewModel cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
 
             if (cartItem.Quantity > 1)
             {
@@ -85,11 +84,11 @@ namespace PizzaWebAppAuthentication.Controllers
 
         public async Task<ActionResult> Remove(Guid id)
         {
-            var cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart");
 
             cart.RemoveAll(p => p.PizzaId == id);
 
-            CartItem cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
+            CartItemViewModel cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
 
             if (cart.Count == 0)
             {

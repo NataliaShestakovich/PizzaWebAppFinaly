@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 
 namespace PizzaWebAppAuthentication.Infrastructure.Components
@@ -8,7 +7,7 @@ namespace PizzaWebAppAuthentication.Infrastructure.Components
     {
         public IViewComponentResult Invoke()
         {
-            List<CartItem> cart = HttpContext.Session.GetJson<List<CartItem>>("Cart");
+            List<CartItemViewModel> cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart");
             SmallCartViewModel smallCartViewModel;
 
             if (cart == null || cart.Count == 0)

@@ -2,27 +2,16 @@
 {
     public class CartItem
     {
-        public Guid PizzaId { get; set; }
+        public Guid ID { get; set; }
 
-        public string PizzaName { get; set; }
+        public Guid PizzaId { get; set; }
 
         public int Quantity { get; set; }
 
-        public decimal Price { get; set; }
-        
-        public decimal TotalPrice { get { return Quantity * Price; }}
+        public Guid OrderId { get; set; }
 
-        public string Image { get; set; }
+        public virtual Pizza Pizza { get; set; }    
 
-        public CartItem() { }
-
-        public CartItem(Pizza pizza)
-        {
-            PizzaId = pizza.Id;
-            PizzaName = pizza.Name;
-            Price = pizza.Price;
-            Quantity = 1;
-            Image = pizza.ImagePath;
-        }
+        public virtual Order Order { get; set; }
     }
 }
