@@ -18,18 +18,29 @@ namespace PizzaWebAppAuthentication.Data.Seed
             _userManager = userManager;
             }
 
-        public void InitializePizzasTableDb()
+        public async Task InitializeDb()
+        {
+            InitializePizzasTableDb();
+            InitializeIngredientsTableDb();
+            InitializeSizeTableDb();
+            InitializeBaseTableDb();
+            InitializeOrdersTableDb();
+            await InitializeUsersTableDb();
+        }
+
+
+       private void InitializePizzasTableDb()
         {
             if (_context.Pizzas.Count() == 0)
             {
-                var piz1 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/1.png" };
-                var piz2 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/2.png" };
-                var piz3 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/4.png" };
-                var piz4 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/5.png" };
-                var piz5 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/6.png" };
-                var piz6 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/3.png" };
-                var piz7 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImageUrl = "~/images/1.png" };
-                var piz8 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.",ImageUrl = "~/images/4.png" };
+                var piz1 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
+                var piz2 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/2.png" };
+                var piz3 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/4.png" };
+                var piz4 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/5.png" };
+                var piz5 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/6.png" };
+                var piz6 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/3.png" };
+                var piz7 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
+                var piz8 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.",ImagePath = "~/images/4.png" };
 
                 var pizs = new List<Pizza> {piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8};
 
@@ -38,7 +49,54 @@ namespace PizzaWebAppAuthentication.Data.Seed
             }
         }
 
-        public void InitializeOrdersTableDb()
+        private void InitializeIngredientsTableDb()
+        {
+            if (_context.Ingredients.Count() == 0)
+            {
+                var ingr3 = new Ingredient { Name = "Ketchup", Price = 2, PortionGrams = 15 };
+                var ingr4 = new Ingredient { Name = "Mushrooms", Price = 3, PortionGrams = 20 };
+                var ingr5 = new Ingredient { Name = "Cheese", Price = 5, PortionGrams = 25 };
+                var ingr6 = new Ingredient { Name = "Ham", Price = 12, PortionGrams = 30 };
+                var ingr7 = new Ingredient { Name = "Chicken fillet", Price = 9, PortionGrams = 35 };
+                var ingr8 = new Ingredient { Name = "Tomatoes", Price = 3, PortionGrams = 35 };
+
+                var ingrs = new List<Ingredient> { ingr3, ingr4, ingr5, ingr6, ingr7, ingr8 };
+
+                _context.Ingredients.AddRange(ingrs);
+                _context.SaveChanges();
+            }
+        }
+        private void InitializeSizeTableDb()
+        {
+            if (_context.Sizes.Count() == 0)
+            {
+                var size1 = new Size { Name = "маленькая", Diameter = 28 };
+                var size2 = new Size { Name = "средняя", Diameter = 32};
+                var size3 = new Size { Name = "большая", Diameter = 45 };
+
+                var sizes = new List<Size> { size1, size2, size3};
+
+                _context.Sizes.AddRange(sizes);
+                _context.SaveChanges();
+            }
+        }
+
+        private void InitializeBaseTableDb()
+        {
+            if (_context.Bases.Count() == 0)
+            {
+                var base1 = new PizzaBase { Name = "тонкая", Price = 1.2M };
+                var base2 = new PizzaBase { Name = "стандартная", Price = 1.5M };
+                var base3 = new PizzaBase { Name = "толстая", Price = 1.7M };
+
+                var bases = new List<PizzaBase> { base1, base2, base3 };
+
+                _context.Bases.AddRange(bases);
+                _context.SaveChanges();
+            }
+        }
+
+        private void InitializeOrdersTableDb()
         {
             if (_context.OrderStatuses.Count() == 0)
             {
@@ -54,7 +112,7 @@ namespace PizzaWebAppAuthentication.Data.Seed
             }
         }
 
-        public async Task InitializeUsersTableDb ()
+        private async Task InitializeUsersTableDb ()
         {
             if (_context.Users.Count() == 0)
             {
