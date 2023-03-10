@@ -24,7 +24,6 @@ namespace PizzaWebAppAuthentication.Data.Seed
             InitializeIngredientsTableDb();
             InitializeSizeTableDb();
             InitializeBaseTableDb();
-            InitializeOrdersTableDb();
             await InitializeUsersTableDb();
         }
 
@@ -92,22 +91,6 @@ namespace PizzaWebAppAuthentication.Data.Seed
                 var bases = new List<PizzaBase> { base1, base2, base3 };
 
                 _context.Bases.AddRange(bases);
-                _context.SaveChanges();
-            }
-        }
-
-        private void InitializeOrdersTableDb()
-        {
-            if (_context.OrderStatuses.Count() == 0)
-            {
-                var status1 = new OrderStatus { Name = "Accepted" };
-                var status2 = new OrderStatus { Name = "Cooking" };
-                var status3 = new OrderStatus { Name = "Completed" };
-                var status4 = new OrderStatus { Name = "Interrupted" };
-
-                var statuses = new List<OrderStatus> { status1, status2, status3, status4 };
-
-                _context.OrderStatuses.AddRange(statuses);
                 _context.SaveChanges();
             }
         }
