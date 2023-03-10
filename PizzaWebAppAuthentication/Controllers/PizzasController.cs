@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Data;
+using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels;
 
 namespace PizzaWebAppAuthentication.Controllers
@@ -9,6 +11,12 @@ namespace PizzaWebAppAuthentication.Controllers
 
     public class PizzasController : Controller
     {
+        private readonly ApplicationDbContext _context;
+
+        public PizzasController(ApplicationDbContext context)
+        {
+            _context= context;
+        }
         // GET: PizzaController
         public IActionResult Index() // отображает список доступных пицц ЮЗЕР И АДМИН Т.Е ЗАРЕГИСТРИРОВАННЫЕ ПОЛЬЗОВАТЕЛИ
         {
@@ -48,23 +56,45 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         [HttpGet]
-        public IActionResult CreateCustomPizza() //отображать форму, на которой пользователь может
-                                                 //выбирать свои предпочтения по ингредиентам для
-                                                 //пиццы, включая тип теста, соуса, сыра и топпингов.
+        public IActionResult CreateCustomPizza() 
         {
+            var ingredients = _context.Ingredients.Select(x => x.Name).ToList();
+            ViewData["Ingredients"] = ingredients;
+
+            var bases = _context.Bases.ToList(); ;
+            ViewData["Bases"] = bases;
+
+            var sizes = _context.Sizes.ToList();
+            ViewData["Sizes"] = sizes;
+
             return View();
         }
 
         [HttpPost]
         public IActionResult CreateCustomPizza(PizzaViewModel pizza)
         {
-            //Метод CreateCustomPizza может создавать объект Pizza, но он не обязан его
-            //инициализировать пустым конструктором. В этом методе можно создавать объект
-            //Pizza с некоторыми начальными значениями, например, задавать имя пиццы, ее размер
-            //и т.д. Также метод CreateCustomPizza может возвращать не только RedirectToAction
-            //к методу AddIngredientToPizza, но и сам объект Pizza, который затем будет
-            //использоваться в методе AddIngredientToPizza.
-            return View();
+            var newPizza = new Pizza();
+            newPizza.Id = Guid.NewGuid();
+            newPizza.IsCustom= true;
+            newPizza.Composition = "Пицца создана нашим клиентом";
+            newPizza.Name = "Клиентская";
+
+            newPizza.PizzaBase = _context.Bases.Where(c => c.Name == pizza.Base).FirstOrDefault();
+
+            newPizza.Size = _context.Sizes.Where(c => c.Diameter == pizza.Size).FirstOrDefault();
+
+            decimal ingredientCost = 0;
+
+            foreach (var item in pizza.Ingredients)
+            {
+                var ingredient = _context.Ingredients.Where(c => c.Name == item).FirstOrDefault();
+                newPizza.Ingredients.Add(ingredient);
+                ingredientCost += ingredient.Price;
+            }
+
+            newPizza.Price = newPizza.PizzaBase.Price + (decimal)newPizza.Size.Diameter*0.1m;
+
+            return RedirectToAction("Index", "Home");
         }
 
         // GET: PizzaController/Edit/5

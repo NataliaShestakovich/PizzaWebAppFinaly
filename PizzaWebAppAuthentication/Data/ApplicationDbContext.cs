@@ -9,9 +9,13 @@ namespace PizzaWebAppAuthentication.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            //Database.EnsureDeleted();
+            //Database.EnsureCreated();
         }
 
         public DbSet<Pizza> Pizzas { get; set; }
+        public DbSet<Size> Sizes { get; set; }
+        public DbSet<PizzaBase> Bases { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Address> Addresses { get; set; }

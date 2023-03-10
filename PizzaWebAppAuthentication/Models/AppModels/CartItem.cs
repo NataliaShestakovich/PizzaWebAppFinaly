@@ -2,9 +2,7 @@
 {
     public class CartItem
     {
-        public long Id { get; set; }
-
-        public long PizzaId { get; set; }
+        public Guid PizzaId { get; set; }
 
         public string PizzaName { get; set; }
 
@@ -24,7 +22,7 @@
             PizzaName = pizza.Name;
             Price = pizza.Price;
             Quantity = 1;
-            Image = pizza.ImageUrl;
+            Image = pizza.ImagePath;
         }
     }
 }

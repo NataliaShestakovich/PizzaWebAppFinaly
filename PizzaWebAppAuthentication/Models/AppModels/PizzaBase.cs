@@ -2,7 +2,7 @@
 
 namespace PizzaWebAppAuthentication.Models.AppModels
 {
-    public class Ingredient
+    public class PizzaBase
     {
         public int Id { get; set; }
 
@@ -10,8 +10,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         public string Name { get; set; }
 
         public decimal Price { get; set; }
-
-        public int PortionGrams { get; set; }
 
     }
 }
