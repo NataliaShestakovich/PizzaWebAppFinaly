@@ -1,19 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration.UserSecrets;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
-using PizzaWebAppAuthentication.Repositories;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PizzaWebAppAuthentication.Controllers
-{
-    //контроллер, который будет отвечать за отображение и управление заказами клиентов, а также
-    //за обработку заказов и отправку уведомлений о новых заказах на почту пиццерии.
+{    
     public class OrdersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -97,9 +91,7 @@ namespace PizzaWebAppAuthentication.Controllers
                         Quantity = cartItem.Quantity,
                         OrderId = order.Id
                     };
-                    //await _context.AddAsync(orderItem);
-                    //await _context.SaveChangesAsync();
-
+                    
                     order.CartItems.Add(orderItem);
                 }
 
@@ -114,9 +106,9 @@ namespace PizzaWebAppAuthentication.Controllers
 
                     return RedirectToAction("Index", "Home");
                 }
-            }
-            
+            }            
             TempData["Error"] = "Incomplete ordering data";
+
             return RedirectToAction("Index","Cart");
         }
     }
