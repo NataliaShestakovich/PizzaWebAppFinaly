@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PizzaWebAppAuthentication.Infrastructure.Validation;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaWebAppAuthentication.Models.AppModels
 {
@@ -31,6 +33,8 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public string Composition { get; set; }
 
-        //public virtual ICollection<Order> RelatedOrders  { get; set; } // заказы в которых присутствует эта пицца
+        [NotMapped]
+        [FileExtention]
+        public IFormFile ImageUpload { get; set; }        
     }
 }
