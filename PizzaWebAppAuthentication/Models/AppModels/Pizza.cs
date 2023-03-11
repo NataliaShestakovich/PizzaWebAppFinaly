@@ -26,7 +26,7 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public PizzaBase PizzaBase { get; set; }
 
-        public Size Size { get; set; }
+        public Size Size { get; set; } // можно установить дефолтное значение??
 
         [Required]
         public string ImagePath { get; set; }
