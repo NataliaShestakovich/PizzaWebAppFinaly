@@ -63,11 +63,6 @@
         </main>
     </div>
 
-    @*<footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - PizzaWebAppAuthentication - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-        </div>
-    </footer>*@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -75,7 +70,24 @@
 </body>
 </html>
 
+
+
 <style>
+
+    body {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+}
+
+main {
+  flex-grow: 1;
+}
+
+footer {
+  flex-shrink: 0;
+}
     .container-fluid {
         width: 85%;
     }
@@ -85,5 +97,5 @@
         margin: 0 auto;
         width: 100px;
         height: 80px;
-    }   
+    }
 </style>

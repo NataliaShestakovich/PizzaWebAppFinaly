@@ -1,0 +1,48 @@
+﻿@model IEnumerable<PizzaWebAppAuthentication.Models.AppModels.Pizza>
+
+@{
+    ViewData["Title"] = "Pizza";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Pizza</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Image</th>
+            <th>Description</th>
+            <th>Composition</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Price.ToString("C2")
+            </td>
+            <td>
+                    <img src="@Url.Content(item.ImagePath)" width="200" alt=""/>
+            </td>
+            <td>
+                @item.Description
+            </td>
+            <td>
+                @item.Composition
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id" class="confirmDeletion">Delete</a>
+            </td>
+        </tr>}
+    </tbody>
+</table>
