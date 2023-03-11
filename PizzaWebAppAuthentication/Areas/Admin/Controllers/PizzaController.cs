@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 using PizzaWebAppAuthentication.Repositories;
@@ -10,10 +11,21 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     {
         private readonly ApplicationDbContext _contextDb;
         private readonly IPizzaRepository _pizzaRepository;
-        public PizzaController(ApplicationDbContext contextDb, IPizzaRepository pizzaRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+
+        public PizzaController(ApplicationDbContext contextDb, 
+                              IPizzaRepository pizzaRepository,
+                              IWebHostEnvironment webHostEnvironment)
         {
             _contextDb = contextDb;
             _pizzaRepository = pizzaRepository;
+            _webHostEnvironment = webHostEnvironment;
+        }
+
+        public IActionResult Create()
+        {
+            
+            return View();
         }
 
         public async Task<IActionResult> Index()
