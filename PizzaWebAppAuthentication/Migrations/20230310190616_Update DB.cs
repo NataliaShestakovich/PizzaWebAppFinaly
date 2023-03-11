@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PizzaWebAppAuthentication.Migrations
 {
     /// <inheritdoc />
-    public partial class CreateDB : Migration
+    public partial class UpdateDB : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -256,7 +256,8 @@ namespace PizzaWebAppAuthentication.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId1 = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DeliveryAddressId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -271,8 +272,8 @@ namespace PizzaWebAppAuthentication.Migrations
                         principalTable: "Addresses",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Orders_AspNetUsers_UserId",
-                        column: x => x.UserId,
+                        name: "FK_Orders_AspNetUsers_UserId1",
+                        column: x => x.UserId1,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                     table.ForeignKey(
@@ -283,25 +284,29 @@ namespace PizzaWebAppAuthentication.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CartItem",
+                name: "CartItems",
                 columns: table => new
                 {
                     ID = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     PizzaId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PizzaName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Quantity = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Image = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CartItem", x => x.ID);
+                    table.PrimaryKey("PK_CartItems", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_CartItem_Orders_OrderId",
+                        name: "FK_CartItems_Orders_OrderId",
                         column: x => x.OrderId,
                         principalTable: "Orders",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CartItems_Pizzas_PizzaId",
+                        column: x => x.PizzaId,
+                        principalTable: "Pizzas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -344,9 +349,14 @@ namespace PizzaWebAppAuthentication.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CartItem_OrderId",
-                table: "CartItem",
+                name: "IX_CartItems_OrderId",
+                table: "CartItems",
                 column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CartItems_PizzaId",
+                table: "CartItems",
+                column: "PizzaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Ingredients_PizzaId",
@@ -364,9 +374,9 @@ namespace PizzaWebAppAuthentication.Migrations
                 column: "PizzaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Orders_UserId",
+                name: "IX_Orders_UserId1",
                 table: "Orders",
-                column: "UserId");
+                column: "UserId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Pizzas_PizzaBaseId",
@@ -398,7 +408,7 @@ namespace PizzaWebAppAuthentication.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "CartItem");
+                name: "CartItems");
 
             migrationBuilder.DropTable(
                 name: "Ingredients");

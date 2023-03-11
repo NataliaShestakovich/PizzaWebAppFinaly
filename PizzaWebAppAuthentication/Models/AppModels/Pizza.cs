@@ -31,6 +31,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public string Composition { get; set; }
 
-        public virtual ICollection<Order> RelatedOrders  { get; set; } // заказы в которых присутствует эта пицца
+        //public virtual ICollection<Order> RelatedOrders  { get; set; } // заказы в которых присутствует эта пицца
     }
 }

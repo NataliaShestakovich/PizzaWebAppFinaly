@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzaWebAppAuthentication.Data;
 
@@ -11,9 +12,11 @@ using PizzaWebAppAuthentication.Data;
 namespace PizzaWebAppAuthentication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230310194943_154798770")]
+    partial class _154798770
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,9 +316,6 @@ namespace PizzaWebAppAuthentication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("DeliveryAddressId")
                         .HasColumnType("uniqueidentifier");
 
@@ -325,14 +325,12 @@ namespace PizzaWebAppAuthentication.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeliveryAddressId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -501,13 +499,7 @@ namespace PizzaWebAppAuthentication.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("DeliveryAddressId");
 
-                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("DeliveryAddress");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Pizza", b =>

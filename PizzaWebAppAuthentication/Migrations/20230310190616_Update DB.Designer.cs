@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PizzaWebAppAuthentication.Data;
 
@@ -11,9 +12,11 @@ using PizzaWebAppAuthentication.Data;
 namespace PizzaWebAppAuthentication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230310190616_Update DB")]
+    partial class UpdateDB
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -313,26 +316,31 @@ namespace PizzaWebAppAuthentication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ApplicationUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<Guid?>("DeliveryAddressId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<Guid?>("PizzaId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeliveryAddressId");
 
-                    b.HasIndex("UserId");
+                    b.HasIndex("PizzaId");
+
+                    b.HasIndex("UserId1");
 
                     b.ToTable("Orders");
                 });
@@ -472,7 +480,7 @@ namespace PizzaWebAppAuthentication.Migrations
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.CartItem", b =>
                 {
                     b.HasOne("PizzaWebAppAuthentication.Models.AppModels.Order", "Order")
-                        .WithMany("CartItems")
+                        .WithMany("OrderItems")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -501,9 +509,13 @@ namespace PizzaWebAppAuthentication.Migrations
                         .WithMany("Orders")
                         .HasForeignKey("DeliveryAddressId");
 
+                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.Pizza", null)
+                        .WithMany("RelatedOrders")
+                        .HasForeignKey("PizzaId");
+
                     b.HasOne("PizzaWebAppAuthentication.Models.AppModels.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId1");
 
                     b.Navigation("DeliveryAddress");
 
@@ -532,12 +544,14 @@ namespace PizzaWebAppAuthentication.Migrations
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Order", b =>
                 {
-                    b.Navigation("CartItems");
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Pizza", b =>
                 {
                     b.Navigation("Ingredients");
+
+                    b.Navigation("RelatedOrders");
                 });
 #pragma warning restore 612, 618
         }

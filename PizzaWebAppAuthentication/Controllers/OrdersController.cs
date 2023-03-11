@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration.UserSecrets;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
 using PizzaWebAppAuthentication.Repositories;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -50,50 +52,68 @@ namespace PizzaWebAppAuthentication.Controllers
 
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
-            Order order = new Order
+            if (cart.Count >= 0 || cart != null)
             {
-                Id = id,
-                OrderDate = DateTime.Now,
-                OrderItems = cart,
-                TotalPrice = cart.Sum(x => x.Quantity * x.Price)
-            };
+                Order order = new Order
+                {
+                    Id = id,
+                    OrderDate = DateTime.Now,
+                    CartItems = new List<CartItem>(),
+                    TotalPrice = cart.Sum(x => x.Quantity * x.Price)
+                };
 
-            string userName = HttpContext.User.Identity.Name;
-            var user = await _userManager.FindByNameAsync(userName);
+                string userName = HttpContext.User.Identity.Name;
+                              
+                var user = await _userManager.FindByNameAsync(userName);
 
-            order.User = new ApplicationUser();
-            order.User = user;            
+                order.ApplicationUserId = Guid.Parse(user.Id);
 
-            var IsExistAddress = _context.Addresses.Where(c => c.City == dataOrder.DeliveryAddress.City).
-                                                    Where(s => s.Street == dataOrder.DeliveryAddress.Street).
-                                                    Where(b => b.Building == dataOrder.DeliveryAddress.Building).
-                                                    Where(a => a.Apartment == dataOrder.DeliveryAddress.Apartment).
-                                                    FirstOrDefault();
-            order.DeliveryAddress = new();
+                var IsExistAddress = _context.Addresses.Where(c => c.City == dataOrder.DeliveryAddress.City).
+                                                        Where(s => s.Street == dataOrder.DeliveryAddress.Street).
+                                                        Where(b => b.Building == dataOrder.DeliveryAddress.Building).
+                                                        Where(a => a.Apartment == dataOrder.DeliveryAddress.Apartment).
+                                                        FirstOrDefault();
+                order.DeliveryAddress = new();
 
-            if (IsExistAddress != null)
-            {
-                order.DeliveryAddress = IsExistAddress;                
-            }
-            else
-            {                
-                order.DeliveryAddress.Id = Guid.NewGuid();
-                order.DeliveryAddress.City = dataOrder.DeliveryAddress.City;
-                order.DeliveryAddress.Street = dataOrder.DeliveryAddress.Street;
-                order.DeliveryAddress.Building = dataOrder.DeliveryAddress.Building;
-                order.DeliveryAddress.Apartment = dataOrder.DeliveryAddress.Apartment;               
-            }
+                if (IsExistAddress != null)
+                {
+                    order.DeliveryAddress = IsExistAddress;
+                }
+                else
+                {
+                    order.DeliveryAddress.Id = Guid.NewGuid();
+                    order.DeliveryAddress.City = dataOrder.DeliveryAddress.City;
+                    order.DeliveryAddress.Street = dataOrder.DeliveryAddress.Street;
+                    order.DeliveryAddress.Building = dataOrder.DeliveryAddress.Building;
+                    order.DeliveryAddress.Apartment = dataOrder.DeliveryAddress.Apartment;
+                }
 
-            if (ModelState.IsValid)
-            {
-                await _context.Orders.AddAsync(order);
-                await _context.SaveChangesAsync();
+                foreach (var cartItem in cart)
+                {
+                    var orderItem = new CartItem
+                    {
+                        ID = cartItem.ID,
+                        PizzaId = cartItem.PizzaId,
+                        Quantity = cartItem.Quantity,
+                        OrderId = order.Id
+                    };
+                    //await _context.AddAsync(orderItem);
+                    //await _context.SaveChangesAsync();
 
-                HttpContext.Session.Remove("Cart");
-                
-                TempData["Success"] = "Your order is accepted";
+                    order.CartItems.Add(orderItem);
+                }
 
-                return RedirectToAction("Index", "Home");
+                if (ModelState.IsValid)
+                {
+                    await _context.Orders.AddAsync(order);
+                    await _context.SaveChangesAsync();
+
+                    HttpContext.Session.Remove("Cart");
+
+                    TempData["Success"] = "Your order is accepted";
+
+                    return RedirectToAction("Index", "Home");
+                }
             }
             
             TempData["Error"] = "Incomplete ordering data";

@@ -12,8 +12,8 @@ using PizzaWebAppAuthentication.Data;
 namespace PizzaWebAppAuthentication.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230310152037_Create DB")]
-    partial class CreateDB
+    [Migration("20230310193321_New Update DB")]
+    partial class NewUpdateDB
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -264,20 +264,11 @@ namespace PizzaWebAppAuthentication.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Image")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("OrderId")
+                    b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("PizzaId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("PizzaName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -286,7 +277,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("CartItem");
+                    b.ToTable("CartItems");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Ingredient", b =>
@@ -335,16 +326,14 @@ namespace PizzaWebAppAuthentication.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
                     b.HasIndex("DeliveryAddressId");
 
                     b.HasIndex("PizzaId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -483,9 +472,13 @@ namespace PizzaWebAppAuthentication.Migrations
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.CartItem", b =>
                 {
-                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.Order", null)
-                        .WithMany("OrderItems")
-                        .HasForeignKey("OrderId");
+                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.Order", "Order")
+                        .WithMany("CartItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Order");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Ingredient", b =>
@@ -505,13 +498,7 @@ namespace PizzaWebAppAuthentication.Migrations
                         .WithMany("RelatedOrders")
                         .HasForeignKey("PizzaId");
 
-                    b.HasOne("PizzaWebAppAuthentication.Models.AppModels.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId");
-
                     b.Navigation("DeliveryAddress");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Pizza", b =>
@@ -536,7 +523,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Order", b =>
                 {
-                    b.Navigation("OrderItems");
+                    b.Navigation("CartItems");
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Pizza", b =>
