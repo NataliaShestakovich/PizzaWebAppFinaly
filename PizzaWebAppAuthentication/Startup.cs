@@ -1,4 +1,5 @@
 ﻿using PizzaWebAppAuthentication.Data.Seed;
+using System.Globalization;
 
 namespace PizzaWebAppAuthentication
 {
@@ -13,7 +14,7 @@ namespace PizzaWebAppAuthentication
 
                 var initializerDb = scope.ServiceProvider.GetService<InitializeDataBase>();
                 await initializerDb.InitializeDb();
-            }            
+            }
         }
     }
 }

@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
@@ -9,6 +10,7 @@ using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
 using Serilog.Events;
+using System.Globalization;
 
 namespace PizzaWebAppAuthentication
 {
@@ -20,7 +22,7 @@ namespace PizzaWebAppAuthentication
             {
                 var builder = WebApplication.CreateBuilder(args);
 
-                builder.Host.UseSerilog((ctx, lc)=> lc
+                builder.Host.UseSerilog((ctx, lc) => lc
                 //.WriteTo.Console(LogEventLevel.Warning)
                 .WriteTo.File(@"D:\Users\PizzaLog folder\logs\data.log", LogEventLevel.Warning));
 
@@ -61,10 +63,11 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddScoped<UserManagementService>(); //Посмотреть после если будет интерфейс
 
-                builder.Services.AddAuthorization(option => 
-                        {option.AddPolicy("OnlyAdmin", policyBuilder =>
+                builder.Services.AddAuthorization(option =>
+                        {
+                            option.AddPolicy("OnlyAdmin", policyBuilder =>
                         policyBuilder.RequireRole("Admin"));
-                });
+                        });
 
                 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
 
@@ -88,11 +91,13 @@ namespace PizzaWebAppAuthentication
                 }
 
                 app.UseHttpsRedirection();
+                
                 app.UseStaticFiles();
 
                 app.UseRouting();
 
                 app.UseAuthentication();
+                
                 app.UseAuthorization();
 
                 app.MapControllerRoute(
