@@ -3,6 +3,7 @@ using PizzaWebAppAuthentication.Infrastructure.Validation;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Diagnostics.Metrics;
+using System.Globalization;
 
 namespace PizzaWebAppAuthentication.Models.AppModels
 {
@@ -19,9 +20,9 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         [Required]
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a value")]
-        [Column(TypeName = "decimal(6, 2)")]
+        [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
-
+        
         public PizzaBase PizzaBase { get; set; }
 
         public Size Size { get; set; } // можно установить дефолтное значение??
