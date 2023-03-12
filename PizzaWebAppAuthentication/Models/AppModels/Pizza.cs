@@ -22,8 +22,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Column(TypeName = "decimal(6, 2)")]
         public decimal Price { get; set; }
 
-        public bool IsCustom { get; set; }
-
         public PizzaBase PizzaBase { get; set; }
 
         public Size Size { get; set; } // можно установить дефолтное значение??

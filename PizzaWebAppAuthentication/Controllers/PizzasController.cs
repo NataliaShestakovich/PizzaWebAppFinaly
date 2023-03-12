@@ -75,7 +75,7 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
-            newPizza.IsCustom= true;
+            //newPizza.IsCustom= true; это совойство удалила так как кастомные будут в отдельной таблице в БД
             newPizza.Composition = "Пицца создана нашим клиентом";
             newPizza.Name = "Клиентская";
 
