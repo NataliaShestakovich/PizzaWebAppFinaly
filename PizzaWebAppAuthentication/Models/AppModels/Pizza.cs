@@ -33,8 +33,6 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public ICollection<Ingredient> Ingredients { get; set; }
 
-        public string Description { get; set; }
-
         private string _composition;
 
         public string Composition
