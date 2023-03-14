@@ -20,28 +20,59 @@ namespace PizzaWebAppAuthentication.Data.Seed
 
         public async Task InitializeDb()
         {
-            InitializePizzasTableDb();
             InitializeIngredientsTableDb();
             InitializeSizeTableDb();
             InitializeBaseTableDb();
+            InitializePizzasTableDb();
             await InitializeUsersTableDb();
         }
 
 
-       private void InitializePizzasTableDb()
+        private void InitializePizzasTableDb()
         {
             if (_context.Pizzas.Count() == 0)
             {
-                var piz1 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
-                var piz2 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/2.png" };
-                var piz3 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/4.png" };
-                var piz4 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/5.png" };
-                var piz5 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/6.png" };
-                var piz6 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/3.png" };
-                var piz7 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
-                var piz8 = new Pizza { Name = "Capricciosa", Price = 70.00M, Description = "A normal pizza with a taste from the forest.",ImagePath = "~/images/4.png" };
+                var piz1 = new Pizza { Name = "Капричиоза", Standart = true, Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
+                var piz2 = new Pizza { Name = "Сытная", Standart = true, Price = 75.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/2.png" };
+                var piz3 = new Pizza { Name = "Гавайская", Standart = true, Price = 60.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/4.png" };
+                var piz4 = new Pizza { Name = "Везувий", Standart = true, Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/5.png" };
+                var piz5 = new Pizza { Name = "Студенческая", Standart = true, Price = 70.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/6.png" };
+                var piz6 = new Pizza { Name = "Охотничья", Standart = true, Price = 60.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/3.png" };
+                var piz7 = new Pizza { Name = "Сырная", Standart = true, Price = 75.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
+                var piz8 = new Pizza { Name = "Пепперони", Standart = true, Price = 75.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/4.png" };
+                var piz9 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/1.png" };
+                var piz10 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, Description = "A normal pizza with a taste from the forest.", ImagePath = "~/images/4.png" };
 
-                var pizs = new List<Pizza> {piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8};
+
+                var pizs = new List<Pizza> { piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8, piz9, piz10 };
+
+                var pizzaBase = _context.Bases.FirstOrDefault();
+                if (pizzaBase != null)
+                {
+                    foreach (var pizza in pizs)
+                    {
+                        pizza.PizzaBase = pizzaBase;
+                    }
+                }
+
+                var size = _context.Sizes.FirstOrDefault();
+                if (size != null)
+                {
+                    foreach (var pizza in pizs)
+                    {
+                        pizza.Size = size;
+                    }
+                }
+
+                var ingredients = _context.Ingredients.ToList();
+
+                foreach (var ingredient in ingredients)
+                {
+                    foreach (var pizza in pizs)
+                    {
+                        pizza.Ingredients.Add(ingredient);
+                    }
+                }
 
                 _context.Pizzas.AddRange(pizs);
                 _context.SaveChanges();
@@ -52,12 +83,12 @@ namespace PizzaWebAppAuthentication.Data.Seed
         {
             if (_context.Ingredients.Count() == 0)
             {
-                var ingr3 = new Ingredient { Name = "Ketchup", Price = 2, PortionGrams = 15 };
-                var ingr4 = new Ingredient { Name = "Mushrooms", Price = 3, PortionGrams = 20 };
-                var ingr5 = new Ingredient { Name = "Cheese", Price = 5, PortionGrams = 25 };
-                var ingr6 = new Ingredient { Name = "Ham", Price = 12, PortionGrams = 30 };
-                var ingr7 = new Ingredient { Name = "Chicken fillet", Price = 9, PortionGrams = 35 };
-                var ingr8 = new Ingredient { Name = "Tomatoes", Price = 3, PortionGrams = 35 };
+                var ingr3 = new Ingredient { Name = "Кетчуп", Price = 2, PortionGrams = 15 };
+                var ingr4 = new Ingredient { Name = "Грибы", Price = 3, PortionGrams = 20 };
+                var ingr5 = new Ingredient { Name = "Сыр", Price = 5, PortionGrams = 25 };
+                var ingr6 = new Ingredient { Name = "Ветчина", Price = 12, PortionGrams = 30 };
+                var ingr7 = new Ingredient { Name = "Курица", Price = 9, PortionGrams = 35 };
+                var ingr8 = new Ingredient { Name = "Помидоры", Price = 3, PortionGrams = 35 };
 
                 var ingrs = new List<Ingredient> { ingr3, ingr4, ingr5, ingr6, ingr7, ingr8 };
 

@@ -19,7 +19,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _pizzaRepository.GetPizzas());
+            return View(await _pizzaRepository.GetStandartPizzas());
         }
 
         [Authorize]

@@ -14,15 +14,18 @@
     @foreach (var item in Model)
     {
         <div class="grid-item">
-            <img src="@Url.Content(item.ImagePath)" alt="Product Image"/>
+            <img src="@Url.Content(item.ImagePath)" alt="Product Image" />
             <div class="grid-item-details">
                 <h3>@item.Name</h3>
-                <p>@item.Description</p>
-                <span>@item.Price</span>
+                <p>@item.PizzaBase.Name.ToLower() основа, @item.Size.Diameter см</p>
+
+                @if (item.Ingredients.Any())
+                {
+                    <p>@string.Join(", ", item.Ingredients.Select(c => c.Name)).ToLower()</p>
+                }
+                <h5>@item.Price руб.</h5>
                 <p></p>
-                <a class="btn btn-primary" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">Add to cart</a>
-                   @*<button class ="in-cart" type="button"/>*@
-                @*<span class = "txt">В корзину<span/>*@
+                <a class="btn btn-primary" asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id">В корзину</a>
             </div>
         </div>
     }
