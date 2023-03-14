@@ -75,7 +75,7 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
-            //newPizza.IsCustom= true; это совойство удалила так как кастомные будут в отдельной таблице в БД
+            newPizza.Standart = true;
             newPizza.Composition = "Пицца создана нашим клиентом";
             newPizza.Name = "Клиентская";
 
@@ -92,9 +92,11 @@ namespace PizzaWebAppAuthentication.Controllers
                 ingredientCost += ingredient.Price;
             }
 
-            newPizza.Price = newPizza.PizzaBase.Price + (decimal)newPizza.Size.Diameter*0.1m;
+            newPizza.Price = newPizza.PizzaBase.Price + (decimal)newPizza.Size.Diameter * 0.1m + ingredientCost;
 
-            return RedirectToAction("Index", "Home");
+            //return RedirectToAction("Index", "Home");
+
+            return Content($"Вы успешно сформировали пиццу. Стоимость: {newPizza.Price}");
         }
 
         // GET: PizzaController/Edit/5

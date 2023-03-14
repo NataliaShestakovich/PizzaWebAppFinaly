@@ -16,7 +16,7 @@
                     <div style="display: inline-block; margin-right: 20px;">
                         <label>
                             @Html.RadioButtonFor(model => model.Base, pizzaBase.Name)
-                            @pizzaBase.Name
+                            @pizzaBase.Name.ToLower()
                         </label>
                     </div>
                 }
@@ -29,7 +29,7 @@
                     <div style="display: inline-block; margin-right: 20px;">
                         <label>
                             @Html.RadioButtonFor(model => model.Size, size.Diameter)
-                            @(size.Name + ' ' + size.Diameter + "см")
+                            @(size.Name.ToLower() + ' ' + size.Diameter + "см")
                         </label>
                     </div>
                 }
@@ -41,7 +41,7 @@
                 @foreach (var ingredient in (List<string>)ViewData["Ingredients"])
                 {
                     <p />
-                    <input type="checkbox" name="Ingredients" value=@ingredient> @ingredient
+                    <input type="checkbox" name="Ingredients" value=@ingredient> @ingredient.ToLower()
                 }
             </div>
 
@@ -75,6 +75,3 @@
         /* стили для блока с картинкой */
     }
 </style>
-
-
-
