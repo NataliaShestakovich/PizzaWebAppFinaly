@@ -10,12 +10,17 @@ namespace PizzaWebAppAuthentication.Repositories
         private readonly ApplicationDbContext _context;
         public PizzaRepository(ApplicationDbContext context)
         {
-            _context= context;
+            _context = context;
         }
-        
-        public async Task<IEnumerable<Pizza>> GetPizzas()
-        {    
-            var pizzas = await _context.Pizzas.ToListAsync();
+
+        public async Task<IEnumerable<Pizza>> GetStandartPizzas()
+        {
+            var pizzas = await _context.Pizzas
+                .Where(c => c.Standart)
+                .Include(c => c.Ingredients)
+                .Include(c => c.PizzaBase)
+                .Include(c => c.Size)
+                .ToListAsync();
             return pizzas;
         }
     }

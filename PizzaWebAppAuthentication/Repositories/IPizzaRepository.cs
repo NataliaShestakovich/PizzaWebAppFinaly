@@ -4,6 +4,6 @@ namespace PizzaWebAppAuthentication.Repositories
 {
     public interface IPizzaRepository
     {
-        public Task<IEnumerable<Pizza>> GetPizzas();
+        public Task<IEnumerable<Pizza>> GetStandartPizzas();
     }
 }
