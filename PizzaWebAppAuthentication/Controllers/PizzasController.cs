@@ -76,7 +76,6 @@ namespace PizzaWebAppAuthentication.Controllers
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
             newPizza.Standart = true;
-            newPizza.Composition = "Пицца создана нашим клиентом";
             newPizza.Name = "Клиентская";
 
             newPizza.PizzaBase = _context.Bases.Where(c => c.Name == pizza.Base).FirstOrDefault();

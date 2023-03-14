@@ -33,49 +33,8 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public ICollection<Ingredient> Ingredients { get; set; }
 
-        private string _composition;
-
-        public string Composition
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(_composition))
-                {
-                    _composition = FormCompositionDefault();
-                }
-                return _composition;
-            }
-            set
-            {
-                _composition = value;
-            }
-        }
-
         [NotMapped]
         [FileExtention]
-        public IFormFile ImageUpload { get; set; }    
-        
-        private string FormCompositionDefault()
-        {
-            string composition = string.Empty;
-            var counter = 0;
-
-            if (Ingredients != null || Ingredients.Count > 0)
-            {
-                foreach (var ingredient in Ingredients)
-                {
-                    counter++;
-
-                    composition += ingredient.Name;
-
-                    if (counter == Ingredients.Count)
-                    {
-                        composition += ", ";
-                    }
-                }
-            } 
-            return (composition);
-        }
-
+        public IFormFile ImageUpload { get; set; } 
     }
 }
