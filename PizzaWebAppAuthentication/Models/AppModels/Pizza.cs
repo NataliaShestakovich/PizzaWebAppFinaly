@@ -22,24 +22,24 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a value")]
         [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
-        
+
+        public bool Standart { get; set; }
+
         public PizzaBase PizzaBase { get; set; }
 
         public Size Size { get; set; } // можно установить дефолтное значение??
 
-        [Required]
         public string ImagePath { get; set; }
 
-        public List<Ingredient> Ingredients { get; set; }
+        public ICollection<Ingredient> Ingredients { get; set; }
 
-
-        [Required, MinLength(10, ErrorMessage = "Minimum length is 10")]
         public string Description { get; set; }
 
         private string _composition;
 
-        public string Composition {
-            get 
+        public string Composition
+        {
+            get
             {
                 if (string.IsNullOrEmpty(_composition))
                 {
@@ -47,11 +47,11 @@ namespace PizzaWebAppAuthentication.Models.AppModels
                 }
                 return _composition;
             }
-            set 
+            set
             {
                 _composition = value;
             }
-        } 
+        }
 
         [NotMapped]
         [FileExtention]
