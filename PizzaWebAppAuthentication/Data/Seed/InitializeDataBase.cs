@@ -32,16 +32,16 @@ namespace PizzaWebAppAuthentication.Data.Seed
         {
             if (_context.Pizzas.Count() == 0)
             {
-                var piz1 = new Pizza { Name = "Капричиоза", Standart = true, Price = 70.00M, ImagePath = "~/images/1.png" };
-                var piz2 = new Pizza { Name = "Сытная", Standart = true, Price = 75.00M, ImagePath = "~/images/2.png" };
-                var piz3 = new Pizza { Name = "Гавайская", Standart = true, Price = 60.00M, ImagePath = "~/images/4.png" };
-                var piz4 = new Pizza { Name = "Везувий", Standart = true, Price = 70.00M, ImagePath = "~/images/5.png" };
-                var piz5 = new Pizza { Name = "Студенческая", Standart = true, Price = 70.00M, ImagePath = "~/images/6.png" };
-                var piz6 = new Pizza { Name = "Охотничья", Standart = true, Price = 60.00M, ImagePath = "~/images/3.png" };
-                var piz7 = new Pizza { Name = "Сырная", Standart = true, Price = 75.00M, ImagePath = "~/images/1.png" };
-                var piz8 = new Pizza { Name = "Пепперони", Standart = true, Price = 75.00M, ImagePath = "~/images/4.png" };
-                var piz9 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, ImagePath = "~/images/1.png" };
-                var piz10 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, ImagePath = "~/images/4.png" };
+                var piz1 = new Pizza { Name = "Капричиоза", Standart = true, Price = 70.00M, ImagePath = "1.png" };
+                var piz2 = new Pizza { Name = "Сытная", Standart = true, Price = 75.00M, ImagePath = "2.png" };
+                var piz3 = new Pizza { Name = "Гавайская", Standart = true, Price = 60.00M, ImagePath = "4.png" };
+                var piz4 = new Pizza { Name = "Везувий", Standart = true, Price = 70.00M, ImagePath = "5.png" };
+                var piz5 = new Pizza { Name = "Студенческая", Standart = true, Price = 70.00M, ImagePath = "6.png" };
+                var piz6 = new Pizza { Name = "Охотничья", Standart = true, Price = 60.00M, ImagePath = "3.png" };
+                var piz7 = new Pizza { Name = "Сырная", Standart = true, Price = 75.00M, ImagePath = "1.png" };
+                var piz8 = new Pizza { Name = "Пепперони", Standart = true, Price = 75.00M, ImagePath = "4.png" };
+                var piz9 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, ImagePath = "1.png" };
+                var piz10 = new Pizza { Name = "Клиентская", Standart = false, Price = 75.00M, ImagePath = "4.png" };
 
 
                 var pizs = new List<Pizza> { piz1, piz2, piz3, piz4, piz5, piz6, piz7, piz8, piz9, piz10 };
