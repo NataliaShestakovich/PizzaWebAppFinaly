@@ -14,7 +14,9 @@
     @foreach (var item in Model)
     {
         <div class="grid-item">
-            <img src="@Url.Content(item.ImagePath)" alt="Product Image" />
+                        
+            <img src="images/@item.ImagePath" width="200" alt="" />
+            
             <div class="grid-item-details">
                 <h3>@item.Name</h3>
                 <p>@item.PizzaBase.Name.ToLower() основа, @item.Size.Diameter см</p>

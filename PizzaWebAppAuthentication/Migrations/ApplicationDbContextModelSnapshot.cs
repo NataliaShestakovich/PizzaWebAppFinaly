@@ -34,7 +34,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasIndex("PizzasId");
 
-                    b.ToTable("IngredientPizza");
+                    b.ToTable("IngredientPizza", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -194,7 +194,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.ApplicationUser", b =>
@@ -291,7 +291,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasIndex("PizzaId");
 
-                    b.ToTable("CartItems");
+                    b.ToTable("CartItems", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Ingredient", b =>
@@ -317,7 +317,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Ingredients");
+                    b.ToTable("Ingredients", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Order", b =>
@@ -347,7 +347,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Pizza", b =>
@@ -381,7 +381,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasIndex("SizeId");
 
-                    b.ToTable("Pizzas");
+                    b.ToTable("Pizzas", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.PizzaBase", b =>
@@ -401,7 +401,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Bases");
+                    b.ToTable("Bases", (string)null);
                 });
 
             modelBuilder.Entity("PizzaWebAppAuthentication.Models.AppModels.Size", b =>
@@ -421,7 +421,7 @@ namespace PizzaWebAppAuthentication.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
                 });
 
             modelBuilder.Entity("IngredientPizza", b =>

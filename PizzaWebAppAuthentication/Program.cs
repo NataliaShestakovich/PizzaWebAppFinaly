@@ -6,6 +6,7 @@ using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Repositories;
+using PizzaWebAppAuthentication.Services.PizzaServises;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
@@ -70,6 +71,8 @@ namespace PizzaWebAppAuthentication
                         });
 
                 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
+                
+                builder.Services.AddTransient<IPizzaServices, PizzaServices>();
 
 
                 var app = builder.Build();

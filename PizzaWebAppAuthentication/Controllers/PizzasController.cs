@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
-using PizzaWebAppAuthentication.Models.ViewModels;
+using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
@@ -75,7 +75,7 @@ namespace PizzaWebAppAuthentication.Controllers
         {
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
-            newPizza.Standart = true;
+            newPizza.Standart = false;
             newPizza.Name = "Клиентская";
 
             newPizza.PizzaBase = _context.Bases.Where(c => c.Name == pizza.Base).FirstOrDefault();
