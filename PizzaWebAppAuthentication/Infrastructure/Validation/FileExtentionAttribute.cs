@@ -8,7 +8,7 @@ namespace PizzaWebAppAuthentication.Infrastructure.Validation
         {
             if (value is IFormFile file)
             {
-                var extension = Path.GetExtension(file.FileName);
+                string extension = Path.GetExtension(file.FileName);
 
                 string[] extensions = { "jpg", "png" };
 

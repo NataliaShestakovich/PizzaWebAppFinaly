@@ -31,7 +31,7 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public string ImagePath { get; set; }
 
-        [NotMapped,FileExtention]
+        [NotMapped]
         public IFormFile ImageUpload { get; set; }
 
         public ICollection<Ingredient> Ingredients { get; set; }       

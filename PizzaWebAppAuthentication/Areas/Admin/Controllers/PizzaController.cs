@@ -52,17 +52,18 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             ViewData["Ingredients"] = ingredients;
             Pizza newPizza = new Pizza();
             
+            var name = await _contextDb.Pizzas.FirstOrDefaultAsync(p => p.Name == pizzaViewModel.Name);
+            if (name != null) 
+            {
+                ModelState.AddModelError("", $"Pizza {pizzaViewModel.Name} already exists");
+                return View(pizzaViewModel);
+            }
+
+            newPizza.Name = pizzaViewModel.Name;
+            newPizza.Price = pizzaViewModel.Price;
+
             if (ModelState.IsValid)
             {
-                var name = await _contextDb.Pizzas.FirstOrDefaultAsync(p => p.Name == pizzaViewModel.Name);
-                if (name != null) 
-                {
-                    ModelState.AddModelError("", $"Pizza {pizzaViewModel.Name} already exists");
-                    return View(pizzaViewModel);
-                }
-
-                newPizza.Name = pizzaViewModel.Name;
-                newPizza.Price = pizzaViewModel.Price;
 
                 if (pizzaViewModel.ImageUpload != null)
                 {
@@ -104,7 +105,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(newPizza);
+            return View(pizzaViewModel);
         }
 
         //public async Task<IActionResult> Edit(Guid id)
