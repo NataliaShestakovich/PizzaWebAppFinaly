@@ -75,12 +75,16 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
                     await pizzaViewModel.ImageUpload.CopyToAsync(fileStream);
                     fileStream.Close();
 
-                    pizzaViewModel.ImagePath = imageName;
+                    newPizza.ImagePath = imageName;
                 }
 
-                newPizza.ImagePath = pizzaViewModel.ImagePath;
-
-
+                if (pizzaViewModel.Ingredients == null || pizzaViewModel.Ingredients.Count == 0)
+                {
+                    TempData["Error"] = "Не добален ни один ингредиент";
+                    
+                    return View(pizzaViewModel);
+                }
+                
                 newPizza.Standart = true;
 
                 newPizza.PizzaBase = _pizzaServices.GetPizzaBaseByName("стандартная");
@@ -89,7 +93,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
                 newPizza.Ingredients = new List<Ingredient>();
 
-                foreach (var item in pizzaViewModel.Ingredients )
+                foreach (var item in pizzaViewModel.Ingredients)
                 {
                     Ingredient ingredient = _pizzaServices.GetIngredientByName(item);
                     newPizza.Ingredients.Add(ingredient);
@@ -103,51 +107,51 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(newPizza);
         }
 
-        public async Task<IActionResult> Edit(Guid id)
-        {
-            Pizza pizza = await _contextDb.Pizzas.FindAsync(id);
+        //public async Task<IActionResult> Edit(Guid id)
+        //{
+        //    Pizza pizza = await _contextDb.Pizzas.FindAsync(id);
 
-            return View(pizza);
-        }
+        //    return View(pizza);
+        //}
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, Pizza pizza)
-        {
-            if (ModelState.IsValid)
-            {
-                var name = await _contextDb.Pizzas.Where(p => p.Name == pizza.Name)
-                                                  .Where(i => i.Id != pizza.Id)
-                                                  .Select(p=>pizza.Name)
-                                                  .FirstOrDefaultAsync();
-                if (name != null)
-                {
-                    ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
-                    return View(pizza);
-                }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(Guid id, Pizza pizza)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        var name = await _contextDb.Pizzas.Where(p => p.Name == pizza.Name)
+        //                                          .Where(i => i.Id != pizza.Id)
+        //                                          .Select(p=>pizza.Name)
+        //                                          .FirstOrDefaultAsync();
+        //        if (name != null)
+        //        {
+        //            ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
+        //            return View(pizza);
+        //        }
 
-                if (pizza.ImageUpload != null)
-                {
-                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                    string imageName = Guid.NewGuid().ToString() + "_" + pizza.ImageUpload.FileName;
+        //        if (pizza.ImageUpload != null)
+        //        {
+        //            string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+        //            string imageName = Guid.NewGuid().ToString() + "_" + pizza.ImageUpload.FileName;
 
-                    string filePath = Path.Combine(uploadsDir, imageName);
+        //            string filePath = Path.Combine(uploadsDir, imageName);
 
-                    FileStream fileStream = new(filePath, FileMode.Create);
-                    await pizza.ImageUpload.CopyToAsync(fileStream);
-                    fileStream.Close();
+        //            FileStream fileStream = new(filePath, FileMode.Create);
+        //            await pizza.ImageUpload.CopyToAsync(fileStream);
+        //            fileStream.Close();
 
-                    pizza.ImagePath = imageName;
-                }
+        //            pizza.ImagePath = imageName;
+        //        }
 
-                _contextDb.Update(pizza);
-                await _contextDb.SaveChangesAsync();
+        //        _contextDb.Update(pizza);
+        //        await _contextDb.SaveChangesAsync();
 
-                TempData["Success"] = $"Pizza {pizza.Name} has been edited";                
-            }
+        //        TempData["Success"] = $"Pizza {pizza.Name} has been edited";                
+        //    }
 
-            return RedirectToAction("Index");
-        }
+        //    return RedirectToAction("Index");
+        //}
 
         public async Task<IActionResult> Delete(Guid id)
         {
