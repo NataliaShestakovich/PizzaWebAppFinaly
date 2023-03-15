@@ -3,22 +3,29 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Models.ViewModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
+using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
 using PizzaWebAppAuthentication.Repositories;
+using PizzaWebAppAuthentication.Services.PizzaServises;
+using SendGrid.Helpers.Mail;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 {
     [Area("Admin")]
     public class PizzaController: Controller
     {
+        private readonly IPizzaServices _pizzaServices;
         private readonly ApplicationDbContext _contextDb;
         private readonly IPizzaRepository _pizzaRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PizzaController(ApplicationDbContext contextDb, 
-                              IPizzaRepository pizzaRepository,
-                              IWebHostEnvironment webHostEnvironment)
+        public PizzaController(IPizzaServices pizzaservices,
+                               ApplicationDbContext contextDb, 
+                               IPizzaRepository pizzaRepository,
+                               IWebHostEnvironment webHostEnvironment)
         {
+            _pizzaServices = pizzaservices;
             _contextDb = contextDb;
             _pizzaRepository = pizzaRepository;
             _webHostEnvironment = webHostEnvironment;
@@ -26,50 +33,74 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _pizzaRepository.GetStandartPizzas());
+            return View(await _pizzaServices.GetStandartPizzasAsync());
         }
         
         public IActionResult Create()
-        {            
+        {
+            var ingredients = _pizzaServices.GetIngredients();
+            ViewData["Ingredients"] = ingredients;
+
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Pizza pizza)
+        public async Task<IActionResult> Create(PizzaViewModelForAdmin pizzaViewModel)
         {
+            var ingredients = _pizzaServices.GetIngredients();
+            ViewData["Ingredients"] = ingredients;
+            Pizza newPizza = new Pizza();
+            
             if (ModelState.IsValid)
             {
-                var name = await _contextDb.Pizzas.FirstOrDefaultAsync(p => p.Name == pizza.Name);
+                var name = await _contextDb.Pizzas.FirstOrDefaultAsync(p => p.Name == pizzaViewModel.Name);
                 if (name != null) 
                 {
-                    ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
-                    return View(pizza);
+                    ModelState.AddModelError("", $"Pizza {pizzaViewModel.Name} already exists");
+                    return View(pizzaViewModel);
                 }
 
-                if (pizza.ImageUpload != null)
+                newPizza.Name = pizzaViewModel.Name;
+                newPizza.Price = pizzaViewModel.Price;
+
+                if (pizzaViewModel.ImageUpload != null)
                 {
                     string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-                    string imageName = Guid.NewGuid().ToString() + "_" + pizza.ImageUpload.FileName;
+                    string imageName = Guid.NewGuid().ToString() + "_" + pizzaViewModel.ImageUpload.FileName;
 
                     string filePath = Path.Combine(uploadsDir, imageName);
 
                     FileStream fileStream = new(filePath, FileMode.Create);
-                    await pizza.ImageUpload.CopyToAsync(fileStream);
+                    await pizzaViewModel.ImageUpload.CopyToAsync(fileStream);
                     fileStream.Close();
 
-                    pizza.ImagePath = imageName;
+                    pizzaViewModel.ImagePath = imageName;
                 }
 
-                _contextDb.Add(pizza);
-                await _contextDb.SaveChangesAsync();
+                newPizza.ImagePath = pizzaViewModel.ImagePath;
 
-                TempData["Success"] = $"Pizza {pizza.Name} has been created";
+
+                newPizza.Standart = true;
+
+                newPizza.PizzaBase = _pizzaServices.GetPizzaBaseByName("стандартная");
+
+                newPizza.Size = _pizzaServices.GetSizeByDiameter(32);
+
+                newPizza.Ingredients = new List<Ingredient>();
+
+                foreach (var item in pizzaViewModel.Ingredients )
+                {
+                    Ingredient ingredient = _pizzaServices.GetIngredientByName(item);
+                    newPizza.Ingredients.Add(ingredient);
+                }
+
+                TempData["Success"] = await _pizzaServices.AddPizzaToDataBaseAsync(newPizza);
 
                 return RedirectToAction("Index");
             }
 
-            return View(pizza);
+            return View(newPizza);
         }
 
         public async Task<IActionResult> Edit(Guid id)
