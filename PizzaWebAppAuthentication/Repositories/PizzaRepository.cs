@@ -25,6 +25,19 @@ namespace PizzaWebAppAuthentication.Repositories
             return pizzas;
         }
 
+        public async Task<Pizza> GetStandartPizzaByIdAsync(Guid id)
+        {
+            var pizza = await _context.Pizzas
+                .Where(c => c.Standart == true)
+                .Where(p => p.Id == id)
+                .Include(c => c.Ingredients)
+                .Include(c => c.PizzaBase)
+                .Include(c => c.Size)
+                .FirstOrDefaultAsync();
+
+            return pizza;
+        }
+
         public IEnumerable<string> GetIngredients()
         {
             return (_context.Ingredients.Select(x => x.Name).ToList());
@@ -45,18 +58,41 @@ namespace PizzaWebAppAuthentication.Repositories
             return (_context.Ingredients.Where(c => c.Name == ingredientName).FirstOrDefault());
         }
 
+        public List<Pizza> GetPizzasByName(string name)
+        {
+            var pizzas = _context.Pizzas.Where(p => p.Name == name)
+                                        .ToList();
+            return pizzas;
+        }
+
         public async Task<string> AddPizzaToDataBaseAsync(Pizza pizza)
         {
-            string result = string.Empty;
-
             _context.Add(pizza);
 
             await _context.SaveChangesAsync();
 
-            result = $"Pizza {pizza.Name} has been created";
-
-            return result;
+            return $"Pizza {pizza.Name} has been created";
         }
+
+        public async Task<string> UpdatePizzaInDataBaseAsync(Pizza pizza)
+        {
+            _context.Update(pizza);
+
+            await _context.SaveChangesAsync();
+
+            return $"Pizza {pizza.Name} has been edited";
+        }
+
+        public async Task<string> DeletePizzaFromDataBaseAsync(Pizza pizza)
+        {
+            _context.Pizzas.Remove(pizza);
+            await _context.SaveChangesAsync();
+
+            return $"Pizza {pizza.Name} has been deleted";
+        }
+
+        
+
 
     }
 }

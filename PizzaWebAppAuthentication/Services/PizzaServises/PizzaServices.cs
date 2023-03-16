@@ -9,7 +9,7 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
         private readonly IPizzaRepository _pizzaRepository;
         private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public PizzaServices( IPizzaRepository pizzaRepository,
+        public PizzaServices(IPizzaRepository pizzaRepository,
                               IWebHostEnvironment webHostEnvironment)
         {
             _pizzaRepository = pizzaRepository;
@@ -21,6 +21,13 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             var pizzas = await _pizzaRepository.GetStandartPizzasAsync();
 
             return pizzas;
+        }
+
+        public async Task<Pizza> GetStandartPizzaByIdAsync(Guid id)
+        {
+            var pizza = await _pizzaRepository.GetStandartPizzaByIdAsync(id);
+
+            return pizza;
         }
 
         public IEnumerable<string> GetIngredients()
@@ -35,7 +42,7 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             return (_pizzaRepository.GetPizzaBaseByName(baseName));
         }
 
-       public Size GetSizeByDiameter(double sizeName)
+        public Size GetSizeByDiameter(double sizeName)
         {
             return (_pizzaRepository.GetSizeByDiameter(sizeName));
         }
@@ -49,5 +56,36 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
         {
             return (_pizzaRepository.AddPizzaToDataBaseAsync(pizza));
         }
+
+        public async Task<string> AddNewPizzaImageAsync(IFormFile imageUpload)
+        {
+            string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+            string imageName = Guid.NewGuid().ToString() + "_" + imageUpload.FileName;
+
+            string filePath = Path.Combine(uploadsDir, imageName);
+
+            using (FileStream fileStream = new FileStream(filePath, FileMode.Create))
+            {
+                await imageUpload.CopyToAsync(fileStream);
+            }
+
+            return imageName;
+        }
+
+        public async Task<string> UpdatePizzaInDataBaseAsync(Pizza pizza)
+        {
+            return await _pizzaRepository.UpdatePizzaInDataBaseAsync(pizza);
+        }
+
+        public async Task<string> DeletePizzaFromDataBaseAsync(Pizza pizza)
+        {
+            return await _pizzaRepository.DeletePizzaFromDataBaseAsync(pizza);
+        }
+
+        public List<Pizza> GetPizzasByName(string name)
+        {
+            return _pizzaRepository.GetPizzasByName(name);
+        }
+
     }
 }
