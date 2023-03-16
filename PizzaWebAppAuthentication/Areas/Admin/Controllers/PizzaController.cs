@@ -108,51 +108,61 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(pizzaViewModel);
         }
 
-        //public async Task<IActionResult> Edit(Guid id)
-        //{
-        //    Pizza pizza = await _contextDb.Pizzas.FindAsync(id);
+        public async Task<IActionResult> Edit(Guid id)
+        {
+            Pizza pizza = await _contextDb.Pizzas.FindAsync(id);
 
-        //    return View(pizza);
-        //}
+            return View(pizza);
+        }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> Edit(Guid id, Pizza pizza)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        var name = await _contextDb.Pizzas.Where(p => p.Name == pizza.Name)
-        //                                          .Where(i => i.Id != pizza.Id)
-        //                                          .Select(p=>pizza.Name)
-        //                                          .FirstOrDefaultAsync();
-        //        if (name != null)
-        //        {
-        //            ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
-        //            return View(pizza);
-        //        }
+        
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, Pizza pizza)
+         {
+            if (ModelState.IsValid)
+            {
+                var name = await _contextDb.Pizzas.Where(p => p.Name == pizza.Name)
+                                                  .Where(i => i.Id != pizza.Id)
+                                                  .Select(p => pizza.Name)
+                                                  .FirstOrDefaultAsync();
+                if (name != null)
+                {
+                    ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
+                    return View(pizza);
+                }
 
-        //        if (pizza.ImageUpload != null)
-        //        {
-        //            string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
-        //            string imageName = Guid.NewGuid().ToString() + "_" + pizza.ImageUpload.FileName;
+                var existingPizza = await _contextDb.Pizzas.Where(p => p.Id == id)
+                                               .Include(p => p.Ingredients)
+                                               .Include(b => b.PizzaBase)
+                                               .Include(s => s.Size)                                             
+                                               .FirstOrDefaultAsync();
 
-        //            string filePath = Path.Combine(uploadsDir, imageName);
+                if (pizza.ImageUpload != null)
+                {
+                    string uploadsDir = Path.Combine(_webHostEnvironment.WebRootPath, "images");
+                    string imageName = Guid.NewGuid().ToString() + "_" + pizza.ImageUpload.FileName;
 
-        //            FileStream fileStream = new(filePath, FileMode.Create);
-        //            await pizza.ImageUpload.CopyToAsync(fileStream);
-        //            fileStream.Close();
+                    string filePath = Path.Combine(uploadsDir, imageName);
 
-        //            pizza.ImagePath = imageName;
-        //        }
+                    FileStream fileStream = new(filePath, FileMode.Create);
+                    await pizza.ImageUpload.CopyToAsync(fileStream);
+                    fileStream.Close();
 
-        //        _contextDb.Update(pizza);
-        //        await _contextDb.SaveChangesAsync();
+                    existingPizza.ImagePath = imageName;
+                }
 
-        //        TempData["Success"] = $"Pizza {pizza.Name} has been edited";                
-        //    }
+                existingPizza.Name = pizza.Name;
+                existingPizza.Price = pizza.Price;
 
-        //    return RedirectToAction("Index");
-        //}
+                _contextDb.Update(existingPizza);
+                await _contextDb.SaveChangesAsync();
+
+                TempData["Success"] = $"Pizza {existingPizza.Name} has been edited";
+            }
+
+            return RedirectToAction("Index");
+        }
 
         public async Task<IActionResult> Delete(Guid id)
         {
