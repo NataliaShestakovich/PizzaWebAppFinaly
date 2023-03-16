@@ -88,7 +88,6 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(pizza);
         }
 
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(Guid id, Pizza pizza)
