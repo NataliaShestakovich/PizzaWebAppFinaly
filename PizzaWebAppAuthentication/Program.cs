@@ -1,17 +1,17 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Models.AppModels;
-using PizzaWebAppAuthentication.Repositories;
+using PizzaWebAppAuthentication.Repositories.IngredientRepository;
+using PizzaWebAppAuthentication.Repositories.PizzaRepository;
+using PizzaWebAppAuthentication.Services.IngredientServices;
 using PizzaWebAppAuthentication.Services.PizzaServises;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
 using Serilog.Events;
-using System.Globalization;
 
 namespace PizzaWebAppAuthentication
 {
@@ -71,8 +71,10 @@ namespace PizzaWebAppAuthentication
                         });
 
                 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
+                builder.Services.AddTransient<IIngredientRepository, IngredientRepository>();
                 
                 builder.Services.AddTransient<IPizzaServices, PizzaServices>();
+                builder.Services.AddTransient<IIngredientServises, IngredientServises>();
 
 
                 var app = builder.Build();
