@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
 using PizzaWebAppAuthentication.Services.PizzaServises;
@@ -125,6 +123,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             Pizza pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
 
             TempData["Success"] = await _pizzaServices.DeletePizzaFromDataBaseAsync(pizza);
+
             return RedirectToAction("Index");
         }
     }

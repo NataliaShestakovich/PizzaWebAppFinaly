@@ -1,6 +1,5 @@
-﻿using PizzaWebAppAuthentication.Data;
-using PizzaWebAppAuthentication.Models.AppModels;
-using PizzaWebAppAuthentication.Repositories;
+﻿using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Repositories.PizzaRepository;
 
 namespace PizzaWebAppAuthentication.Services.PizzaServises
 {

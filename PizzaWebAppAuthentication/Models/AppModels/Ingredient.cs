@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PizzaWebAppAuthentication.Models.AppModels
 {
@@ -13,6 +15,9 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a value")]
+        [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
 
         public int PortionGrams { get; set; }
