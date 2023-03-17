@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models;
-using PizzaWebAppAuthentication.Repositories;
+using PizzaWebAppAuthentication.Repositories.PizzaRepository;
 using System.Diagnostics;
 
 namespace PizzaWebAppAuthentication.Controllers
