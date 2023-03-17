@@ -41,5 +41,10 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
         {
             return await _iIngredientRepository.UpdateIngredientInDataBaseAsync (ingredient);
         }
+
+        public async Task<string> DeleteIngredientAsync(Ingredient ingredient)
+        {
+            return await _iIngredientRepository.DeleteIngredientAsync (ingredient);
+        }
     }
 }

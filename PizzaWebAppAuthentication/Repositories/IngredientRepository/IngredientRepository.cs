@@ -49,5 +49,13 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
 
             return $"Ingredient {ingredient.Name} has been edited";
         }
+
+        public async Task<string> DeleteIngredientAsync(Ingredient ingredient)
+        {
+                _context.Ingredients.Remove(ingredient);
+                await _context.SaveChangesAsync();
+                return $"Ingredient {ingredient.Name} has been deleted";
+        }
+
     }
 }

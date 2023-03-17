@@ -8,7 +8,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     public class IngredientsController : Controller
     {
         private readonly IIngredientServises _ingredientServices;
-       
+
         public IngredientsController(IIngredientServises ingredientServices)
         {
             _ingredientServices = ingredientServices;
@@ -16,12 +16,12 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-           return View (await _ingredientServices.GetIngredientsAsync());
+            return View(await _ingredientServices.GetIngredientsAsync());
         }
 
         public IActionResult Create(Guid id)
         {
-            
+
             return View();
         }
 
@@ -29,7 +29,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Ingredient ingredient)
         {
-            
+
             var existingIngredients = await _ingredientServices.GetIngredientsByName(ingredient.Name);
 
             if (existingIngredients.Count() > 0)
@@ -68,21 +68,26 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             }
 
             if (ModelState.IsValid)
-            {                
-                    TempData["Success"] = await _ingredientServices.UpdateIngredientInDataBaseAsync(ingredient);
+            {
+                TempData["Success"] = await _ingredientServices.UpdateIngredientInDataBaseAsync(ingredient);
 
-                    return RedirectToAction("Index");
+                return RedirectToAction("Index");
             }
 
             return View(ingredient);
         }
 
-        //public async Task<IActionResult> Delete(Guid id)
-        //{
-        //    Pizza pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
 
-        //    TempData["Success"] = await _pizzaServices.DeletePizzaFromDataBaseAsync(pizza);
-        //    return RedirectToAction("Index");
-        //}
+            if (ingredient != null)
+            {
+                TempData["Success"] = _ingredientServices.DeleteIngredientAsync(ingredient);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

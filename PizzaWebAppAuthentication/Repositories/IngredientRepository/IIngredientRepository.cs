@@ -11,5 +11,6 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
 
         Task<string> AddIngredientToDataBaseAsync(Ingredient ingredient);
         Task<string> UpdateIngredientInDataBaseAsync(Ingredient ingredient);
+        Task<string> DeleteIngredientAsync(Ingredient ingredient);
     }
 }

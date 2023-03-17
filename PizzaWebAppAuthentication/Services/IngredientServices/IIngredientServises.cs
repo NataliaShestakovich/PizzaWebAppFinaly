@@ -10,5 +10,6 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
         Task<bool> IngredientExistsAsync(string name, int id);
         Task<string> AddIngredientToDataBaseAsync(Ingredient ingredient);
         Task<string> UpdateIngredientInDataBaseAsync(Ingredient ingredient);
+        Task<string> DeleteIngredientAsync(Ingredient ingredient);
     }
 }
