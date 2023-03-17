@@ -13,7 +13,7 @@ namespace PizzaWebAppAuthentication.Controllers
             _contextDb = contextDb;
         }
        
-        public ActionResult Index()
+        public IActionResult Index()
         {
             var cart = HttpContext.Session.GetJson <List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
@@ -26,7 +26,7 @@ namespace PizzaWebAppAuthentication.Controllers
             return View(cartViewModel);
         }
 
-        public async Task<ActionResult> Add(Guid id) 
+        public async Task<IActionResult> Add(Guid id) 
         { 
             var pizza = await _contextDb.Pizzas.FindAsync(id); // Вынести в сервис и репозиторий этот метод и заменить на обращение через него
             if (pizza == null)
@@ -53,7 +53,7 @@ namespace PizzaWebAppAuthentication.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
-        public async Task<ActionResult> Decrease(Guid id)
+        public IActionResult Decrease(Guid id)
         {
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart");
 
@@ -82,7 +82,7 @@ namespace PizzaWebAppAuthentication.Controllers
             return RedirectToAction("Index");
         }
 
-        public async Task<ActionResult> Remove(Guid id)
+        public IActionResult Remove(Guid id)
         {
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart");
 
@@ -104,7 +104,7 @@ namespace PizzaWebAppAuthentication.Controllers
             return RedirectToAction("Index");
         }
 
-        public ActionResult Clear()
+        public IActionResult Clear()
         {
             HttpContext.Session.Remove("Cart");
 
