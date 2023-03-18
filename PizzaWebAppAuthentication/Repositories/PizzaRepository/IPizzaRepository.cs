@@ -8,19 +8,23 @@ public interface IPizzaRepository
 
     Task<Pizza> GetStandartPizzaByIdAsync(Guid id);
 
-    IEnumerable<string> GetIngredients();
+    Task<IEnumerable<string>> GetIngredientNames();
 
-    PizzaBase GetPizzaBaseByName(string baseName);
+    Task<Ingredient> GetIngredientByName(string ingredientName);
 
-    Size GetSizeByDiameter(double sizeName);
+    Task<PizzaBase> GetPizzaBaseByName(string baseName);
 
-    Ingredient GetIngredientByName(string ingredientName);
+    Task<IEnumerable<string>> GetPizzaBaseNames();
 
-    List<Pizza> GetPizzasByName(string name);
+    Task<IEnumerable<string>> GetSizeNames();
 
-    Task<string> AddPizzaToDataBaseAsync(Pizza pizza);
+    Task<Size> GetSizeByDiameter(double sizeName);
 
-    Task<string> UpdatePizzaInDataBaseAsync(Pizza pizza);
+    Task<List<Pizza>> GetPizzasByName(string name);
 
-    Task<string> DeletePizzaFromDataBaseAsync(Pizza pizza);
+    Task AddPizzaToDataBaseAsync(Pizza pizza);
+
+    Task UpdatePizzaInDataBaseAsync(Pizza pizza);
+
+    Task DeletePizzaFromDataBaseAsync(Pizza pizza);
 }

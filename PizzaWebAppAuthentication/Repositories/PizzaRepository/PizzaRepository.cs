@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
-using System.Collections;
 
 namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
 {
     public class PizzaRepository : IPizzaRepository
     {
         private readonly ApplicationDbContext _context;
+
         public PizzaRepository(ApplicationDbContext context)
         {
             _context = context;
@@ -38,61 +38,61 @@ namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
             return pizza;
         }
 
-        public IEnumerable<string> GetIngredients()
+        public async Task<IEnumerable<string>> GetIngredientNames()
         {
-            return _context.Ingredients.Select(x => x.Name).ToList();
+            return await _context.Ingredients.Select(x => x.Name).ToListAsync();
         }
 
-        public PizzaBase GetPizzaBaseByName(string baseName)
+        public async Task<Ingredient> GetIngredientByName(string ingredientName)
         {
-            return _context.Bases.Where(c => c.Name == baseName).FirstOrDefault();
+            return await _context.Ingredients.Where(c => c.Name == ingredientName).FirstOrDefaultAsync();
         }
 
-        public Size GetSizeByDiameter(double sizeName)
+        public async Task<PizzaBase> GetPizzaBaseByName(string baseName)
         {
-            return _context.Sizes.Where(c => c.Diameter == sizeName).FirstOrDefault();
+            return await _context.Bases.Where(c => c.Name == baseName).FirstOrDefaultAsync();
         }
 
-        public Ingredient GetIngredientByName(string ingredientName)
+        public async Task<IEnumerable<string>> GetPizzaBaseNames()
         {
-            return _context.Ingredients.Where(c => c.Name == ingredientName).FirstOrDefault();
+            return await _context.Bases.Select(c => c.Name).ToListAsync();
         }
 
-        public List<Pizza> GetPizzasByName(string name)
+        public async Task<IEnumerable<string>> GetSizeNames()
         {
-            var pizzas = _context.Pizzas.Where(p => p.Name == name)
-                                        .ToList();
+            return await _context.Sizes.Select(c => c.Name).ToListAsync();
+        }
+
+        public async Task<Size> GetSizeByDiameter(double sizeName)
+        {
+            return await _context.Sizes.Where(c => c.Diameter == sizeName).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Pizza>> GetPizzasByName(string name)
+        {
+            var pizzas = await _context.Pizzas.Where(p => p.Name == name)
+                                        .ToListAsync();
             return pizzas;
         }
 
-        public async Task<string> AddPizzaToDataBaseAsync(Pizza pizza)
+        public async Task AddPizzaToDataBaseAsync(Pizza pizza)
         {
             _context.Add(pizza);
 
             await _context.SaveChangesAsync();
-
-            return $"Pizza {pizza.Name} has been created";
         }
 
-        public async Task<string> UpdatePizzaInDataBaseAsync(Pizza pizza)
+        public async Task UpdatePizzaInDataBaseAsync(Pizza pizza)
         {
             _context.Update(pizza);
 
-            await _context.SaveChangesAsync();
-
-            return $"Pizza {pizza.Name} has been edited";
+            await _context.SaveChangesAsync();           
         }
 
-        public async Task<string> DeletePizzaFromDataBaseAsync(Pizza pizza)
+        public async Task DeletePizzaFromDataBaseAsync(Pizza pizza)
         {
             _context.Pizzas.Remove(pizza);
-            await _context.SaveChangesAsync();
-
-            return $"Pizza {pizza.Name} has been deleted";
+            await _context.SaveChangesAsync();            
         }
-
-
-
-
     }
 }

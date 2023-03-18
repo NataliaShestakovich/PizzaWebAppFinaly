@@ -8,22 +8,26 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
 
         Task<Pizza> GetStandartPizzaByIdAsync(Guid id);
 
-        IEnumerable<string> GetIngredients();
+        Task<IEnumerable<string>> GetIngredientNames();
 
-        PizzaBase GetPizzaBaseByName(string baseName);
+        Task<PizzaBase> GetPizzaBaseByName(string baseName);
 
-        Size GetSizeByDiameter(double sizeName);
+        Task<IEnumerable<string>> GetPizzaBaseNames();
 
-        Ingredient GetIngredientByName(string ingredientName);
+        Task<IEnumerable<string>> GetSizeNames();
+
+        Task<Size> GetSizeByDiameter(double sizeName);
+
+        Task<Ingredient> GetIngredientByName(string ingredientName);
         
-        List<Pizza> GetPizzasByName(string name);
+        Task<List<Pizza>> GetPizzasByName(string name);
 
-        Task<string> AddPizzaToDataBaseAsync(Pizza pizza);
+        Task AddPizzaToDataBaseAsync(Pizza pizza);
 
         Task<string> AddNewPizzaImageAsync(IFormFile imageUpload); 
 
-        Task<string> UpdatePizzaInDataBaseAsync(Pizza pizza);
+        Task UpdatePizzaInDataBaseAsync(Pizza pizza);
 
-        Task<string> DeletePizzaFromDataBaseAsync(Pizza pizza);
+        Task DeletePizzaFromDataBaseAsync(Pizza pizza);
     }
 }

@@ -1,53 +1,53 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
+using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
     public class PizzasController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly IPizzaServices _pizzaServices;
 
-        public PizzasController(ApplicationDbContext context)
+        public PizzasController(IPizzaServices pizzaservices)
         {
-            _context= context;
+            _pizzaServices = pizzaservices;
         }
-        
+
         [HttpGet]
-        public IActionResult CreateCustomPizza() 
+        public async Task<IActionResult> CreateCustomPizza() 
         {
-            var ingredients = _context.Ingredients.Select(x => x.Name).ToList();
+            var ingredients = await _pizzaServices.GetIngredientNames();
             ViewData["Ingredients"] = ingredients;
 
-            var bases = _context.Bases.ToList(); ;
+            var bases = await _pizzaServices.GetPizzaBaseNames() ;
             ViewData["Bases"] = bases;
 
-            var sizes = _context.Sizes.ToList();
+            var sizes = await _pizzaServices.GetSizeNames();
             ViewData["Sizes"] = sizes;
 
             return View();
         }
 
         [HttpPost]
-        public IActionResult CreateCustomPizza(PizzaViewModel pizza)
+        public async Task<IActionResult> CreateCustomPizzaAsync(PizzaViewModel pizza)
         {
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
             newPizza.Standart = false;
             newPizza.Name = "Клиентская: ";
 
-            newPizza.PizzaBase = _context.Bases.Where(c => c.Name == pizza.Base).FirstOrDefault();
+            newPizza.PizzaBase = await _pizzaServices.GetPizzaBaseByName(pizza.Base);
 
-            newPizza.Size = _context.Sizes.Where(c => c.Diameter == pizza.Size).FirstOrDefault();
+            newPizza.Size = await _pizzaServices.GetSizeByDiameter(pizza.Size);
 
             decimal ingredientCost = 0;
             int index = 1;
 
             foreach (var item in pizza.Ingredients)
             {
-                var ingredient = _context.Ingredients.Where(c => c.Name == item).FirstOrDefault();
+                var ingredient = await _pizzaServices.GetIngredientByName(item);
                 newPizza.Ingredients.Add(ingredient);
                 ingredientCost += ingredient.Price;
                 if (index < pizza.Ingredients.Count())

@@ -11,17 +11,14 @@ namespace PizzaWebAppAuthentication.Controllers
     public class CartController : Controller
     {
         private readonly IPizzaServices _pizzaServices;
-        private readonly ApplicationDbContext _contextDb;
         private readonly PizzaOption _pizzaOption;
-        public CartController(ApplicationDbContext contextDb,
-                              PizzaOption pizzaOption,
+
+        public CartController(PizzaOption pizzaOption,
                               IPizzaServices pizzaservices)
         {
-            _contextDb = contextDb;
             _pizzaOption = pizzaOption;
             _pizzaServices = pizzaservices;
         }
-       
         public IActionResult Index()
         {
             var cart = HttpContext.Session.GetJson <List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
@@ -37,7 +34,6 @@ namespace PizzaWebAppAuthentication.Controllers
 
         public async Task<IActionResult> Add(Guid id) 
         {
-            //var pizza = await _contextDb.Pizzas.FindAsync(id); // Вынести в сервис и репозиторий этот метод и заменить на обращение через него
             var pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
             if (pizza == null)
             {

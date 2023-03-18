@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
+using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
@@ -9,10 +10,12 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     public class PizzaController : Controller
     {
         private readonly IPizzaServices _pizzaServices;
-       
-        public PizzaController(IPizzaServices pizzaservices)
+        private readonly PizzaOption _pizzaOption;
+
+        public PizzaController(IPizzaServices pizzaservices, PizzaOption pizzaOption)
         {
             _pizzaServices = pizzaservices;
+            _pizzaOption = pizzaOption;
         }
 
         public async Task<IActionResult> Index()
@@ -20,9 +23,9 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(await _pizzaServices.GetStandartPizzasAsync());
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            var ingredients = _pizzaServices.GetIngredients();
+            var ingredients = await _pizzaServices.GetIngredientNames();
             ViewData["Ingredients"] = ingredients;
 
             return View();
@@ -32,23 +35,23 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(PizzaViewModelForAdmin pizzaViewModel)
         {
-            var ingredients = _pizzaServices.GetIngredients();
+            var ingredients = await _pizzaServices.GetIngredientNames();
             ViewData["Ingredients"] = ingredients;
             Pizza newPizza = new Pizza();
 
-            var existingPizzas = _pizzaServices.GetPizzasByName(pizzaViewModel.Name);
-           
+            var existingPizzas = await _pizzaServices.GetPizzasByName(pizzaViewModel.Name);
+
             if (existingPizzas.Count > 0)
             {
-                ModelState.AddModelError("", $"Pizza {pizzaViewModel.Name} already exists");
+                ModelState.AddModelError("", string.Format(_pizzaOption.ErrorAddInDatabase, pizzaViewModel.Name));
                 return View(pizzaViewModel);
             }
 
             newPizza.Name = pizzaViewModel.Name;
             newPizza.Price = pizzaViewModel.Price;
             newPizza.Standart = true;
-            newPizza.PizzaBase = _pizzaServices.GetPizzaBaseByName("стандартная");
-            newPizza.Size = _pizzaServices.GetSizeByDiameter(32);
+            newPizza.PizzaBase = await _pizzaServices.GetPizzaBaseByName(_pizzaOption.StandartPizzaBase);
+            newPizza.Size = await _pizzaServices.GetSizeByDiameter(32);
             newPizza.Ingredients = new List<Ingredient>();
 
             if (ModelState.IsValid)
@@ -60,18 +63,26 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
                 if (pizzaViewModel.Ingredients == null || pizzaViewModel.Ingredients.Count == 0)
                 {
-                    TempData["Error"] = "Не добален ни один ингредиент";
+                    TempData["Error"] = _pizzaOption.ErrorAddingIngredients;
 
                     return View(pizzaViewModel);
                 }
 
                 foreach (var item in pizzaViewModel.Ingredients)
                 {
-                    Ingredient ingredient = _pizzaServices.GetIngredientByName(item);
+                    Ingredient ingredient = await _pizzaServices.GetIngredientByName(item);
                     newPizza.Ingredients.Add(ingredient);
                 }
 
-                TempData["Success"] = await _pizzaServices.AddPizzaToDataBaseAsync(newPizza);
+                try
+                {
+                    await _pizzaServices.AddPizzaToDataBaseAsync(newPizza);
+                    TempData["Success"] = String.Format(_pizzaOption.SuccessAddPizzaToDatabase, newPizza.Name);
+                }
+                catch (Exception)
+                {
+                    TempData["Error"] = String.Format(_pizzaOption.SuccessAddPizzaToDatabase, newPizza.Name);
+                }
 
                 return RedirectToAction("Index");
             }
@@ -92,13 +103,13 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         {
             if (ModelState.IsValid)
             {
-                var pizzasByName = _pizzaServices.GetPizzasByName(pizza.Name);
+                var pizzasByName = await _pizzaServices.GetPizzasByName(pizza.Name);
 
                 IEnumerable<Pizza> anotherPizzaAlsoNamed = pizzasByName.Where(p => p.Id != pizza.Id) ?? new List<Pizza>();
 
                 if (anotherPizzaAlsoNamed.Count() > 0)
                 {
-                    ModelState.AddModelError("", $"Pizza {pizza.Name} already exists");
+                    ModelState.AddModelError("", string.Format(_pizzaOption.ErrorAddInDatabase, pizza.Name));
                     return View(pizza);
                 }
 
@@ -112,7 +123,15 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
                 existingPizza.Name = pizza.Name;
                 existingPizza.Price = pizza.Price;
 
-                TempData["Success"] = await _pizzaServices.UpdatePizzaInDataBaseAsync(existingPizza);
+                try
+                {
+                    await _pizzaServices.UpdatePizzaInDataBaseAsync(existingPizza);
+                    TempData["Success"] = String.Format(_pizzaOption.SuccessUpdatePizzaInDatabase, existingPizza.Name);
+                }
+                catch (Exception)
+                {
+                    TempData["Error"] = String.Format(_pizzaOption.ErrorUpdatePizzaInDatabase, existingPizza.Name);
+                }
             }
 
             return RedirectToAction("Index");
@@ -122,7 +141,16 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         {
             Pizza pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
 
-            TempData["Success"] = await _pizzaServices.DeletePizzaFromDataBaseAsync(pizza);
+            try
+            {
+                await _pizzaServices.DeletePizzaFromDataBaseAsync(pizza);
+
+                TempData["Success"] = String.Format(_pizzaOption.SuccessDeletePizzaFromDatabase, pizza.Name);
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = String.Format(_pizzaOption.ErrorDeletePizzaFromDatabase, pizza.Name);
+            }
 
             return RedirectToAction("Index");
         }
