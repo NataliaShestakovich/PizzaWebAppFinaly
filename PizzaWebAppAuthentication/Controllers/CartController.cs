@@ -60,7 +60,7 @@ namespace PizzaWebAppAuthentication.Controllers
             return Redirect(Request.Headers["Referer"].ToString());
         }
         
-        public async Task<IActionResult> AddPizza (Pizza pizza) 
+        public IActionResult AddPizza (Pizza pizza) 
         {             
             if (pizza == null)
             {

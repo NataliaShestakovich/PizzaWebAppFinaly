@@ -8,8 +8,8 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
         Task<IEnumerable<Ingredient>> GetIngredientsByName(string name);
         Task<Ingredient> GetIngredientById(int id);
         Task<bool> IngredientExistsAsync(string name, int id);
-        Task<string> AddIngredientToDataBaseAsync(Ingredient ingredient);
-        Task<string> UpdateIngredientInDataBaseAsync(Ingredient ingredient);
-        Task<string> DeleteIngredientAsync(Ingredient ingredient);
+        Task AddIngredientToDataBaseAsync(Ingredient ingredient);
+        Task UpdateIngredientInDataBaseAsync(Ingredient ingredient);
+        Task DeleteIngredientAsync(Ingredient ingredient);
     }
 }

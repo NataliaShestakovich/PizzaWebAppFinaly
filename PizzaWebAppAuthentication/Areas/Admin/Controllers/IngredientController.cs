@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Services.IngredientServices;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
@@ -8,10 +9,12 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     public class IngredientsController : Controller
     {
         private readonly IIngredientServises _ingredientServices;
+        private readonly PizzaOption _pizzaOption;
 
-        public IngredientsController(IIngredientServises ingredientServices)
+        public IngredientsController(IIngredientServises ingredientServices, PizzaOption pizzaOption)
         {
             _ingredientServices = ingredientServices;
+            _pizzaOption = pizzaOption;
         }
 
         public async Task<IActionResult> Index()
@@ -21,7 +24,6 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
         public IActionResult Create(Guid id)
         {
-
             return View();
         }
 
@@ -34,14 +36,25 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
             if (existingIngredients.Count() > 0)
             {
-                ModelState.AddModelError("", $"Ingredient {ingredient.Name} already exists");
+                ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
                 return View(ingredient);
             }
 
             if (ModelState.IsValid)
             {
-                TempData["Success"] = await _ingredientServices.AddIngredientToDataBaseAsync(ingredient);
+                try
+                {
+                    await _ingredientServices.AddIngredientToDataBaseAsync(ingredient);
 
+                    TempData["Success"] = string.Format(_pizzaOption.SuccessAddIngredientToDatabase, ingredient.Name);
+                }
+                catch (Exception)
+                {
+
+                    TempData["Error"] = string.Format(_pizzaOption.ErrorAddIngredientToDatabase, ingredient.Name);
+                    return View(ingredient);
+                }
+                
                 return RedirectToAction("Index");
             }
 
@@ -63,13 +76,26 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
             if (existingOtherIngredientWithName)
             {
-                ModelState.AddModelError("", $"Ingredient {ingredient.Name} already exists");
+                ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
+
                 return View(ingredient);
             }
 
             if (ModelState.IsValid)
             {
-                TempData["Success"] = await _ingredientServices.UpdateIngredientInDataBaseAsync(ingredient);
+                try
+                {
+                    await _ingredientServices.UpdateIngredientInDataBaseAsync(ingredient);
+
+                    TempData["Success"] = string.Format(_pizzaOption.SuccessUpdateIngredientInDatabase, ingredient.Name);
+                }
+                catch (Exception)
+                {
+
+                    TempData["Error"] = string.Format(_pizzaOption.ErrorUpdateIngredientInDatabase, ingredient.Name);
+                    
+                    return View(ingredient);
+                }
 
                 return RedirectToAction("Index");
             }
@@ -77,14 +103,26 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(ingredient);
         }
 
-        [HttpDelete("{id}")]
+        //[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
 
             if (ingredient != null)
             {
-                TempData["Success"] = _ingredientServices.DeleteIngredientAsync(ingredient);
+                try
+                {
+                    await _ingredientServices.DeleteIngredientAsync(ingredient);
+
+                    TempData["Success"] = string.Format(_pizzaOption.SuccessDeleteIngredientFromDatabase, ingredient.Name);
+                }
+                catch (Exception)
+                {
+
+                    TempData["Error"] = string.Format(_pizzaOption.ErrorDeleteIngredientFromDatabase, ingredient.Name);
+
+                    return View(ingredient);
+                }
             }
 
             return RedirectToAction("Index");

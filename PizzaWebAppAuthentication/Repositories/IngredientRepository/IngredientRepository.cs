@@ -27,13 +27,11 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
             return await _context.Ingredients.Where(i => i.Id == id).FirstOrDefaultAsync();
         }
 
-        public async Task<string> AddIngredientToDataBaseAsync(Ingredient ingredient)
+        public async Task AddIngredientToDataBaseAsync(Ingredient ingredient)
         {
             _context.Add(ingredient);
 
             await _context.SaveChangesAsync();
-
-            return $"Ingredient {ingredient.Name} has been created";
         }
 
         public async Task<bool> IngredientExistsAsync(string name, int id)
@@ -41,20 +39,17 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
             return await _context.Ingredients.AnyAsync(i => i.Name == name && i.Id != id);
         }
 
-        public async Task<string> UpdateIngredientInDataBaseAsync(Ingredient ingredient)
+        public async Task UpdateIngredientInDataBaseAsync(Ingredient ingredient)
         {
             _context.Update(ingredient);
 
             await _context.SaveChangesAsync();
-
-            return $"Ingredient {ingredient.Name} has been edited";
         }
 
-        public async Task<string> DeleteIngredientAsync(Ingredient ingredient)
+        public async Task DeleteIngredientAsync(Ingredient ingredient)
         {
                 _context.Ingredients.Remove(ingredient);
                 await _context.SaveChangesAsync();
-                return $"Ingredient {ingredient.Name} has been deleted";
         }
 
     }

@@ -18,13 +18,13 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="Price" class="control-label">Цена за порцию</label>
+                <label asp-for="Price" class="control-label">Цена за порцию, р</label>
                 <input type="text" asp-for="Price" class="form-control" lang="en" step="0.01"/>
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="PortionGrams" class="control-label">Весс порции, гр</label>
+                <label asp-for="PortionGrams" class="control-label">Вес порции, гр</label>
                 <input type="number" asp-for="PortionGrams" class="form-control" lang="en" />
                 <span asp-validation-for="PortionGrams" class="text-danger"></span>
             </div>
@@ -39,7 +39,7 @@
             </div>            
 
             <div class="form-group">
-                <button btn btn-primary>Добавить в базу</button>
+                <button btn btn-primary>Добавить</button>
             </div>
         </form>
     </div>

@@ -32,19 +32,19 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
             return await _iIngredientRepository.IngredientExistsAsync (name, id);
         }
 
-        public async Task<string> AddIngredientToDataBaseAsync(Ingredient ingredient)
+        public async Task AddIngredientToDataBaseAsync(Ingredient ingredient)
         {
-            return await _iIngredientRepository.AddIngredientToDataBaseAsync(ingredient);
+            await _iIngredientRepository.AddIngredientToDataBaseAsync(ingredient);
         }
 
-        public async Task<string> UpdateIngredientInDataBaseAsync(Ingredient ingredient)
+        public async Task UpdateIngredientInDataBaseAsync(Ingredient ingredient)
         {
-            return await _iIngredientRepository.UpdateIngredientInDataBaseAsync (ingredient);
+            await _iIngredientRepository.UpdateIngredientInDataBaseAsync (ingredient);
         }
 
-        public async Task<string> DeleteIngredientAsync(Ingredient ingredient)
+        public async Task DeleteIngredientAsync(Ingredient ingredient)
         {
-            return await _iIngredientRepository.DeleteIngredientAsync (ingredient);
+            await _iIngredientRepository.DeleteIngredientAsync (ingredient);
         }
     }
 }

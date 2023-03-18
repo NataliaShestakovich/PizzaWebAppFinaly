@@ -5,18 +5,18 @@
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Ingredients</h1>
+<h1>Ингредиенты</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Добавить новый ингредиент</a>
 </p>
 <table class="table">
     <thead>
         <tr>
-            <th>Name</th>
-            <th>Price</th>
-            <th>PortionGrams</th>
-            <th>Availability</th>
+            <th>Название</th>
+            <th>Цена за порцию, р</th>
+            <th>Вес порции, гр</th>
+            <th>В наличии</th>
             <th></th>
         </tr>
     </thead>
@@ -37,8 +37,8 @@
                     @item.Availability
                 </td>
                 <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id" class="confirmDeletion">Delete</a>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Изменить</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id" class="confirmDeletion">Удалить</a>
                 </td>
             </tr>
         }

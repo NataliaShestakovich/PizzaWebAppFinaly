@@ -1,4 +1,6 @@
-﻿namespace PizzaWebAppAuthentication.Options
+﻿using static System.Net.Mime.MediaTypeNames;
+
+namespace PizzaWebAppAuthentication.Options
 {
     public class PizzaOption
     {
@@ -23,6 +25,14 @@
         public string SuccessAcceptOrder { get; set; } // "Ваш заказ принят"
         public string ErrorAcceptOrder { get; set; } // "Неполные данные для заказа"
         public string ErrorAddOrderToDatabase { get; set; } // "Заказ не принят в обработку"
+        public string IngredientDuplicationError { get; set; } // "Ингредиент с названием {0} уже существует в базе данных"
+        public string SuccessAddIngredientToDatabase { get; set; } //"Ингредиент с названием {0} добавлен в базу данных"
+        public string ErrorAddIngredientToDatabase { get; set; } //"Произошла ошибка. Ингредиент с названием {0} не добавлен в базу данных"
+        public string SuccessUpdateIngredientInDatabase { get; set; } //"Ингредиент с названием {0} был изменен в базе данных"
+        public string ErrorUpdateIngredientInDatabase { get; set; } //"Произошла ошибка. Ингредиент с названием {0} не был изменен в базе данных"
+        public string SuccessDeleteIngredientFromDatabase { get; set; } //"Ингредиент с названием {0} был удален из базы данных"
+        public string ErrorDeleteIngredientFromDatabase { get; set; } //"Произошла ошибка. Ингредиент с названием {0} не был удален из базы данных"
+
 
 
 

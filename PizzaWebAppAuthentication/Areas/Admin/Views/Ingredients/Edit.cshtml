@@ -1,10 +1,10 @@
 ﻿@model PizzaWebAppAuthentication.Models.AppModels.Ingredient
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Изменить";
     Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Edit</h1>
+<h1>Обновление данных ингредиента</h1>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -12,39 +12,39 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+                <label asp-for="Price" class="control-label">Цена за порцию, р</label>
                 <input type="text" asp-for="Price" class="form-control" lang="en" step="0.01" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="PortionGrams" class="control-label"></label>
+                <label asp-for="PortionGrams" class="control-label">Вес порции, гр</label>
                 <input type="number" asp-for="PortionGrams" class="form-control" lang="en" />
                 <span asp-validation-for="PortionGrams" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Availability" class="control-label"></label>
+                <label asp-for="Availability" class="control-label">В наличии</label>
                 <div>
                     <input asp-for="Availability" type="checkbox" class="form-check-input" />
-                    <label class="form-check-label" asp-for="Availability">Available</label>
+                    <label class="form-check-label" asp-for="Availability">Доступно</label>
                 </div>
                 <span asp-validation-for="Availability" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <button btn btn-primary>Edit</button>
+                <button btn btn-primary>Изменить</button>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться к списку ингредиентов</a>
 </div>
