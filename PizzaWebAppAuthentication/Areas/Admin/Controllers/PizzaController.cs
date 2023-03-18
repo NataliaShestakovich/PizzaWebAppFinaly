@@ -76,7 +76,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
                 try
                 {
-                    await _pizzaServices.AddPizzaToDataBaseAsync(newPizza);
+                    await _pizzaServices.AddPizzaToDatabaseAsync(newPizza);
                     TempData["Success"] = String.Format(_pizzaOption.SuccessAddPizzaToDatabase, newPizza.Name);
                 }
                 catch (Exception)
@@ -125,7 +125,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
                 try
                 {
-                    await _pizzaServices.UpdatePizzaInDataBaseAsync(existingPizza);
+                    await _pizzaServices.UpdatePizzaInDatabaseAsync(existingPizza);
                     TempData["Success"] = String.Format(_pizzaOption.SuccessUpdatePizzaInDatabase, existingPizza.Name);
                 }
                 catch (Exception)
@@ -143,7 +143,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
             try
             {
-                await _pizzaServices.DeletePizzaFromDataBaseAsync(pizza);
+                await _pizzaServices.DeletePizzaFromDatabaseAsync(pizza);
 
                 TempData["Success"] = String.Format(_pizzaOption.SuccessDeletePizzaFromDatabase, pizza.Name);
             }

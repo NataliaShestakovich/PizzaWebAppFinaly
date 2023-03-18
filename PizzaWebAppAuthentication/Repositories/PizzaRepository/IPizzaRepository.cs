@@ -16,15 +16,25 @@ public interface IPizzaRepository
 
     Task<IEnumerable<string>> GetPizzaBaseNames();
 
+    Task<IEnumerable<PizzaBase>> GetPizzaBases();
+
+    Task<IEnumerable<Size>> GetSizes();
+
     Task<IEnumerable<string>> GetSizeNames();
 
     Task<Size> GetSizeByDiameter(double sizeName);
 
     Task<List<Pizza>> GetPizzasByName(string name);
 
-    Task AddPizzaToDataBaseAsync(Pizza pizza);
+    Task AddPizzaToDatabaseAsync(Pizza pizza);
 
-    Task UpdatePizzaInDataBaseAsync(Pizza pizza);
+    Task AddCustomPizzaToDatabaseAsync(Pizza pizza);
 
-    Task DeletePizzaFromDataBaseAsync(Pizza pizza);
+    Task UpdatePizzaInDatabaseAsync(Pizza pizza);
+
+    Task DeletePizzaFromDatabaseAsync(Pizza pizza);
+
+    Task AddOrderToDatabase(Order order);
+
+    Task<Address> GetAddressAsync(Order order);
 }

@@ -58,6 +58,16 @@ namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
             return await _context.Bases.Select(c => c.Name).ToListAsync();
         }
 
+        public async Task<IEnumerable<PizzaBase>> GetPizzaBases()
+        {
+            return await _context.Bases.ToListAsync();
+        }
+
+        public async Task<IEnumerable<Size>> GetSizes()
+        {
+            return await _context.Sizes.ToListAsync();
+        }
+
         public async Task<IEnumerable<string>> GetSizeNames()
         {
             return await _context.Sizes.Select(c => c.Name).ToListAsync();
@@ -75,24 +85,55 @@ namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
             return pizzas;
         }
 
-        public async Task AddPizzaToDataBaseAsync(Pizza pizza)
+        public async Task AddPizzaToDatabaseAsync(Pizza pizza)
         {
             _context.Add(pizza);
 
             await _context.SaveChangesAsync();
         }
 
-        public async Task UpdatePizzaInDataBaseAsync(Pizza pizza)
+        public async Task AddCustomPizzaToDatabaseAsync(Pizza pizza)
+        {
+            _context.Pizzas.Add(pizza);
+            _context.Entry(pizza.Size).State = EntityState.Unchanged;
+            _context.Entry(pizza.PizzaBase).State = EntityState.Unchanged;
+           
+            foreach (var item in pizza.Ingredients)
+            {
+                _context.Entry(item).State = EntityState.Unchanged;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task UpdatePizzaInDatabaseAsync(Pizza pizza)
         {
             _context.Update(pizza);
 
             await _context.SaveChangesAsync();           
         }
 
-        public async Task DeletePizzaFromDataBaseAsync(Pizza pizza)
+        public async Task DeletePizzaFromDatabaseAsync(Pizza pizza)
         {
             _context.Pizzas.Remove(pizza);
             await _context.SaveChangesAsync();            
         }
+    
+        public async Task AddOrderToDatabase(Order order)
+        {
+            await _context.Orders.AddAsync(order);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<Address> GetAddressAsync (Order order)
+        {
+            var address = await _context.Addresses.Where(c => c.City == order.DeliveryAddress.City).
+                                                         Where(s => s.Street == order.DeliveryAddress.Street).
+                                                         Where(b => b.Building == order.DeliveryAddress.Building).
+                                                         Where(a => a.Apartment == order.DeliveryAddress.Apartment).
+                                                         FirstOrDefaultAsync();
+            return address;
+        }
+   
     }
 }

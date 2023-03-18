@@ -46,6 +46,16 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             return await _pizzaRepository.GetPizzaBaseNames();
         }
 
+        public async Task<IEnumerable<PizzaBase>> GetPizzaBases()
+        {
+            return await _pizzaRepository.GetPizzaBases();
+        }
+
+        public async Task<IEnumerable<Size>> GetSizes()
+        {
+            return await _pizzaRepository.GetSizes();
+        }
+
         public async Task<IEnumerable<string>> GetSizeNames()
         {
             return await _pizzaRepository.GetSizeNames();
@@ -61,9 +71,14 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             return await _pizzaRepository.GetIngredientByName(ingredientName);
         }
 
-        public async Task AddPizzaToDataBaseAsync(Pizza pizza)
+        public async Task AddPizzaToDatabaseAsync(Pizza pizza)
         {
-            await _pizzaRepository.AddPizzaToDataBaseAsync(pizza);
+            await _pizzaRepository.AddPizzaToDatabaseAsync(pizza);
+        }
+
+        public async Task AddCustomPizzaToDatabaseAsync(Pizza pizza)
+        {
+            await _pizzaRepository.AddCustomPizzaToDatabaseAsync(pizza);
         }
 
         public async Task<string> AddNewPizzaImageAsync(IFormFile imageUpload)
@@ -81,14 +96,14 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             return imageName;
         }
 
-        public async Task UpdatePizzaInDataBaseAsync(Pizza pizza)
+        public async Task UpdatePizzaInDatabaseAsync(Pizza pizza)
         {
-            await _pizzaRepository.UpdatePizzaInDataBaseAsync(pizza);
+            await _pizzaRepository.UpdatePizzaInDatabaseAsync(pizza);
         }
 
-        public async Task DeletePizzaFromDataBaseAsync(Pizza pizza)
+        public async Task DeletePizzaFromDatabaseAsync(Pizza pizza)
         {
-            await _pizzaRepository.DeletePizzaFromDataBaseAsync(pizza);
+            await _pizzaRepository.DeletePizzaFromDatabaseAsync(pizza);
         }
 
         public async Task<List<Pizza>> GetPizzasByName(string name)
@@ -96,5 +111,14 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
             return await _pizzaRepository.GetPizzasByName(name);
         }
 
+        public async Task AddOrderToDatabase(Order order)
+        {
+            await _pizzaRepository.AddOrderToDatabase(order);
+        }
+
+        public async Task<Address> GetAddressAsync(Order order)
+        {
+            return await _pizzaRepository.GetAddressAsync(order);
+        }
     }
 }

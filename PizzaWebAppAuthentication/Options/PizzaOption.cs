@@ -16,8 +16,13 @@
         public string SuccessUpdatePizzaInDatabase { get; set; } //"Пицца с названием {0} была изменена в базе данных"
         public string ErrorUpdatePizzaInDatabase { get; set; } //"Произошла ошибка. Пицца с названием {0} не была изменена в базе данных"
         public string StandartPizzaBase { get; set; } // "стандартная"
+        public string CustomPizzaName { get; set; } //  "Клиентская: "
         public string SuccessDeletePizzaFromDatabase { get; set; } //"Пицца с названием {0} была удалена из базы данных"
         public string ErrorDeletePizzaFromDatabase { get; set; } //"Произошла ошибка. Пицца с названием {0} не была удалена из базы данных"
+        public string EmptyCart { get; set; } // "Ваша корзина пуста, добавьте пиццу в корзину"
+        public string SuccessAcceptOrder { get; set; } // "Ваш заказ принят"
+        public string ErrorAcceptOrder { get; set; } // "Неполные данные для заказа"
+        public string ErrorAddOrderToDatabase { get; set; } // "Заказ не принят в обработку"
 
 
 

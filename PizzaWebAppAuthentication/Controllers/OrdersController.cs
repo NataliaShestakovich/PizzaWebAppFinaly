@@ -6,6 +6,7 @@ using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
+using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Controllers
@@ -13,19 +14,19 @@ namespace PizzaWebAppAuthentication.Controllers
     public class OrdersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPizzaServices _pizzaServises;
+        private readonly PizzaOption _pizzaOption;
 
         public OrdersController(ILogger<HomeController> logger,
-                                ApplicationDbContext context,
                                 UserManager<ApplicationUser> userManager,
-                                IPizzaServices pizzaServises)
+                                IPizzaServices pizzaServises,
+                                PizzaOption pizzaOption)
         {
             _logger = logger;
-            _context = context;
             _userManager = userManager;
             _pizzaServises = pizzaServises;
+            _pizzaOption = pizzaOption;
         }
 
         [Authorize]
@@ -36,7 +37,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
             if (cart.Count <= 0 || cart == null)
             {
-                TempData["Error"] = "Your cart is empty, add some pizzas first";
+                TempData["Error"] = _pizzaOption.EmptyCart;
 
                 return RedirectToAction("Index", "Home");
             }
@@ -69,11 +70,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
                 order.ApplicationUserId = Guid.Parse(user.Id);
 
-                var IsExistAddress = _context.Addresses.Where(c => c.City == dataOrder.DeliveryAddress.City).
-                                                        Where(s => s.Street == dataOrder.DeliveryAddress.Street).
-                                                        Where(b => b.Building == dataOrder.DeliveryAddress.Building).
-                                                        Where(a => a.Apartment == dataOrder.DeliveryAddress.Apartment).
-                                                        FirstOrDefault();
+                var IsExistAddress = await _pizzaServises.GetAddressAsync(dataOrder);
                 order.DeliveryAddress = new();
 
                 if (IsExistAddress != null)
@@ -97,15 +94,7 @@ namespace PizzaWebAppAuthentication.Controllers
                     {
                         var customPizza = customPizzas.Find(p => p.Id == cartItem.PizzaId);
 
-                        _context.Pizzas.Add(customPizza);
-                        _context.Entry(customPizza.Size).State = EntityState.Unchanged;
-                        _context.Entry(customPizza.PizzaBase).State = EntityState.Unchanged;
-                        foreach (var item in customPizza.Ingredients)
-                        {
-                            _context.Entry(item).State = EntityState.Unchanged;
-                        }
-                        
-                        _context.SaveChanges();                        
+                        await _pizzaServises.AddCustomPizzaToDatabaseAsync(customPizza);                   
                     }
                     var orderItem = new CartItem
                     {
@@ -120,17 +109,20 @@ namespace PizzaWebAppAuthentication.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    await _context.Orders.AddAsync(order);
-                    await _context.SaveChangesAsync();
-
-                    HttpContext.Session.Remove("Cart");
-
-                    TempData["Success"] = "Your order is accepted";
-
+                    try
+                    {
+                        await _pizzaServises.AddOrderToDatabase(order);
+                        TempData["Success"] = _pizzaOption.SuccessAcceptOrder;
+                        HttpContext.Session.Remove("Cart");
+                    }
+                    catch (Exception)
+                    {
+                        TempData["Error"] = _pizzaOption.ErrorAddOrderToDatabase;
+                    }
                     return RedirectToAction("Index", "Home");
                 }
             }            
-            TempData["Error"] = "Incomplete ordering data";
+            TempData["Error"] = _pizzaOption.ErrorAcceptOrder;
 
             return RedirectToAction("Index","Cart");
         }
