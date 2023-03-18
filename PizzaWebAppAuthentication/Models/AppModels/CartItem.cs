@@ -13,5 +13,17 @@
         public virtual Order Order { get; set; }
 
         public virtual Pizza Pizza { get; set; }
+
+        public CartItem()
+        {
+
+        }
+
+        public CartItem(Pizza pizza)
+        {
+            PizzaId= pizza.Id;
+            Quantity = 1;
+            Pizza = pizza;
+        }
     }
 }

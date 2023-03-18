@@ -1,16 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
+using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
+using PizzaWebAppAuthentication.Options;
+using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
     public class CartController : Controller
     {
+        private readonly IPizzaServices _pizzaServices;
         private readonly ApplicationDbContext _contextDb;
-        public CartController(ApplicationDbContext contextDb)
+        private readonly PizzaOption _pizzaOption;
+        public CartController(ApplicationDbContext contextDb,
+                              PizzaOption pizzaOption,
+                              IPizzaServices pizzaservices)
         {
             _contextDb = contextDb;
+            _pizzaOption = pizzaOption;
+            _pizzaServices = pizzaservices;
         }
        
         public IActionResult Index()
@@ -27,11 +36,13 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         public async Task<IActionResult> Add(Guid id) 
-        { 
-            var pizza = await _contextDb.Pizzas.FindAsync(id); // Вынести в сервис и репозиторий этот метод и заменить на обращение через него
+        {
+            //var pizza = await _contextDb.Pizzas.FindAsync(id); // Вынести в сервис и репозиторий этот метод и заменить на обращение через него
+            var pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
             if (pizza == null)
             {
-                //TODO сделать проверку выбросить нотификейшен
+                TempData["Error"] = _pizzaOption.SuccessAddPizzaInCart;
+                return View(pizza);
             }
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
@@ -48,7 +59,34 @@ namespace PizzaWebAppAuthentication.Controllers
 
             HttpContext.Session.SetJson("Cart", cart);
 
-            TempData["Success"] = "The product has been added.";
+            TempData["Success"] = string.Format(_pizzaOption.SuccessAddPizzaInCart, pizza.Name);
+
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+        
+        public async Task<IActionResult> AddPizza (Pizza pizza) 
+        {             
+            if (pizza == null)
+            {
+                TempData["Error"] = _pizzaOption.SuccessAddPizzaInCart;
+                return View(pizza);
+            }
+            var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
+
+            CartItemViewModel cartItem = cart.Where(p => p.PizzaId == pizza.Id).FirstOrDefault();
+
+            if (cartItem == null)
+            {
+                cart.Add(new CartItemViewModel(pizza));
+            }
+            else
+            {
+                cartItem.Quantity += 1;
+            }
+
+            HttpContext.Session.SetJson("Cart", cart);
+
+            TempData["Success"] = string.Format(_pizzaOption.SuccessAddCustomPizza, pizza.Name);
 
             return Redirect(Request.Headers["Referer"].ToString());
         }
@@ -77,7 +115,7 @@ namespace PizzaWebAppAuthentication.Controllers
                 HttpContext.Session.SetJson("Cart", cart);
             }
             
-            TempData["Success"] = "The product has been removed.";
+            TempData["Success"] = string.Format(_pizzaOption.SuccessDecreasePizzaInCart,cartItem.PizzaName);
 
             return RedirectToAction("Index");
         }
@@ -99,7 +137,8 @@ namespace PizzaWebAppAuthentication.Controllers
                 HttpContext.Session.SetJson("Cart", cart);
             }
 
-            TempData["Success"] = "The product has been removed.";
+            string pizzaName = cart.Where(c => c.PizzaId == id).Select(c => c.PizzaName).FirstOrDefault();
+            TempData["Success"] = String.Format(_pizzaOption.SuccessRemovePizzaFromCart, pizzaName);
 
             return RedirectToAction("Index");
         }
@@ -110,7 +149,5 @@ namespace PizzaWebAppAuthentication.Controllers
 
             return RedirectToAction("Index");
         }
-
-
     }
 }

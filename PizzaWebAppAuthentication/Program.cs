@@ -3,7 +3,9 @@ using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
+using PizzaWebAppAuthentication.Extentions;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
 using PizzaWebAppAuthentication.Repositories.PizzaRepository;
 using PizzaWebAppAuthentication.Services.IngredientServices;
@@ -12,6 +14,7 @@ using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
 using Serilog.Events;
+using System.Configuration;
 
 namespace PizzaWebAppAuthentication
 {
@@ -35,6 +38,8 @@ namespace PizzaWebAppAuthentication
                     ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
                 builder.Services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlServer(connectionString));
+
+                builder.Services.AddCustomConfiguration<PizzaOption>(PizzaOption.SectionName);
 
                 builder.Services.AddDistributedMemoryCache();
                 builder.Services.AddSession(options =>
@@ -72,7 +77,7 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
                 builder.Services.AddTransient<IIngredientRepository, IngredientRepository>();
-                
+
                 builder.Services.AddTransient<IPizzaServices, PizzaServices>();
                 builder.Services.AddTransient<IIngredientServises, IngredientServises>();
 
@@ -96,14 +101,15 @@ namespace PizzaWebAppAuthentication
                 }
 
                 app.UseHttpsRedirection();
-                
+
                 app.UseStaticFiles();
 
                 app.UseRouting();
 
                 app.UseAuthentication();
-                
+
                 app.UseAuthorization();
+
 
                 app.MapControllerRoute(
                     name: "Areas",
@@ -115,9 +121,9 @@ namespace PizzaWebAppAuthentication
 
                 app.MapRazorPages();
 
-                app.Run();
+            app.Run();
 
-            }
+        }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "Application terminated unexpectedly");

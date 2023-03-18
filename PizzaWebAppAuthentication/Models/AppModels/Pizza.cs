@@ -22,7 +22,7 @@ namespace PizzaWebAppAuthentication.Models.AppModels
 
         public bool Standart { get; set; }
 
-        public PizzaBase PizzaBase { get; set; }
+        public virtual PizzaBase PizzaBase { get; set; }
 
         public Size Size { get; set; } 
 

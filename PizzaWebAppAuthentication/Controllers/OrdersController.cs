@@ -1,24 +1,31 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
+using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Controllers
-{    
+{
     public class OrdersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IPizzaServices _pizzaServises;
 
-        public OrdersController(ILogger<HomeController> logger, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+        public OrdersController(ILogger<HomeController> logger,
+                                ApplicationDbContext context,
+                                UserManager<ApplicationUser> userManager,
+                                IPizzaServices pizzaServises)
         {
             _logger = logger;
             _context = context;
             _userManager = userManager;
+            _pizzaServises = pizzaServises;
         }
 
         [Authorize]
@@ -82,8 +89,24 @@ namespace PizzaWebAppAuthentication.Controllers
                     order.DeliveryAddress.Apartment = dataOrder.DeliveryAddress.Apartment;
                 }
 
+                var customPizzas = HttpContext.Session.GetJson<List<Pizza>>("CustomPizza") ?? new List<Pizza>();
+
                 foreach (var cartItem in cart)
                 {
+                    if ((customPizzas != null || customPizzas.Count()>0) && customPizzas.Any(x => x.Id == cartItem.PizzaId))
+                    {
+                        var customPizza = customPizzas.Find(p => p.Id == cartItem.PizzaId);
+
+                        _context.Pizzas.Add(customPizza);
+                        _context.Entry(customPizza.Size).State = EntityState.Unchanged;
+                        _context.Entry(customPizza.PizzaBase).State = EntityState.Unchanged;
+                        foreach (var item in customPizza.Ingredients)
+                        {
+                            _context.Entry(item).State = EntityState.Unchanged;
+                        }
+                        
+                        _context.SaveChanges();                        
+                    }
                     var orderItem = new CartItem
                     {
                         ID = cartItem.ID,
