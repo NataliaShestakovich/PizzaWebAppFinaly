@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels;
 using PizzaWebAppAuthentication.Options;
@@ -6,6 +7,7 @@ using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 {
+    [Authorize]
     [Area("Admin")]
     public class PizzaController : Controller
     {

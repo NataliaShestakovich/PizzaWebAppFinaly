@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Extentions;
+using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
@@ -110,7 +111,6 @@ namespace PizzaWebAppAuthentication
 
                 app.UseAuthorization();
 
-
                 app.MapControllerRoute(
                     name: "Areas",
                     pattern: "{area:exists}/{controller=Pizza}/{action=Index}/{id?}");
@@ -121,9 +121,9 @@ namespace PizzaWebAppAuthentication
 
                 app.MapRazorPages();
 
-            app.Run();
+                app.Run();
 
-        }
+            }
             catch (Exception ex)
             {
                 Log.Fatal(ex, "Application terminated unexpectedly");
