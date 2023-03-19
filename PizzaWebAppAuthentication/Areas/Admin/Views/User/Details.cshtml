@@ -1,0 +1,34 @@
+﻿@model PizzaWebAppAuthentication.Models.ViewModels.UserManagementViewModels.UserDataViewModel
+
+<h2>User Details</h2>
+
+<table class="table">
+    <tr>
+        <th>Id</th>
+        <td>@Model.Id</td>
+    </tr>
+    <tr>
+        <th>First Name</th>
+        <td>@Model.FirstName</td>
+    </tr>
+    <tr>
+        <th>Last Name</th>
+        <td>@Model.LastName</td>
+    </tr>
+    <tr>
+        <th>Email</th>
+        <td>@Model.Email</td>
+    </tr>
+    <tr>
+        <th>Phone</th>
+        <td>@Model.Phone</td>
+    </tr>
+    <tr>
+        <th>Role</th>
+        <td>@Model.Role</td>
+    </tr>
+    <tr>
+        <th>Date of Last Order</th>
+        <td>@(Model.DateLastOrder?.ToShortDateString())</td>
+    </tr>
+</table>
