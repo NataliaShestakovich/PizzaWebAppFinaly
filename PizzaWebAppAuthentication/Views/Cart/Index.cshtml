@@ -1,18 +1,18 @@
 ﻿@model PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles.CartViewModel
 
 @{
-    ViewData["Title"] = "Cart Overview";
+    ViewData["Title"] = "Корзина покупок";
 }
 
 @if (Model.CartItems.Count > 0)
 {
     <table class="table">
         <tr>
-            <th>Pizza Name</th>
-            <th>Quantity</th>
+            <th>Название пиццы</th>
+            <th>Количество</th>
             <th></th>
-            <th>Price</th>
-            <th>Total</th>
+            <th>Цена</th>
+            <th>Итого</th>
         </tr>
            @foreach (var item in Model.CartItems)
             {
@@ -22,25 +22,25 @@
                    <td> 
                        <a class="btn btn-primary btn-sm" asp-action="Add" asp-route-id="@item.PizzaId">+</a>
                        <a class="btn btn-info btn-sm" asp-action="Decrease" asp-route-id="@item.PizzaId">-</a>
-                       <a class="btn btn-danger btn-sm" asp-action="Remove" asp-route-id="@item.PizzaId">Remove</a>
+                       <a class="btn btn-danger btn-sm" asp-action="Remove" asp-route-id="@item.PizzaId">Убрать из корзины</a>
                    </td>
                    <td>@item.Price.ToString("C2")</td>
                    <td>@Model.CartItems.Where(x=>x.PizzaId == item.PizzaId).Sum(x=>x.Quantity*x.Price).ToString("C2")</td>
                </tr>
             }
         <tr>
-            <td class="text-right" colspan="4">Grand Total: @Model.GrandTotal.ToString("C2")</td>
+            <td class="text-right" colspan="4">Общая сумма: @Model.GrandTotal.ToString("C2")</td>
         </tr>
         <tr>
             <td class="text-right" colspan="4">
-                <a class="btn btn-danger" asp-action="Clear">Claer Cart</a>
-                <a class="btn btn-primary" asp-controller="Orders" asp-action="Checkout" asp-route-cart="@Model"> Checkout </a>
+                <a class="btn btn-danger" asp-action="Clear">Очистить корзину</a>
+                <a class="btn btn-primary" asp-controller="Orders" asp-action="Checkout" asp-route-cart="@Model"> Подветрдить заказ </a>
             </td>
         </tr>
     </table>
 }
 else
 {
-    <h3 class="display-4 text-cente">Your cart is empty</h3>
+    <h5 class="display-4 text-cente">Корзина покупок пуста</h5>
 }
 

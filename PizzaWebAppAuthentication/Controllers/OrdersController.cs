@@ -11,6 +11,7 @@ using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Controllers
 {
+    [Authorize]
     public class OrdersController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -29,13 +30,13 @@ namespace PizzaWebAppAuthentication.Controllers
             _pizzaOption = pizzaOption;
         }
 
-        [Authorize]
+        
         [HttpGet]
         public IActionResult Checkout()
         {
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
-            if (cart.Count <= 0 || cart == null)
+            if (!cart.Any())
             {
                 TempData["Error"] = _pizzaOption.EmptyCart;
 
@@ -45,7 +46,6 @@ namespace PizzaWebAppAuthentication.Controllers
              return View();
         }
 
-        [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Checkout(Order dataOrder)
@@ -54,7 +54,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
-            if (cart.Count >= 0 || cart != null)
+            if (cart.Any())
             {
                 Order order = new Order
                 {
