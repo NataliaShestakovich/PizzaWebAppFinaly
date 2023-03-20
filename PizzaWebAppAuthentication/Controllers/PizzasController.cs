@@ -21,7 +21,7 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpGet]
         public async Task<IActionResult> CreateCustomPizza() 
         {
-            var ingredients = await _pizzaServices.GetIngredientNames();
+            var ingredients = await _pizzaServices.GetAvailableIngredientNames();
             ViewData["Ingredients"] = ingredients;
 
             var bases = await _pizzaServices.GetPizzaBases() ;
@@ -34,8 +34,24 @@ namespace PizzaWebAppAuthentication.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateCustomPizzaAsync(PizzaViewModel pizza)
+        public async Task<IActionResult> CreateCustomPizza(PizzaViewModel pizza)
         {
+            var ingredients = await _pizzaServices.GetAvailableIngredientNames();
+            ViewData["Ingredients"] = ingredients;
+
+            var bases = await _pizzaServices.GetPizzaBases();
+            ViewData["Bases"] = bases;
+
+            var sizes = await _pizzaServices.GetSizes();
+            ViewData["Sizes"] = sizes;
+
+            if (pizza.Ingredients == null || pizza.Ingredients.Count == 0 || pizza.Base == null || pizza.Size == null)
+            {
+                TempData["Error"] = _pizzaOption.ErrorAddingIngredients;
+
+                return View();
+            }
+
             var newPizza = new Pizza();
             newPizza.Id = Guid.NewGuid();
             newPizza.Standart = false;
@@ -45,6 +61,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
             decimal ingredientCost = 0;
             int counter = 1;
+
 
             foreach (var item in pizza.Ingredients)
             {
@@ -61,7 +78,7 @@ namespace PizzaWebAppAuthentication.Controllers
                 }
                 counter++;
             }
-
+            
             newPizza.Price = newPizza.PizzaBase.Price + (decimal)newPizza.Size.Diameter * 0.1m + ingredientCost;
 
             var customPizzas = HttpContext.Session.GetJson<List<Pizza>>("CustomPizza") ?? new List<Pizza>();

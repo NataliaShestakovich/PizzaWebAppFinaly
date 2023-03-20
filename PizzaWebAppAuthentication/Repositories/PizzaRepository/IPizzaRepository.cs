@@ -10,6 +10,8 @@ public interface IPizzaRepository
 
     Task<IEnumerable<string>> GetIngredientNames();
 
+    Task<IEnumerable<string>> GetAvailableIngredientNames();
+
     Task<Ingredient> GetIngredientByName(string ingredientName);
 
     Task<PizzaBase> GetPizzaBaseByName(string baseName);

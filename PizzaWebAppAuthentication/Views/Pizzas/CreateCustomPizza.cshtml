@@ -17,9 +17,10 @@
                         <label>
                             @Html.RadioButtonFor(model => model.Base, pizzaBase.Name)
                             @pizzaBase.Name.ToLower()
-                        </label>
+                        </label>                        
                     </div>
                 }
+                <span asp-validation-for="Base" class="text-danger"></span>
             </div>
 
             <div style="margin-bottom: 20px;">
@@ -31,6 +32,7 @@
                             @Html.RadioButtonFor(model => model.Size, size.Diameter)
                             @(size.Name.ToLower() + ' ' + size.Diameter + "см")
                         </label>
+                        <span asp-validation-for="Size" class="text-danger"></span>
                     </div>
                 }
             </div>
@@ -45,7 +47,7 @@
                 }
             </div>
 
-            <button type="submit">Добавить в карзину</button>
+            <button type="submit">Добавить в корзину</button>
 
         }
     </div>

@@ -31,9 +31,12 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
 
         public async Task< IEnumerable<string>> GetIngredientNames()
         {
-            var ingredients = await _pizzaRepository.GetIngredientNames();
+            return await _pizzaRepository.GetIngredientNames();            
+        }
 
-            return ingredients;
+        public async Task<IEnumerable<string>> GetAvailableIngredientNames() 
+        {
+            return await _pizzaRepository.GetAvailableIngredientNames();           
         }
 
         public async Task<PizzaBase> GetPizzaBaseByName(string baseName)

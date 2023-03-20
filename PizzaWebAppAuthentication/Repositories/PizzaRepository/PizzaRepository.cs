@@ -43,6 +43,11 @@ namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
             return await _context.Ingredients.Select(x => x.Name).ToListAsync();
         }
 
+        public async Task<IEnumerable<string>> GetAvailableIngredientNames()
+        {   
+            return await _context.Ingredients.Where(x => x.Availability == true).Select(x => x.Name).ToListAsync();
+        }
+
         public async Task<Ingredient> GetIngredientByName(string ingredientName)
         {
             return await _context.Ingredients.Where(c => c.Name == ingredientName).FirstOrDefaultAsync();

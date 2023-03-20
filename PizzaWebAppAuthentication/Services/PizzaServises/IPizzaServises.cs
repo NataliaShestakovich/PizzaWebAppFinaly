@@ -10,6 +10,8 @@ namespace PizzaWebAppAuthentication.Services.PizzaServises
 
         Task<IEnumerable<string>> GetIngredientNames();
 
+        Task<IEnumerable<string>> GetAvailableIngredientNames();
+
         Task<PizzaBase> GetPizzaBaseByName(string baseName);
 
         Task<IEnumerable<string>> GetPizzaBaseNames();

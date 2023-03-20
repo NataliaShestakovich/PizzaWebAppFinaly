@@ -38,8 +38,6 @@ namespace PizzaWebAppAuthentication.Services.OrderServices
                 }
             }
             return orderViewModels;
-        }
-
-       
+        }       
     }
 }

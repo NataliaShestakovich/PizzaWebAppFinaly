@@ -68,7 +68,7 @@ namespace PizzaWebAppAuthentication
 
                 builder.Services.AddTransient<InitializeDataBase>();
 
-                builder.Services.AddScoped<UserManagementService>(); //Посмотреть после если будет интерфейс
+                builder.Services.AddScoped<UserManagementService>(); 
 
                 builder.Services.AddAuthorization(option =>
                         {
