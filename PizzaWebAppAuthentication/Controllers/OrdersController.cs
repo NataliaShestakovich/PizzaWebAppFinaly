@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Models.ViewModels.CartViewModeles;
@@ -94,7 +92,7 @@ namespace PizzaWebAppAuthentication.Controllers
 
                 foreach (var cartItem in cart)
                 {
-                    if (customPizzas.Any() && customPizzas.Any(x => x.Id == cartItem.PizzaId))
+                    if (customPizzas.Any(x => x.Id == cartItem.PizzaId))
                     {
                         var customPizza = customPizzas.Find(p => p.Id == cartItem.PizzaId);
 

@@ -24,7 +24,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             return View(await _ingredientServices.GetIngredientsAsync());
         }
 
-        public IActionResult Create(Guid id)
+        public IActionResult Create()
         {
             return View();
         }

@@ -14,7 +14,7 @@ namespace PizzaWebAppAuthentication.Options
         public string SuccessAddPizzaToDatabase { get; set; } //"Пицца с названием {0} добавлена в базу данных"
         public string ErrorAddPizzaToDatabase { get; set; } //"Произошла ошибка. Пицца с именем {0} не добавлена в базу данных"
         public string ErrorAddInDatabase { get; set; } //"Пицца с названием {0} уже существует в базе данных"
-        public string ErrorAddingIngredients { get; set; } //"Не добавлен ни один ингрединет"
+        public string ErrorCreatingPizza { get; set; } //"Не заполнены все параметры для создания пиццы"
         public string SuccessUpdatePizzaInDatabase { get; set; } //"Пицца с названием {0} была изменена в базе данных"
         public string ErrorUpdatePizzaInDatabase { get; set; } //"Произошла ошибка. Пицца с названием {0} не была изменена в базе данных"
         public string StandartPizzaBase { get; set; } // "стандартная"

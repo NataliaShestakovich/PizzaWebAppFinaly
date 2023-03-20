@@ -36,53 +36,32 @@ namespace PizzaWebAppAuthentication.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateCustomPizza(PizzaViewModel pizza)
         {
-            var ingredients = await _pizzaServices.GetAvailableIngredientNames();
-            ViewData["Ingredients"] = ingredients;
-
-            var bases = await _pizzaServices.GetPizzaBases();
-            ViewData["Bases"] = bases;
-
-            var sizes = await _pizzaServices.GetSizes();
-            ViewData["Sizes"] = sizes;
-
-            if (pizza.Ingredients == null || pizza.Ingredients.Count == 0 || pizza.Base == null || pizza.Size == null)
+            if (!ModelState.IsValid)
             {
-                TempData["Error"] = _pizzaOption.ErrorAddingIngredients;
-
-                return View();
+                TempData["Error"] = _pizzaOption.ErrorCreatingPizza;
+                return RedirectToAction("CreateCustomPizza");
             }
 
-            var newPizza = new Pizza();
-            newPizza.Id = Guid.NewGuid();
-            newPizza.Standart = false;
-            newPizza.Name = _pizzaOption.CustomPizzaName;
-            newPizza.PizzaBase = await _pizzaServices.GetPizzaBaseByName(pizza.Base);
-            newPizza.Size = await _pizzaServices.GetSizeByDiameter(pizza.Size);
+            var newPizza = new Pizza()
+            {
+                Id = Guid.NewGuid(),
+                Standart = false,
+                Name = _pizzaOption.CustomPizzaName,
+                PizzaBase = await _pizzaServices.GetPizzaBaseByName(pizza.Base),
+                Size = await _pizzaServices.GetSizeByDiameter(pizza.Size)
+            };
 
             decimal ingredientCost = 0;
-            int counter = 1;
-
-
             foreach (var item in pizza.Ingredients)
             {
                 var ingredient = await _pizzaServices.GetIngredientByName(item);
                 newPizza.Ingredients.Add(ingredient);
                 ingredientCost += ingredient.Price;
-                if (counter < pizza.Ingredients.Count())
-                {
-                    newPizza.Name += $"{ingredient.Name}, ";
-                }
-                else
-                {
-                    newPizza.Name += $"{ingredient.Name}.";
-                }
-                counter++;
             }
-            
+
             newPizza.Price = newPizza.PizzaBase.Price + (decimal)newPizza.Size.Diameter * 0.1m + ingredientCost;
 
             var customPizzas = HttpContext.Session.GetJson<List<Pizza>>("CustomPizza") ?? new List<Pizza>();
-
             customPizzas.Add(newPizza);
 
             HttpContext.Session.SetJson("CustomPizza", customPizzas);

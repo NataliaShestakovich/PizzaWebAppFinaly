@@ -8,13 +8,13 @@
 <form asp-action="Checkout" method="post" class="form-horizontal" role="form">
     @Html.AntiForgeryToken()
     
-    <h4>You're just one step away from finish your order.</h4>
+    <h4>Для завершения заказа заполните данные</h4>
     <hr />
 
     <div asp-validation-summary="All" class="text-danger"></div>
 
     <div class="form-group">
-        <label asp-for=@Model.DeliveryAddress.City class="col-md-2 control-label"></label>
+        <label asp-for=@Model.DeliveryAddress.City class="col-md-2 control-label">Город</label>
         <div class="col-md-5">
             <input asp-for=@Model.DeliveryAddress.City class="form-control" />
             <span asp-validation-for=@Model.DeliveryAddress.City class="text-danger"></span>
@@ -22,7 +22,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for=@Model.DeliveryAddress.Street class="col-md-2 control-label"></label>
+        <label asp-for=@Model.DeliveryAddress.Street class="col-md-2 control-label">Улица</label>
         <div class="col-md-5">
             <input asp-for=@Model.DeliveryAddress.Street class="form-control" />
             <span asp-validation-for=@Model.DeliveryAddress.Street class="text-danger"></span>
@@ -30,7 +30,7 @@
     </div>
 
     <div class="form-group">
-        <label asp-for=@Model.DeliveryAddress.Building class="col-md-2 control-label"></label>
+        <label asp-for=@Model.DeliveryAddress.Building class="col-md-2 control-label">Дом</label>
         <div class="col-md-5">
             <input asp-for=@Model.DeliveryAddress.Building class="form-control" />
             <span asp-validation-for=@Model.DeliveryAddress.Building class="text-danger"></span>
@@ -38,13 +38,13 @@
     </div>
 
     <div class="form-group">
-        <label asp-for=@Model.DeliveryAddress.Apartment class="col-md-2 control-label"></label>
+        <label asp-for=@Model.DeliveryAddress.Apartment class="col-md-2 control-label">Квартира</label>
         <div class="col-md-5">
             <input asp-for=@Model.DeliveryAddress.Apartment class="form-control" />
             <span asp-validation-for=@Model.DeliveryAddress.Apartment class="text-danger"></span>
         </div>
     </div>
     <div>
-        <button class="btn btn-primary" type="submit">Confirm and pay</button>
+        <button class="btn btn-primary" type="submit">Подтвердить и оплатить</button>
     </div>
 </form>

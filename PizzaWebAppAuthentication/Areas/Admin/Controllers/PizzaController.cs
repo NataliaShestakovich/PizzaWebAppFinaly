@@ -65,7 +65,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 
                 if (pizzaViewModel.Ingredients == null || pizzaViewModel.Ingredients.Count == 0)
                 {
-                    TempData["Error"] = _pizzaOption.ErrorAddingIngredients;
+                    TempData["Error"] = _pizzaOption.ErrorCreatingPizza;
 
                     return View(pizzaViewModel);
                 }

@@ -62,7 +62,7 @@ namespace PizzaWebAppAuthentication
                     .AddRoles<IdentityRole>()
                     .AddEntityFrameworkStores<ApplicationDbContext>();
 
-                builder.Services.AddTransient<IEmailSender, EmailSender>();
+                //builder.Services.AddTransient<IEmailSender, EmailSender>();
 
                 builder.Services.AddTransient<CreateDefaultUserService>();
 

@@ -5,10 +5,11 @@ namespace PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels
 {
     public class PizzaViewModel
     {
-        [Required(ErrorMessage ="Выберите основу для пиццы")]
+        [Required]
         public string Base { get; set; }
         
-        [Required(ErrorMessage = "Выберите размер пиццы")]
+        [Required]
+        [Range(1, double.MaxValue)]
         public double Size { get; set; }
 
         [Required]
