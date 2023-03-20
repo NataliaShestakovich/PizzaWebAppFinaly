@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
 using PizzaWebAppAuthentication.Extentions;
-using PizzaWebAppAuthentication.Infrastructure;
 using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
+using PizzaWebAppAuthentication.Repositories.OrderRepository;
 using PizzaWebAppAuthentication.Repositories.PizzaRepository;
 using PizzaWebAppAuthentication.Services.IngredientServices;
+using PizzaWebAppAuthentication.Services.OrderServices;
 using PizzaWebAppAuthentication.Services.PizzaServises;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
 using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
 using Serilog.Events;
-using System.Configuration;
 
 namespace PizzaWebAppAuthentication
 {
@@ -76,9 +76,11 @@ namespace PizzaWebAppAuthentication
                         policyBuilder.RequireRole("Admin"));
                         });
 
+                builder.Services.AddTransient<IOrderRepository, OrderRepository>();
                 builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
                 builder.Services.AddTransient<IIngredientRepository, IngredientRepository>();
 
+                builder.Services.AddTransient<IOrderServices, OrderServices>();
                 builder.Services.AddTransient<IPizzaServices, PizzaServices>();
                 builder.Services.AddTransient<IIngredientServises, IngredientServises>();
 

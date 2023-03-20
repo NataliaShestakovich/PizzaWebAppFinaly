@@ -7,8 +7,8 @@ using PizzaWebAppAuthentication.Services.PizzaServises;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 {
-    [Authorize]
     [Area("Admin")]
+    [Authorize(Policy = "OnlyAdmin")]
     public class PizzaController : Controller
     {
         private readonly IPizzaServices _pizzaServices;

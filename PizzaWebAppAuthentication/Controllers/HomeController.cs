@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Models;
 using PizzaWebAppAuthentication.Repositories.PizzaRepository;
+using PizzaWebAppAuthentication.Services.PizzaServises;
 using System.Diagnostics;
 
 namespace PizzaWebAppAuthentication.Controllers
@@ -9,17 +10,17 @@ namespace PizzaWebAppAuthentication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IPizzaRepository _pizzaRepository;
+        private readonly IPizzaServices _pizzaServices;
 
-        public HomeController(ILogger<HomeController> logger, IPizzaRepository pizzaRepository)
+        public HomeController(ILogger<HomeController> logger, IPizzaServices pizzaServices)
         {
             _logger = logger;
-            _pizzaRepository = pizzaRepository;
+            _pizzaServices = pizzaServices;
         }
 
         public async Task<IActionResult> Index()
         {
-            var pizzas = await _pizzaRepository.GetStandartPizzasAsync();
+            var pizzas = await _pizzaServices.GetStandartPizzasAsync();
 
             return View(pizzas);
         }

@@ -1,0 +1,42 @@
+﻿@model IEnumerable<PizzaWebAppAuthentication.Models.ViewModels.OrderViewModel.OrderViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Заказы</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Дата заказа</th>
+            <th>Пицца</th>
+            <th>Цена</th>
+            <th>Заказчик</th>
+            <th>№ Заказа</th>            
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.OrderDate
+                </td>
+                <td>
+                    @item.PizzaName
+                </td>
+                <td>
+                    @item.Price
+                </td>
+                <td>
+                    @item.Email
+                </td>
+                <td>
+                    @item.OrderId
+                </td>                
+            </tr>
+        }
+    </tbody>
+</table>

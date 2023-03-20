@@ -170,7 +170,6 @@ namespace PizzaWebAppAuthentication.Data.Seed
                     await AddUserToDb(user);
                 }
             }
-
         }
 
         private async Task AddUserToDb(ApplicationUser user)

@@ -32,6 +32,7 @@ namespace PizzaWebAppAuthentication.Options
         public string ErrorUpdateIngredientInDatabase { get; set; } //"Произошла ошибка. Ингредиент с названием {0} не был изменен в базе данных"
         public string SuccessDeleteIngredientFromDatabase { get; set; } //"Ингредиент с названием {0} был удален из базы данных"
         public string ErrorDeleteIngredientFromDatabase { get; set; } //"Произошла ошибка. Ингредиент с названием {0} не был удален из базы данных"
+        public string ErrorExistUserInDatabase { get; set; } // Пользователь не прошел регистрацию
 
 
 

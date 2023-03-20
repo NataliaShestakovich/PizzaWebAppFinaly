@@ -14,12 +14,12 @@ namespace PizzaWebAppAuthentication.Controllers
     [Authorize]
     public class OrdersController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly ILogger<OrdersController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IPizzaServices _pizzaServises;
         private readonly PizzaOption _pizzaOption;
 
-        public OrdersController(ILogger<HomeController> logger,
+        public OrdersController(ILogger<OrdersController> logger,
                                 UserManager<ApplicationUser> userManager,
                                 IPizzaServices pizzaServises,
                                 PizzaOption pizzaOption)
@@ -30,7 +30,7 @@ namespace PizzaWebAppAuthentication.Controllers
             _pizzaOption = pizzaOption;
         }
 
-        
+
         [HttpGet]
         public IActionResult Checkout()
         {
@@ -43,7 +43,7 @@ namespace PizzaWebAppAuthentication.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-             return View();
+            return View();
         }
 
         [HttpPost]
@@ -56,19 +56,23 @@ namespace PizzaWebAppAuthentication.Controllers
 
             if (cart.Any())
             {
+                string userName = HttpContext.User.Identity.Name;
+                var user = await _userManager.FindByNameAsync(userName);
+
+                if (user == null)
+                {
+                    TempData["Error"] = _pizzaOption.ErrorExistUserInDatabase;
+                    return RedirectToAction("Index", "Home");
+                }
+
                 Order order = new Order
                 {
                     Id = id,
                     OrderDate = DateTime.Now,
                     CartItems = new List<CartItem>(),
-                    TotalPrice = cart.Sum(x => x.Quantity * x.Price)
+                    TotalPrice = cart.Sum(x => x.Quantity * x.Price),
+                    ApplicationUser = user
                 };
-
-                string userName = HttpContext.User.Identity.Name;
-                              
-                var user = await _userManager.FindByNameAsync(userName);
-
-                order.ApplicationUserId = Guid.Parse(user.Id);
 
                 var IsExistAddress = await _pizzaServises.GetAddressAsync(dataOrder);
                 order.DeliveryAddress = new();
@@ -90,11 +94,11 @@ namespace PizzaWebAppAuthentication.Controllers
 
                 foreach (var cartItem in cart)
                 {
-                    if ((customPizzas != null || customPizzas.Count()>0) && customPizzas.Any(x => x.Id == cartItem.PizzaId))
+                    if (customPizzas.Any() && customPizzas.Any(x => x.Id == cartItem.PizzaId))
                     {
                         var customPizza = customPizzas.Find(p => p.Id == cartItem.PizzaId);
 
-                        await _pizzaServises.AddCustomPizzaToDatabaseAsync(customPizza);                   
+                        await _pizzaServises.AddCustomPizzaToDatabaseAsync(customPizza);
                     }
                     var orderItem = new CartItem
                     {
@@ -103,7 +107,7 @@ namespace PizzaWebAppAuthentication.Controllers
                         Quantity = cartItem.Quantity,
                         OrderId = order.Id
                     };
-                    
+
                     order.CartItems.Add(orderItem);
                 }
 
@@ -121,10 +125,10 @@ namespace PizzaWebAppAuthentication.Controllers
                     }
                     return RedirectToAction("Index", "Home");
                 }
-            }            
+            }
             TempData["Error"] = _pizzaOption.ErrorAcceptOrder;
 
-            return RedirectToAction("Index","Cart");
+            return RedirectToAction("Index", "Cart");
         }
     }
 }

@@ -15,5 +15,7 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         
         [Display(Name = "Login")]
         public override string? UserName { get => base.UserName; set => base.UserName = value; }
+
+        public ICollection<Order> Orders { get; set; }
     }
 }
