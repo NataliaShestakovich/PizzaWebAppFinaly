@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
-using PizzaWebAppAuthentication.Models.ViewModels.RoleManagementViewModels;
 using System.Data;
 
 namespace PizzaWebAppAuthentication.Services.RoleManagementService
