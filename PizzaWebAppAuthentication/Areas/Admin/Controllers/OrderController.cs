@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Services.OrderServices;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
@@ -10,19 +11,32 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     {
         private readonly ILogger<OrderController> _logger;
         private readonly IOrderServices _orderServises;
-        
+        private readonly PizzaOption _pizzaOption;
+
         public OrderController(ILogger<OrderController> logger,
-                                IOrderServices orderServises)
+                                IOrderServices orderServises,
+                                PizzaOption pizzaOption)
         {
             _logger = logger;
-            _orderServises = orderServises;            
+            _orderServises = orderServises;
+            _pizzaOption = pizzaOption;
         }
 
         public async Task<IActionResult> Index()
         {
-            var dataOrders = await _orderServises.GetOrderViewModel();
+            try
+            {
+                var dataOrders = await _orderServises.GetOrderViewModel();
 
-            return View(dataOrders);
+                return View(dataOrders);
+            }
+            catch (Exception ex)
+            {
+                var message = _pizzaOption.ErrorGetOrderData;
+                _logger.LogError(ex, message);
+                TempData["Error"] = message;
+                return RedirectToAction("Index", "Home");
+            }
         }
     }
 }
