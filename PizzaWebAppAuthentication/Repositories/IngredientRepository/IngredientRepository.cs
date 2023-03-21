@@ -1,56 +1,57 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Models.AppModels;
+using PizzaWebAppAuthentication.Repositories.RepositoryBase;
 
 namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
 {
-    public class IngredientRepository:IIngredientRepository
+    public class IngredientRepository: RepositoryBase<Ingredient, int>, IIngredientRepository
     {
-        private readonly ApplicationDbContext _context;
-        public IngredientRepository (ApplicationDbContext context)
+        public IngredientRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
-            _context = context;
         }
 
-        public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
-        {
-            return await _context.Ingredients.ToListAsync();
-        }
-
+        //public async Task<IEnumerable<Ingredient>> GetAllAsync()
+        //{
+        //    return await _dbContext.Ingredients.ToListAsync();
+        //}
+       
         public async Task<IEnumerable<Ingredient>> GetIngredientsByName(string name) 
         {
-            return await _context.Ingredients.Where(i => i.Name == name).ToListAsync();
+            return await _dbContext.Set<Ingredient>().Where(i => i.Name == name).ToListAsync();
         }
+        
+        //public async Task<Ingredient> GetByIdAsync(int id)
+        //{
+        //    return await _dbContext.Ingredients.Where(i => i.Id == id).FirstOrDefaultAsync();
+        //}
 
-        public async Task<Ingredient> GetIngredientById(int id)
-        {
-            return await _context.Ingredients.Where(i => i.Id == id).FirstOrDefaultAsync();
-        }
+        //public async Task CreateAsync(Ingredient ingredient)
+        //{
+        //    _dbContext.Add(ingredient);
 
-        public async Task AddIngredientToDataBaseAsync(Ingredient ingredient)
-        {
-            _context.Add(ingredient);
+        //    await _dbContext.SaveChangesAsync();
+        //}
 
-            await _context.SaveChangesAsync();
-        }
-
+        
         public async Task<bool> IngredientExistsAsync(string name, int id)
         {
-            return await _context.Ingredients.AnyAsync(i => i.Name == name && i.Id != id);
+            return await _dbContext.Set<Ingredient>().AnyAsync(i => i.Name == name && i.Id != id);
         }
+        
 
-        public async Task UpdateIngredientInDataBaseAsync(Ingredient ingredient)
-        {
-            _context.Update(ingredient);
+        //public async Task UpdateAsync(Ingredient ingredient)
+        //{
+        //    _dbContext.Update(ingredient);
 
-            await _context.SaveChangesAsync();
-        }
+        //    await _dbContext.SaveChangesAsync();
+        //}
 
-        public async Task DeleteIngredientAsync(Ingredient ingredient)
-        {
-                _context.Ingredients.Remove(ingredient);
-                await _context.SaveChangesAsync();
-        }
+        //public async Task DeleteAsync(Ingredient ingredient)
+        //{
+        //        _dbContext.Ingredients.Remove(ingredient);
+        //        await _dbContext.SaveChangesAsync();
+        //}
 
     }
 }
