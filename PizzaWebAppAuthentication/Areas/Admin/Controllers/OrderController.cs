@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PizzaWebAppAuthentication.Models.ViewModels.OrderViewModel;
 using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Services.OrderServices;
 
@@ -26,16 +27,17 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         {
             try
             {
-                var dataOrders = await _orderServises.GetOrderViewModel();
+                var dataOrders = await _orderServises.GetOrderViewModel() ?? new List<OrderViewModel>();
 
                 return View(dataOrders);
             }
             catch (Exception ex)
             {
                 var message = _pizzaOption.ErrorGetOrderData;
+
                 _logger.LogError(ex, message);
-                TempData["Error"] = message;
-                return RedirectToAction("Index", "Home");
+
+                return StatusCode(500);
             }
         }
     }

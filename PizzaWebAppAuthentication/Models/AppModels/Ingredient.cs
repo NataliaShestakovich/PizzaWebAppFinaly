@@ -15,11 +15,13 @@ namespace PizzaWebAppAuthentication.Models.AppModels
         [Required]
         public string Name { get; set; }
 
-        [Required]
-        [Range(0.01, double.MaxValue, ErrorMessage = "Please enter a value")]
+        [Required(ErrorMessage ="Необходимо указать цену")]
+        [Range(0.01, double.MaxValue)]
         [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
 
+
+        [Required(ErrorMessage = "Необходимо указать вес порции")]
         public int PortionGrams { get; set; }
 
         public bool Availability { get; set; }

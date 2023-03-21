@@ -1,16 +1,15 @@
 ﻿using PizzaWebAppAuthentication.Models.AppModels;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
-using PizzaWebAppAuthentication.Repositories.PizzaRepository;
 
 namespace PizzaWebAppAuthentication.Services.IngredientServices
 {
-    public class IngredientServises: IIngredientServises
+    public class IngredientServises : IIngredientServises
     {
         private readonly IIngredientRepository _iIngredientRepository;
-       
-        public IngredientServises (IIngredientRepository iIngredientRepository)
+
+        public IngredientServises(IIngredientRepository iIngredientRepository)
         {
-            _iIngredientRepository = iIngredientRepository;           
+            _iIngredientRepository = iIngredientRepository;
         }
         public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
         {
@@ -29,7 +28,7 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
 
         public async Task<bool> IngredientExistsAsync(string name, int id)
         {
-            return await _iIngredientRepository.IngredientExistsAsync (name, id);
+            return await _iIngredientRepository.IngredientExistsAsync(name, id);
         }
 
         public async Task AddIngredientToDataBaseAsync(Ingredient ingredient)
@@ -39,12 +38,37 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
 
         public async Task UpdateIngredientInDataBaseAsync(Ingredient ingredient)
         {
-            await _iIngredientRepository.UpdateAsync (ingredient);
+            await _iIngredientRepository.UpdateAsync(ingredient);
         }
 
         public async Task DeleteIngredientAsync(Ingredient ingredient)
         {
-            await _iIngredientRepository.DeleteAsync (ingredient);
+            await _iIngredientRepository.DeleteAsync(ingredient);
+        }
+
+        public async Task<bool> IsExistIngredientAsync(Ingredient ingredient)
+        {
+            var existingIngredients = await GetIngredientsByName(ingredient.Name);
+
+            if (existingIngredients.Any())
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        
+        public async Task<bool> IsUniqeNameAsync(int id, Ingredient ingredient)
+        {
+            var existingOtherIngredientWithName = await IngredientExistsAsync(ingredient.Name, id);
+
+            if (existingOtherIngredientWithName)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

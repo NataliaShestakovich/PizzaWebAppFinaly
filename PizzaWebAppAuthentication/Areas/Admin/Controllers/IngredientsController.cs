@@ -12,16 +12,28 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     {
         private readonly IIngredientServises _ingredientServices;
         private readonly PizzaOption _pizzaOption;
+        private readonly ILogger<IngredientsController> _logger;
 
-        public IngredientsController(IIngredientServises ingredientServices, PizzaOption pizzaOption)
+        public IngredientsController(IIngredientServises ingredientServices,
+                                     PizzaOption pizzaOption,
+                                     ILogger<IngredientsController> logger)
         {
             _ingredientServices = ingredientServices;
             _pizzaOption = pizzaOption;
+            _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            return View(await _ingredientServices.GetIngredientsAsync());
+            try
+            {
+                return View((await _ingredientServices.GetIngredientsAsync()) ?? new List<Ingredient>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500);
+            }
         }
 
         public IActionResult Create()
@@ -33,101 +45,124 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Ingredient ingredient)
         {
-
-            var existingIngredients = await _ingredientServices.GetIngredientsByName(ingredient.Name);
-
-            if (existingIngredients.Count() > 0)
+            try
             {
-                ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
-                return View(ingredient);
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                if (await _ingredientServices.IsExistIngredientAsync(ingredient))
                 {
-                    await _ingredientServices.AddIngredientToDataBaseAsync(ingredient);
-
-                    TempData["Success"] = string.Format(_pizzaOption.SuccessAddIngredientToDatabase, ingredient.Name);
-                }
-                catch (Exception)
-                {
-
-                    TempData["Error"] = string.Format(_pizzaOption.ErrorAddIngredientToDatabase, ingredient.Name);
+                    ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
                     return View(ingredient);
                 }
-                
+                if (ModelState.IsValid)
+                {
+                    await _ingredientServices.AddIngredientToDataBaseAsync(ingredient);
+                    TempData["Success"] = string.Format(_pizzaOption.SuccessAddIngredientToDatabase, ingredient.Name);
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    TempData["Error"] = _pizzaOption.ErrorAddIngredientToDatabase;
+                    return View(ingredient);
+                }
+            }
+            catch (NullReferenceException)
+            {
+                CreateNotification();
                 return RedirectToAction("Index");
             }
-
-            return View(ingredient);
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500);
+            }
         }
 
         public async Task<IActionResult> Edit(int id)
         {
-            Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
-
-            return View(ingredient);
+            try
+            {
+                Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
+                return View(ingredient);
+            }
+            catch (NullReferenceException)
+            {
+                CreateNotification();
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Ingredient ingredient)
         {
-            var existingOtherIngredientWithName = await _ingredientServices.IngredientExistsAsync(ingredient.Name, id);
-
-            if (existingOtherIngredientWithName)
+            try
             {
-                ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
+                if (await _ingredientServices.IsUniqeNameAsync(id, ingredient))
+                {
+                    ModelState.AddModelError("", string.Format(_pizzaOption.IngredientDuplicationError, ingredient.Name));
 
-                return View(ingredient);
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                    return View(ingredient);
+                }
+                if (ModelState.IsValid)
                 {
                     await _ingredientServices.UpdateIngredientInDataBaseAsync(ingredient);
 
                     TempData["Success"] = string.Format(_pizzaOption.SuccessUpdateIngredientInDatabase, ingredient.Name);
-                }
-                catch (Exception)
-                {
 
+                    return RedirectToAction("Index");
+                }
+                else
+                {
                     TempData["Error"] = string.Format(_pizzaOption.ErrorUpdateIngredientInDatabase, ingredient.Name);
-                    
+
                     return View(ingredient);
                 }
-
-                return RedirectToAction("Index");
             }
-
-            return View(ingredient);
+            catch (NullReferenceException)
+            {
+                CreateNotification();
+                return View(ingredient);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
         }
 
-        //[HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
-
-            if (ingredient != null)
+            try
             {
-                try
+                Ingredient ingredient = await _ingredientServices.GetIngredientById(id);
+                if (ingredient != null)
                 {
                     await _ingredientServices.DeleteIngredientAsync(ingredient);
 
-                    TempData["Success"] = string.Format(_pizzaOption.SuccessDeleteIngredientFromDatabase, ingredient.Name);
+                    TempData["Success"] = string.Format(_pizzaOption.SuccessDeleteIngredientFromDatabase, ingredient.Name);                    
                 }
-                catch (Exception)
+                else
                 {
-
-                    TempData["Error"] = string.Format(_pizzaOption.ErrorDeleteIngredientFromDatabase, ingredient.Name);
-
-                    return View(ingredient);
+                    TempData["Error"] = string.Format(_pizzaOption.ErrorDeleteIngredientFromDatabase, ingredient.Name);                    
                 }
+                return RedirectToAction("Index");
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return StatusCode(500, ex.Message);
+            }
+        }
 
-            return RedirectToAction("Index");
+        private void CreateNotification()
+        {
+            var message = _pizzaOption.ErrorFindObject;
+            TempData["Error"] = message;
+            _logger.LogError(message);
         }
     }
 }
