@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
-using Serilog;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 {
