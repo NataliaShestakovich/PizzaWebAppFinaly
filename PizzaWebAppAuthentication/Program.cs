@@ -9,6 +9,7 @@ using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
 using PizzaWebAppAuthentication.Repositories.OrderRepository;
 using PizzaWebAppAuthentication.Repositories.PizzaRepository;
+using PizzaWebAppAuthentication.Repositories.RepositoryBase;
 using PizzaWebAppAuthentication.Services.IngredientServices;
 using PizzaWebAppAuthentication.Services.OrderServices;
 using PizzaWebAppAuthentication.Services.PizzaServises;
@@ -76,13 +77,14 @@ namespace PizzaWebAppAuthentication
                         policyBuilder.RequireRole("Admin"));
                         });
 
-                builder.Services.AddTransient<IOrderRepository, OrderRepository>();
-                builder.Services.AddTransient<IPizzaRepository, PizzaRepository>();
-                builder.Services.AddTransient<IIngredientRepository, IngredientRepository>();
+                builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+                builder.Services.AddScoped<IPizzaRepository, PizzaRepository>();
+                builder.Services.AddScoped<IIngredientRepository, IngredientRepository>();
+                //builder.Services.AddScoped(typeof(IRepositoryBase<,>), typeof(RepositoryBase<,>));
 
-                builder.Services.AddTransient<IOrderServices, OrderServices>();
-                builder.Services.AddTransient<IPizzaServices, PizzaServices>();
-                builder.Services.AddTransient<IIngredientServises, IngredientServises>();
+                builder.Services.AddScoped<IOrderServices, OrderServices>();
+                builder.Services.AddScoped<IPizzaServices, PizzaServices>();
+                builder.Services.AddScoped<IIngredientServises, IngredientServises>();
 
 
                 var app = builder.Build();

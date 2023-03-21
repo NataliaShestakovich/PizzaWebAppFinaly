@@ -14,7 +14,7 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
         }
         public async Task<IEnumerable<Ingredient>> GetIngredientsAsync()
         {
-            return await _iIngredientRepository.GetIngredientsAsync();
+            return await _iIngredientRepository.GetAllAsync();
         }
 
         public async Task<IEnumerable<Ingredient>> GetIngredientsByName(string name)
@@ -24,7 +24,7 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
 
         public async Task<Ingredient> GetIngredientById(int id)
         {
-            return await _iIngredientRepository.GetIngredientById(id);
+            return await _iIngredientRepository.GetByIdAsync(id);
         }
 
         public async Task<bool> IngredientExistsAsync(string name, int id)
@@ -34,17 +34,17 @@ namespace PizzaWebAppAuthentication.Services.IngredientServices
 
         public async Task AddIngredientToDataBaseAsync(Ingredient ingredient)
         {
-            await _iIngredientRepository.AddIngredientToDataBaseAsync(ingredient);
+            await _iIngredientRepository.CreateAsync(ingredient);
         }
 
         public async Task UpdateIngredientInDataBaseAsync(Ingredient ingredient)
         {
-            await _iIngredientRepository.UpdateIngredientInDataBaseAsync (ingredient);
+            await _iIngredientRepository.UpdateAsync (ingredient);
         }
 
         public async Task DeleteIngredientAsync(Ingredient ingredient)
         {
-            await _iIngredientRepository.DeleteIngredientAsync (ingredient);
+            await _iIngredientRepository.DeleteAsync (ingredient);
         }
     }
 }
