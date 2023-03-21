@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using PizzaWebAppAuthentication.Data;
 using PizzaWebAppAuthentication.Data.Seed;
@@ -9,12 +8,10 @@ using PizzaWebAppAuthentication.Options;
 using PizzaWebAppAuthentication.Repositories.IngredientRepository;
 using PizzaWebAppAuthentication.Repositories.OrderRepository;
 using PizzaWebAppAuthentication.Repositories.PizzaRepository;
-using PizzaWebAppAuthentication.Repositories.RepositoryBase;
 using PizzaWebAppAuthentication.Services.IngredientServices;
 using PizzaWebAppAuthentication.Services.OrderServices;
 using PizzaWebAppAuthentication.Services.PizzaServises;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
-using PizzaWebAppAuthentication.Services.Sendgrid;
 using Serilog;
 using Serilog.Events;
 

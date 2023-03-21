@@ -3,15 +3,15 @@
 
 @if (Model != null)
 {
-    <a class="fas fa-cart-shopping cart-link" asp-controller="Cart" asp-action="Index"></a>
+    <a class="fas fa-cart-shopping cart-link" asp-area="" asp-controller="Cart" asp-action="Index"></a>
     <p class="d-inline">Items: <span class="badge badge-primary text-dark">@Model.NumberOfItems</span></p>
-    <a class="fas fa-trash-alt d-inline cart-link d-inline" asp-controller="Cart" asp-action="Clear"></a>
+    <a class="fas fa-trash-alt d-inline cart-link d-inline" asp-area="" asp-controller="Cart" asp-action="Clear"></a>
     <p class="d-inline">Total: <b>@Model.TotalAmount.ToString("C2")</b></p>
 
 }
 else
 {
-    <a class="fas fa-cart-shopping cart-link" asp-controller="Cart" asp-action="Index"></a>
+    <a class="fas fa-cart-shopping cart-link" asp-area="" asp-controller="Cart" asp-action="Index"></a>
     <p class="d-inline">Items: <span class="badge badge-primary text-dark">0</span></p>
     <p class="d-inline">Total: <b>@uint.MinValue.ToString("C2")</b></p>
 }
