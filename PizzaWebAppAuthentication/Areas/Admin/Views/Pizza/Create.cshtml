@@ -2,10 +2,10 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_Layout.cshtml";    
+    Layout = "~/Areas/Admin/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create Pizza</h1>
+<h1>Добавить новую пиццу</h1>
 
 <hr />
 <div class="row">
@@ -14,13 +14,13 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
            
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
+                <label asp-for="Name" class="control-label">Название</label>
                 <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
+                <label asp-for="Price" class="control-label">Цена</label>
                 <input type="number" asp-for="Price" class="form-control" lang="en" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
@@ -36,21 +36,21 @@
             </div>
 
             <div class="form-group">
-                <label asp-for="ImageUpload" class="control-label"></label>
+                <label asp-for="ImageUpload" class="control-label">Изображение</label>
                 <input asp-for="ImageUpload" class="form-control" />
                 <img id="imgpreview" class="pt-2"/>
                 <span asp-validation-for="ImageUpload" class="text-danger"></span>
             </div>
                         
             <div class="form-group">
-                <button btn btn-primary>Create</button>
+                <button btn btn-primary>Добавить</button>
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">Вернуться</a>
 </div>
 
 @section Scripts {
