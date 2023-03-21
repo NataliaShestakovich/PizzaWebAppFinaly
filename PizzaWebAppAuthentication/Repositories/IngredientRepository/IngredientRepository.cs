@@ -10,17 +10,26 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
         public IngredientRepository(ApplicationDbContext dbContext) : base(dbContext)
         {
         }
-
-        //public async Task<IEnumerable<Ingredient>> GetAllAsync()
-        //{
-        //    return await _dbContext.Ingredients.ToListAsync();
-        //}
        
         public async Task<IEnumerable<Ingredient>> GetIngredientsByName(string name) 
         {
             return await _dbContext.Set<Ingredient>().Where(i => i.Name == name).ToListAsync();
         }
         
+        public async Task<bool> IngredientExistsAsync(string name, int id)
+        {
+            return await _dbContext.Set<Ingredient>().AnyAsync(i => i.Name == name && i.Id != id);
+        }
+
+
+        
+
+        
+        
+        //public async Task<IEnumerable<Ingredient>> GetAllAsync()
+        //{
+        //    return await _dbContext.Ingredients.ToListAsync();
+        //}
         //public async Task<Ingredient> GetByIdAsync(int id)
         //{
         //    return await _dbContext.Ingredients.Where(i => i.Id == id).FirstOrDefaultAsync();
@@ -33,12 +42,6 @@ namespace PizzaWebAppAuthentication.Repositories.IngredientRepository
         //    await _dbContext.SaveChangesAsync();
         //}
 
-        
-        public async Task<bool> IngredientExistsAsync(string name, int id)
-        {
-            return await _dbContext.Set<Ingredient>().AnyAsync(i => i.Name == name && i.Id != id);
-        }
-        
 
         //public async Task UpdateAsync(Ingredient ingredient)
         //{

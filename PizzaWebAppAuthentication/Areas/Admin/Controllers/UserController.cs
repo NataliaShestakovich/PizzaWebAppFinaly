@@ -17,7 +17,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
             _userService = userService;
         }
 
-        public async Task<IActionResult> Index(UsersListViewModel usersListViewModel) //отображает список всех пользователей для АДМИНа
+        public async Task<IActionResult> Index(UsersListViewModel usersListViewModel)
         {
             List<ApplicationUser> userList = new();
 

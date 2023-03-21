@@ -38,17 +38,17 @@ namespace PizzaWebAppAuthentication.Repositories.PizzaRepository
             return pizza;
         }
 
-        public async Task<IEnumerable<string>> GetIngredientNames()
+        public async Task<IEnumerable<string>> GetIngredientNames() // ДОбавлен в новый репозиторий ингредиентов
         {
             return await _context.Ingredients.Select(x => x.Name).ToListAsync();
         }
 
-        public async Task<IEnumerable<string>> GetAvailableIngredientNames()
+        public async Task<IEnumerable<string>> GetAvailableIngredientNames() // ДОбавлен в новый репозиторий ингредиентов
         {   
             return await _context.Ingredients.Where(x => x.Availability == true).Select(x => x.Name).ToListAsync();
         }
 
-        public async Task<Ingredient> GetIngredientByName(string ingredientName)
+        public async Task<Ingredient> GetIngredientByName(string ingredientName) //ДОбавлен в новый репозиторий ингредиентов
         {
             return await _context.Ingredients.Where(c => c.Name == ingredientName).FirstOrDefaultAsync();
         }
