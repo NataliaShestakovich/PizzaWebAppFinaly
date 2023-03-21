@@ -35,11 +35,19 @@ namespace PizzaWebAppAuthentication.Controllers
         public async Task<IActionResult> Add(Guid id) 
         {
             var pizza = await _pizzaServices.GetStandartPizzaByIdAsync(id);
-            if (pizza == null)
+            if (pizza == null && HttpContext.Session.GetJson<List<Pizza>>("CustomPizza").Any(p => p.Id == id))
             {
-                TempData["Error"] = _pizzaOption.SuccessAddPizzaInCart;
-                return View(pizza);
+                pizza = new();
             }
+            else
+            {
+                if (pizza == null)
+                {
+                    TempData["Error"] = _pizzaOption.SuccessAddPizzaInCart;
+                    return View(pizza);
+                }
+            }
+
             var cart = HttpContext.Session.GetJson<List<CartItemViewModel>>("Cart") ?? new List<CartItemViewModel>();
 
             CartItemViewModel cartItem = cart.Where(p => p.PizzaId == id).FirstOrDefault();
