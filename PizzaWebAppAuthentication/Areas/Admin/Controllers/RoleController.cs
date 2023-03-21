@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PizzaWebAppAuthentication.Services.RoleManagementService;
-using Serilog;
 
 namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
 {
@@ -11,15 +10,26 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
     public class RoleController : Controller
     {
         private readonly UserManagementService _roleService;
-        public RoleController(UserManagementService roleService)
+        private readonly ILogger<RoleController> _logger;
+        public RoleController(UserManagementService roleService,
+                              ILogger<RoleController> logger)
         {
             _roleService = roleService;
+            _logger = logger;
         }
 
         [HttpGet]
         public IActionResult Index()
         {
-            return View(_roleService.GetRoles());
+            try
+            {
+                return View(_roleService.GetRoles() ?? new List<IdentityRole>());
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500);
+            }           
         }
 
         [HttpGet]
@@ -43,7 +53,7 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
                     }
                     else
                     {
-                        if (await _roleService.IsRoleExiste(name))
+                        if (await _roleService.IsRoleExisteAsync(name))
                         {
                             ViewBag.Result = "Данная роль существует в списке ролей ";
                             return View();
@@ -52,9 +62,9 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
                         return StatusCode(500);
                     }
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    Log.Error($"Ошибка{e.Message}. {Environment.NewLine} {e.StackTrace}");
+                    _logger.LogError(ex, ex.Message);
                     return StatusCode(500);
                 }
             }
@@ -65,16 +75,16 @@ namespace PizzaWebAppAuthentication.Areas.Admin.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(string name)
         {
-            if (!string.IsNullOrEmpty(name) && name != "Admin" && name != "User")
+            try
             {
-                var isExistUser = await _roleService.GetUsersByRoleAsync(name);
-                if (isExistUser.Count() <= 0)
-                {
-                    await _roleService.Delete(name);
-                }
+                await _roleService.Delete(name);
+                return RedirectToAction("Index");
             }
-
-            return RedirectToAction("Index");
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.Message);
+                return StatusCode(500);
+            } 
         }
     }
 }
