@@ -16,7 +16,7 @@ namespace PizzaWebAppAuthentication.Models.ViewModels.PizzaViewModels
         [Column(TypeName = "decimal(4, 2)")]
         public decimal Price { get; set; }
         
-        [FileExtention]
+        [FileExtention, Required]
         public IFormFile ImageUpload { get; set; }        
     }
 }
